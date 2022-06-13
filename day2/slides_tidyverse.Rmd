@@ -1,0 +1,537 @@
+---
+title: "Data management met R"
+author: "ESTP Use of R in Official Statistics"
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+    fig_caption: false
+---
+
+```{r,echo=FALSE,message=FALSE}
+knitr::opts_chunk$set(comment=NA)
+library(tidyverse)
+```
+
+## Contents
+
+- R packages and `tidyverse`
+- Data set manipulation
+    - Grammar of data manipulation
+    - Aggregating
+    - Data pipelines
+    - Joining datasets
+    - Restructuring dataset
+- Reading
+    - file names
+    - csv, excel, spss, other
+    - date/time variables
+
+## R packages and tidyverse
+
+### R packages
+
+- number of standard and documented functions.
+- can be published (after strict technical checks) on [CRAN](https://cran.r-project.org)
+
+### Tidyverse
+
+- A collection of packages meant for data-manipulation
+- Consistent interface: data.frame in, data.frame out
+- Website: [tidyverse.org](https://tidyverse.org)
+- Focusses on data manipulation, not everything!
+
+
+# Manipulation of datasets
+
+## Data-manipulation
+
+_factoid_: approx 80\% of time is datamanipulation...
+
+### Reasons?
+- Selecting subset of data (rows, columns)
+- Deduplication (removing duplicate observations)
+- Deriving/calculating new variables. 
+- Counting/averaging, aggregating data
+- Joining data sources
+- Adapt structure
+- Missing values
+- Data contains outliers
+- Data contains measurement errors / inconsistencies. 
+
+## Grammar of data manipulation
+
+### Concept
+
+- set of basic manipulations (_verbs_) that all have a data.frame (tibble) as input and
+output.
+- therefor these _verbs_ can be chained in any particular combination.
+- Manipulations for: 
+    - data selection
+    - deriving new variables 
+    - aggregation
+    - combining datasets (join)
+
+### remarks
+- This idea (algebraic closure) is same as  SQL. 
+- Not all manipulation fit in the grammar
+
+## The tidyverse datatype: `tibble`
+
+- Nicer printing than `data.frame`
+- With a `data.frame` `df` `df[,1]` returns a vector; with a `tibble`
+  `tb` `tb[,1]` returns a tibble (with 1 column).
+- The contain extra metadata use full for dplyr
+- A tibble does not have to be a `data.frame` but also can refer to a table in a 
+database (`dbplyr`!)
+
+```{r}
+tibble(x=1:3,y=letters[1:3])
+```
+
+## Implementation grammar of data manipulation: `dplyr` 
+
+Offers a set of verbs for datamanipulations,
+E.g:
+
+\begin{tabular}{ll}
+\code{filter}    & select rows\\
+\code{select}    & select columns\\
+\code{rename}    & rename columns\\
+\code{distinct}  & select unique rows\\
+\code{arrange}   & sort rows\\
+\code{transmute} & caculate new columns\\
+\code{mutate}    & add new columns
+\end{tabular}
+
+
+
+
+
+# Aggregating
+
+## Aggregating
+
+Aggregating is (arithmically) summarizing the data. Often this is done per group.
+E.g. Calculate the mean income per educution level, age and gender.
+
+### dplyr functions
+
+\begin{tabular}{lp{0.7\textwidth}}
+\code{group\_by} & Label a \code{tibble} so that each following operation is per group\\
+\code{ungroup}   & Remove group labels\\
+\code{summarize} & Calculate one (or more) aggregates.
+\end{tabular}
+
+## Aggregating with `dplyr`
+
+```{r, eval=FALSE}
+summarize(.data, ...)
+```
+With \code{...} you can give \code{<name>=<expression>} to calculate a statistic.
+
+```{r, eval=TRUE}
+summarize(iris
+          , min_sl = min(Sepal.Length) # calculate min 
+          , max_sl = max(Sepal.Length)
+          )
+```
+
+## Grouped aggregation with `dplyr`
+
+```{r, eval=FALSE}
+group_by(.data, ...)
+```
+
+With \code{...} you indicate which  (categorical) variable(s) are used for the groups
+
+```{r}
+summarize(group_by(iris, Species)
+          , min_sl = min(Sepal.Length)
+          , max_sl = max(Sepal.Length)) 
+```
+
+## Tabulating with `dplyr`
+
+With the function `n()` you can count the number of rows. 
+
+```{r}
+summarize(group_by(iris, Species)
+         , number=n()
+         )
+```
+
+## Tabulating with `dplyr` (2)
+
+A shorter version is `count`  (same result)
+
+```{r}
+count(iris, Species, name="number")
+```
+
+
+## Syntactic sugar: data pipelines
+
+The operator `%>%` passes the output of the left side through as the first argument
+of the following function. So:
+
+```{r, eval=FALSE}
+iris %>%
+  group_by(Species) %>%
+  summarize(min_sl = min(Sepal.Length)
+           , max_ls=max(Sepal.Length)
+           )
+```
+
+
+```{r,eval=FALSE}
+summarize(group_by(iris, Species)
+          , min_sl = min(Sepal.Length)
+          , max_sl = max(Sepal.Length)) 
+```
+
+## Syntactic sugar: data pipelines (2)
+
+The operator `%>%` passes the output of the left side through as the first argument
+of the following function. So:
+
+```{r, eval=FALSE}
+iris %>%
+  group_by(Species) %>%
+  summarize(min_sl = min(Sepal.Length)
+           , max_ls=max(Sepal.Length)
+           )
+```
+
+Can also be written (which may be more clear for you...)
+
+```{r, eval=FALSE}
+iris %>%
+  group_by(., Species) %>%
+  summarize( .
+           , min_sl = min(Sepal.Length)
+           , max_ls=max(Sepal.Length)
+           )
+```
+
+## Tabulating (1)
+
+With `base` R function `table` you can cross tabulate. Create a matrix of counts.
+
+```{r, eval=FALSE}
+table(..., useNA = "no")
+```
+With \code{...} you supply the columns preferably in the form \code{<name>=<column>},
+with \code{useNA} you indicate if `NA` should be counted.
+
+```{r}
+k <- c("1e","1e","3e","2e","2e")
+table(k)
+```
+
+## Tabulating (2)
+
+Multiple columns
+```{r}
+k <- c("1e","1e","3e","2e","2e")
+g <- c("m","f","m","m","f")
+table(class = k, gender = g)
+```
+
+
+## Tabulating (3)
+
+The optie \code{useNA} has three possible values:
+
+- \code{"no"}: records with NA are not counted
+- \code{"ifany"}: for columns in which occurs `<NA>` is added to the matrix
+- \code{"always"}: always count the number of NA's.
+
+
+# Combining datasets
+
+## Combine datasets with `dplyr`: stacking
+
+```{r, eval=FALSE}
+bind_rows(... ,.id=FALSE)
+```
+
+ \code{...} are a number of datasets (\code{data.frame}, \code{tbl}) to stack:
+ the number of rows is the sum of the number of rows of the supplied data.frames.
+ Columns are matched on name. Missing columns are filled with NA. Using `id` you 
+ can recognize the origin of the data.
+
+```{r,eval=FALSE}
+bind_rows(women, women[2:1], women[-1],.id="ID")
+```
+
+
+## Joining datasets
+
+\scriptsize
+```{r}
+(d1 <- tibble(key = letters[1:4], X = 1:4))
+(d2 <- tibble(key = letters[2:5], Y = 6:9))
+```
+\normalfont
+
+
+## Joining datasets: `inner_join`
+
+```{r}
+inner_join(d1, d2)
+```
+
+## Joining datasets: `left_join`
+
+```{r}
+left_join(d1, d2)
+```
+
+## Joining datasets: `full_join`
+
+```{r}
+full_join(d1, d2)
+```
+
+## 'Joining' datasets: `anti_join` | `semi_join`
+
+\scriptsize
+```{r}
+anti_join(d1,d2)  # select records in d1 that do not match in d2
+```
+
+```{r}
+semi_join(d1, d2) # selecteer records in d1 that do match in d2
+```
+\normalfont
+
+
+## Pivoting datasets `pivot_longer` en `pivot_wider`
+
+```{r}
+wide <- tibble(name = c("jan","pier","joris")
+      , age = c(23, 18, 27)
+      , shoesize=c(44, 41, 43))
+wide
+```
+
+## Pivoting datasets `pivot_longer` en `pivot_wider`
+
+From wide to long: `pivot_longer``
+\scriptsize
+```{r}
+pivot_longer(wide, age:shoesize, names_to = "variable")
+```
+\normalfont
+
+Or:
+
+\scriptsize
+```{r}
+long <- pivot_longer(wide, -name, names_to="variable")
+```
+\normalfont
+
+## Pivoting datasets `pivot_longer` en `pivot_wider`
+
+From long to wide: `pivot_wider`
+\scriptsize
+```{r}
+pivot_wider(long, names_from = variable)
+```
+\normalfont
+
+# Data types missing values
+
+## Missing values
+
+- Missing values in R are indicated with `NA`.
+- A calculation with  `NA` almost always leads to `NA`.
+
+```{r}
+x <- c(1,4,2,NA,6)
+c( mean1 = mean(x), mean2 = mean(x, na.rm=TRUE) )
+```
+
+- All statistical functions have the option to remove `NA` with argument
+  `na.rm=TRUE`.
+
+
+## Conversion of text to date variables.
+
+### Base R
+
+If the format is _exactly_ known,  `strptime` from base R can be used.
+
+```{r}
+strptime("2017/01/08",format="%Y/%m/%d",tz="CET")
+```
+
+## Conversion with the `lubdridate` package
+
+### Lubridate 
+
+Often it is simpler to use the `lubridate` package 
+
+```{r,message=FALSE}
+library(lubridate)
+ymd("2017/01/08",tz="CET")
+```
+
+For converting you only need to know the order of day, month and year
+`lubridate` contains the following conversion functions:
+```
+      dmy myd ydm mdy dym ymd
+```
+
+## `lubridate` versus `strptime` for converting dates
+
+### `lubridate`
+
+- Is simple
+- Can be a bit slower
+- Simpler to use with different locale settings
+
+### `strptime`
+
+- Can also convert time (not only date)
+- Only works when the format is exactly known.
+
+## Some usefull functions in  `lubridate`
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{function} & \textbf{description}\\
+\code{year}, \code{month}, \code{day} & year, month, day of the month\\
+\code{wday} & day of the week\\
+\code{week}, \code{isoweek} & week number, weeknr in ISO std.
+\end{tabular}
+\end{center}
+
+```{r}
+d <- ymd("2017-01-08")
+c(USAweek = week(d), EUweek = isoweek(d))
+```
+
+## From date (`POSIXct`) to text
+
+```{r,echo=FALSE, results=FALSE}
+Sys.setlocale("LC_TIME","nl_NL.utf8")
+```
+
+Gebruik `format`
+```{r}
+d <- dmy("het was 2 januari 2016","8 jun 1996")
+format(d, format="%A, %d %B '%y")
+```
+
+### Conversioncodes
+
+Zie `?strptime` for a list of conversion codes
+
+## Background
+
+### `POSIXct`
+
+This format store time as the number of seconds since `1970-01-01 00:00:00`.
+During printing (to text) it is turned into a date time depending on the `locale` settings:
+e.g.
+
+- Calendar type (Gregorian, Chinese, Islamic, Coptic,...)
+- Leap years (divisbable by 4, not by 100)
+- Time zone (depends on region)
+- Daylight Savings Time (idem)
+- Leap seconds.
+
+# I/O
+
+
+## File names  in R
+
+- File names are always between quotes.
+- The directory separator is _always the forward slash
+
+```{r,eval=FALSE}
+dat <- read.csv("C:/users/joe/documents/foo.csv")
+```
+
+
+## Reading text files with `readr`
+
+### Advantages
+- faster than base R
+- Specify columntypes
+- Percentages are converted correctly
+- Good error reporting
+
+### Disadvantages
+- Less robust
+
+## Reading csv files with `readr`
+
+```{r,echo=FALSE}
+library(readr)
+```
+
+```{r,eval=FALSE}
+library(readr)
+mydata <- read_csv(file)
+# or
+mydata <- read_csv2(file)
+```
+
+Specify column type
+
+```{r}
+write_csv(iris,"myiris.csv")
+dat <- read_csv("myiris.csv", col_types = "ddddc")
+```
+
+## Compact column types
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Code} & \textbf{Type}\\
+\code{l} & \code{logical}\\
+\code{i} & \code{integer}\\
+\code{d} & \code{double} (=\code{numeric})\\
+\code{c} & \code{character} (text)\\
+\code{D} & \code{datum} (in locale format)\\
+\code{T} & \code{datum/tijd} (in ISO8601) format.\\
+\code{\_} of \code{-} & Skip column
+\end{tabular}
+\end{center}
+
+### Opmerking
+
+## When reading does not succeeed 
+
+e.g. "money", "kg" etc.
+
+- Read in as \code{character}
+- Use \code{parse\_number} to extra the numbers.
+
+```{r}
+x <- c("10%", "EUR 7,-", "$12")
+x
+parse_number(x)
+```
+
+## Other file formats
+
+### The `haven` package
+
+\begin{tabular}{ll}
+SPSS  & \code{read\_spss}, \code{read\_por}\\
+STATA & \code{read\_stata}\\
+SAS   & \code{read\_sas}
+\end{tabular}
+
+### Het `foreign` package (standaard bij R)
+
+Functions for reading \code{arff}, \code{dbf},
+\code{dba}, \code{epiinfo}, \code{mtp}, \code{octave}, \code{systat},
+and \code{xport} files.
+
+

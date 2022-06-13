@@ -1,0 +1,288 @@
+---
+title: "ESTP R - Basics"
+output: 
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+editor_options: 
+  chunk_output_type: console
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width = 50)
+```
+
+### R is functional 
+
+```{r}
+x <- 1
+x # has value of 1
+```
+
+### Always asign values to variables!
+
+**Don't do this...**
+```{r, eval=FALSE}
+read.csv("test.csv")
+```
+
+**Do this**
+
+```{r, eval=FALSE}
+test <- read.csv("test.csv")
+```
+
+
+## Data types
+
+Available data types: logical, numeric, integer, complex, character, and raw (not discussed)
+
+```{r}
+x <- 1
+class(x)
+
+y <- TRUE
+class(y)
+
+z <- "Some text"
+class(z)
+```
+
+## Variables are vectors
+
+Each variable is also a *vector*, i.e. a sequence of data elements of the same class:
+
+```{r}
+numbers <- 1:10
+numbers
+
+my_text <- c("Julia", "Python", "R")
+my_text
+```
+
+
+## Vectorized operations
+
+### Operations work on vectors
+
+```{r}
+numbers
+numbers + 10
+numbers^2
+```
+
+##
+
+### Operation work on vectors (2)
+
+```{r}
+log(numbers)
+mean(numbers)
+paste0("My language is: ", my_text)
+```
+
+
+## Retrieve/set items with index
+
+```{r}
+my_text <- c("Julia", "Python", "R")
+my_text[3]
+my_text[3:1]
+my_text[2] <- "C++"
+my_text
+```
+
+
+
+## Vector generating functions
+
+### Combine: `c`
+
+```{r}
+c(1, 5, 3, 8, 5, 3)
+
+# Also works for vectors as input
+x <- c(1, 5)
+y <- c(8, 5, 3)
+c(x, y)
+```
+
+##
+
+### Repeat: `rep`
+
+```{r}
+# repeat 2, 5 times
+rep(2, 5) 
+
+# repeat vector (1,3) 5 times
+rep(c(1, 3), 5) 
+
+# repeat vector (1,3) until length output is 5
+rep(c(1, 3), length.out = 5) 
+```
+
+##
+
+### Sequence generation: `seq`
+
+```{r}
+# numbers 2 to (and including) 5
+seq(2, 5) 
+
+# 1 to 10 step size 2
+seq(1, 10, by = 2) 
+
+# 1 to 10 where output consists of 20 numbers
+seq(1, 10, length.out = 20) 
+```
+
+
+
+
+## Comparison operators
+
+\begin{center}
+
+\begin{tabular}{ll}
+Expression & \code{TRUE} when\\
+\hline
+\code{x == y} & \code{x} equal to \code{y}\\
+\code{x <= y} & \code{x} less than or equal to \code{y}\\
+\code{x < y}  & \code{x} less than \code{y}\\
+\code{x > y}  & \code{x} greater than \code{y}\\
+\code{x >= y} & \code{x} greater than or equal to \code{y}\\
+\code{x != y} & \code{x} not equal \code{y}\\
+\code{x \%in\% y} & \code{x} is element of \code{y}
+\end{tabular}
+
+\end{center}
+
+## Example: \code{\%in\%}
+
+```{r}
+x <- c("Jolien", "Edwin", "John")
+y <- c("Jolien", "Richard")
+x %in% y
+```
+
+
+## Logical/binary operators
+
+\begin{center}
+\begin{tabular}{ll}
+Operator  & Means\\
+\hline
+\code{\&} & AND\\
+\code{|}  & OR (en/of)\\
+\code{!}  & NOT\\
+\code{all(x)} & all \code{x} equal to \code{TRUE}?\\
+\code{any(x)} & at least one \code{x} equal to \code{TRUE}?
+\end{tabular}
+\end{center}
+
+
+
+## Data frames
+
+A `data.frame` is a tabular format. Technically, it is a list of vectors of the same length
+
+
+
+```{r}
+str(iris)
+```
+
+
+
+## Data frames summary
+
+```{r}
+summary(iris)
+```
+
+## Handy functions
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Function}                 & \textbf{description}\\
+\code{summary}                   & statistical summary \\
+\code{str}                       & technical summary\\
+\code{colMeans}, \code{rowMeans} & mean per column/row\\
+\code{colSums}, \code{rowSums}   & sum per column/row\\
+\code{names}                     & column names\\
+\code{ncol} \code{nrow}          & number of columns, rows\\
+\code{dim}                       & vector with \code{nrow, ncol}
+\end{tabular}
+\end{center}
+
+## Selecting data
+
+
+### Retrieve colum with `$`
+
+```{r}
+mean(iris$Sepal.Length)
+# or 
+# number of rows
+nrow(iris)
+colnames(iris)
+```
+
+##
+
+### Retrieve rows with index
+
+```{r}
+# first row (before comma)
+iris[1,]
+
+# row 2, 6 and 3 and column 1 and 2
+iris[c(2,6,3),1:2]
+```
+
+
+## Plotting (1)
+
+```{r, fig.height=5}
+plot(weight ~ height, data=women)
+```
+
+
+## Plotting (2)
+
+```{r,fig.height=5}
+plot(count ~ spray, data=InsectSprays)
+```
+
+## Plotting (3)
+
+```{r, fig.height=5}
+hist(iris$Sepal.Length, breaks=20)
+```
+
+
+
+
+
+## Workspace
+
+### List variables
+```{r}
+ls()
+```
+
+### Remove variable(s)
+```{r}
+rm("x")
+ls()
+```
+
+
+## RStudio Shortcuts
+
+* **CTRL + R** or **CTRL + Enter** Run code
+* **F1** (cursor at a function name) Help
+* **F2** (cursor at a function name) Go to source
+

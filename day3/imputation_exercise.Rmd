@@ -1,0 +1,138 @@
+---
+title: "Exercises Imputation"
+output: 
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+params:
+  answers: yes
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set( echo = params$answers
+                     , eval = params$answers
+                     , comments = NA
+                     , message=FALSE
+                     , warning = FALSE
+                     )
+library(tidyverse)
+library(simputation)
+```
+
+
+### Exercise 1, imputation
+
+a) Install R package `simputation` (if you have not done so)
+
+```{r, eval=FALSE, echo=TRUE}
+install.packages("simputation", dependencies = TRUE)
+```
+
+b) load the data set "data/iris_missing.csv". 
+Find out on which colums data is missing. 
+
+```{r}
+iris_missing <- read.csv("data/iris_missing.csv")
+summary(iris_missing)
+```
+
+c) Find out which on rows data is missing (tip `complete.cases()`)
+
+```{r}
+which(!complete.cases(iris_missing))
+```
+
+
+c) Calculate the mean of `Sepal.Length`.
+
+```{r}
+mean(iris_missing$Sepal.Length, na.rm=TRUE)
+```
+
+
+d) Load the simputation library and impute `Sepal.Length` with a linear model dependent
+on `Sepal.Width` and `Species` (use `impute_lm`). Store the new data set in 
+`iris_imputed1`
+
+```{r}
+library(simputation)
+iris_imputed1 <- impute_lm(iris_missing, Sepal.Length ~ Sepal.Width + Species)
+```
+
+
+e) Calculate the mean of `iris_imputed1$Sepal.Length`. Any ideas why there are still `NA`s? Which rows have not been imputed?
+
+```{r}
+mean(iris_imputed1$Sepal.Length)
+mean(iris_imputed1$Sepal.Length, na.rm=TRUE)
+
+incomplete <- !complete.cases(iris_imputed1)
+# wel Sepal.Length is missing
+iris_imputed1[incomplete, ]
+```
+
+
+f) Impute remaining NA values of  `Sepal.Length` in `iris_imputed1` with `impute_median` per `Species` (i.e. `Sepal.Length ~ Species`) and store the result in `iris_imputed2`. 
+What is the resulting `mean`?
+
+```{r}
+iris_imputed2 <- impute_median(iris_imputed1, Sepal.Length ~ Species)
+mean(iris_imputed2$Sepal.Length)
+```
+
+
+g) Impute `Sepal.Width` with decision tree model (`cart`), using all other variables.
+And store this in `iris_imputed3`.
+
+```{r}
+iris_imputed3 <- impute_cart(iris_imputed2, Sepal.Width ~ .)
+```
+
+
+h) Use the `%>%` operator to chain to create an imputation pipeline.
+
+```{r}
+iris_imputed <- 
+  iris_missing %>% 
+  impute_lm(., Sepal.Length ~ Sepal.Width + Species) %>% 
+  impute_median(., Sepal.Length ~ Species) %>% 
+  impute_cart(., Sepal.Width ~ .)
+```
+
+
+### Exercise 2
+
+a) Read `data/companies.csv`
+
+```{r}
+companies <- read.csv("data/companies.csv")
+```
+
+
+b) Make a separete data frame, selecting columns 7--14 (`staff`--`vat`)
+
+c) Implement the following imputation sequence:
+    - Impute `turnover` by copying the `vat` variable (`impute_proxy`)
+    
+```{r}
+```
+    
+    - Impute `staff` with a robust linear model based on `staff.costs`
+    
+```{r}
+
+```
+  
+    - Impute `staff` with a robust linear model based on `total.costs`
+    - Impute `profit` as `total.rev - total.costs` (`impute_proxy`)
+    - Impute everything else using `missForest` (formula: `. ~ .`)
+```{r}
+library(tidyverse)
+companies %>% 
+  select(., staff:vat) %>% 
+  impute_proxy(., turnover ~ vat) %>% 
+  impute_rlm(staff ~ staff.costs) %>% 
+  impute_rlm(staff ~ total.costs) %>% 
+  impute_proxy(staff ~ total.rev - total.costs) %>% 
+  impute_mf(., . ~ .)
+```

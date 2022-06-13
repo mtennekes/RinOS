@@ -1,0 +1,26 @@
+---
+title: "Exercises reporting"
+author: "ESTP Use of R in Official Statistics"
+output: 
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+params:
+  answers: TRUE
+---
+
+### Exercise 1
+
+Look the file `un-report.pdf`. We are recreating this document
+using `rmarkdown` in html (of pdf if you want to).
+
+Some clues: 
+
+- **All numbers, including numbers in the texts should be generated with R code**
+- Download cheatsheets for `ggplot2`, `dplyr`, and `rmarkdown`
+- Create a new RStudio project for this report. Make sure the data (`Unitednations.txt`) is in the project directory.
+- You will need to use `tidyverse`
+- Work iteratively, add a litte piece at a time and `knit` to see if it works.
+- Some command may generate a `warning` or `message`, search in the help (e.g. Google) how 
+to turn this off.
+- The tables are created with `pander`. Find out how to change the _caption_.

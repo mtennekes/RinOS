@@ -1,0 +1,165 @@
+---
+title: 'R in Official Statistics'
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+    fig_caption: false
+
+---
+
+```{r setup, include=FALSE}
+```
+
+## R use in Official Statistics
+
+R is used more and more in statistical offices
+
+Reasons:
+
+- popular analytical tool
+- new employees are familiar with it
+- cheaper (e.g. IStat (Italy) saves 1M euro a year)
+- many packages available 
+- active community, also for Official Statistics!
+
+
+## Official Statistics Usages:
+
+- analyzing data (analyst)
+- production of statistics e.g. HSMR in NL (mortality rate)
+- checking and validating data.
+- business cycle tracer, using time series analysis
+- publishing dashboards: e.g. http://dashboards.cbs.nl
+
+## Official Stats R Packages: Sampling (GSBPM 4.1)
+- `sampling`. Several algorithms for drawing (complex) survey samples and calibrating design weights.
+- `surveyplanning`. Tools for sample survey planning, including sample size calculation, estimation of expected precision for the estimates of totals, and calculation of optimal sample size allocation.
+
+
+## Official Stats R Packages: Process (GSBPM 5)
+
+- `blaise` Reading and writing Files in the Blaise Format from R. By Statistics Netherlands.
+- `dcmodify` Derive new variables or modify data using externally defined data modification rules.
+- `reclin` Functions to assist in performing probabilistic record linkage and deduplication: generating pairs, comparing records, em-algorithm for estimating m- and u-probabilities, forcing one-to-one matching. Can also be used for pre- and post-processing for machine learning methods for record linkage.
+- `RecordLinkage`. Implementation of the Fellegi-Sunter method for record linkage.
+- `StatMatch`. Statistical Matching or Data Fusion
+- `fastLink`. Implements a Fellegi-Sunter probabilistic record linkage model that allows for missing data and the inclusion of auxiliary information. Documentation can be found on http://imai.princeton.edu/research/linkage.html
+
+##
+
+- `stringdist`. Implements approximate string matching. Supports various string distances (Damerau-Levenshtein, Hamming, Levenshtein, optimal sting alignment), qgrams (q- gram, cosine, jaccard distance) and heuristic metrics (Jaro, Jaro-Winkler). An implementation of soundex is provided as well.
+- `fuzzyjoin`. Join tables based on exact or similar matches. Allows for matching records based on inaccurate keys.
+- `XBRL`. Extraction of Business Financial Information from XBRL Documents
+
+## Data editing and imputation
+- `validate`. Rule management and data validation.
+- `validatetools` Checking and simplifying sets of validation rules.
+- `errorlocate` Error localisation based on the principle of Fellegi and Holt.
+Uses validate rule definitions
+supports categorical and/or numeric data
+supports linear equalities, inequalities and conditional rules.
+Configurable backend for MIP-based error localization.
+- `VIM`. Visualisation and Imputation of missing values.
+Advanced visualisation of missing data patterns
+Imputation using (robust) linear regression methods
+Imputation using several donor-based methods (kNN, hot-deck)
+
+##
+
+- `simputation`. Simple imputation: many methods using a uniform interface following the tidy tools manifesto
+Allows to easily combiny many imputation methods/strategies.
+Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck methods (powered by VIM), randomForest, EM-based, and iterative randomForest imputation. Reuse of fitted models and definition of simple user-defined methods are supported as well.
+- `SeleMix`. Detection of outliers and influential errors using a latent variable model for selective editing.
+- `univOutl`. Various methods for detecting univariate outliers.
+- extremevalues. Detection of univariate outliers based on modeling the bulk distribution.
+- `deductive`: Deductive correction and imputation using edit rules and (partially) complete data.
+- `rspa`: Adapt Numerical Records to Fit (in)Equality Restrictions.
+
+
+## Estimation and weighting (GSBPM 5.6 | 5.7)
+- `survey`: Weighting and estimation for complex survey designs, possibly under nonresponse. Also computes estimator variance. See also - `srvyr`:for integration with tidy tools.
+- `hbsae`: Small area estimation based on hierarchical Bayesian models.
+- `rsae`: Small area estimation based on (robust) maximum likelihood estimation.
+- `CalibrateSSB`: Calculate weighs and estimates for panel data with non-response.
+- `ReGenesees`: Has a similar interface as the - `survey`: along with specific features (e.g. partitioned calibration) that make it fit for processing large-scale surveys in the official statistics field. ReGenesees implements many different estimators with sampling errors, and ships with a dedicated GUI (package ReGenesees.GUI).
+- `vardpoor`: Linearization of non-linear statistics and variance estimation.
+- `convey`: Variance estimation on indicators of income concentration and poverty using complex sample survey designs. Wrapper around the survey package.
+- `icarus`: Provides detailed tools for performing calibration and several of its varitations, in a familiar setting for Calmar users in SAS.
+- `gustave`: Provides a toolkit for analytical variance estimation in survey sampling.
+- `rtrim`: Trends and Indices for Monitoring data. Provides tools for estimating animal/plant populations based on site counts, including occurrence of missing data.
+- `surveysd`: Calibration, bootstrap and error estimation for complex surveys.
+- `inca`: Calibration weighting with integer weights.
+
+## Time series and seasonal adjustment (GSBPM 5.6 | 5.7)
+
+- `seasonal`: Interface to the X13-ARIMA-SEATS program from R with a very nice shiny GUI.
+- `x12`: Alternative interface to the X13-ARIMA-SEATS program from R with a focus on batch processing time series.
+- `RJDemetra`:R interface to JDemetra+.
+- `tempdisagg`:methods for temporal disaggregation and interpolation of time series.
+
+
+## Output validation (GSBPM 6.2)
+- `validate`: Rule management and data validation.
+
+
+## Statistical disclosure control (GSBPM 6.4)
+- `sdcMicro`: Disclosure control for statistical microdata.
+- `sdcTable`: Disclosure control for tabulated data.
+- `easySdcTable`:provides an interface to the package sdcTable.
+- `sdcHierarchies`:allows to generate, modify and export nested hierarchies.
+- `SmallCountRounding`:can be used to protect frequency tables by rounding necessary inner cells so that cross-classifications to be published are safe.
+- `simPop`: Simulation of synthetic populations from census/survey data considering auxiliary information.
+- `sdcSpatial`: Create privacy protected density maps from location data. Includes visual sensitivity assessment and several protection methods.
+- `synthpop`: Produce synthetic versions of microdata containing confidential information so that they are safe to be released to users for exploratory analysis.
+
+## Visualisation (GSBPM 7.2)
+- `tabplot`: Compare up to about 10-20 variables simultaneously using a tableplot. See also tabplotd3 for a web-based GUI.
+- `tmap`: Thematic geographic maps, including bubble charts, choropleths, and more.
+- `oceanis`: To create maps for statistical analysis such as proportional circles, chroropleth, typology and flows. By INSEE.
+- `treemap`: Space-filling visualisation of hierarchical data.
+- `btb`: Conservative kernel smoothing method for spatial analysis.
+
+## Access to official statistics (GSBPM 7.4)
+- `rsdmx`: Easy access to data from statistical organisations that support SDMX webservices. The package contains a list of SDMX access points of various national and international statistical institutes.
+- `and`:C++ readsdmx. Read SDMX into dataframes from local SDMX-ML file or web-service. By OECD.
+- `rjstat`: Read and write data sets in the JSON-stat format.
+- `oecd`:Search and Extract Data from the OECD
+- `sorvi`:Finnish Open Government Data Toolkit
+- `eurostat`:Tools to download data from the Eurostat database together with search and manipulation utilities.
+- `acs`:Download, Manipulate, and Present American Community Survey and Decennial Data from the US Census.
+- `inegiR`:Access to data published by INEGI, Mexico's official statistics agency.
+
+##
+
+- `cbsodataR`: Access to Statistics Netherlands' (CBS) open data API from R.
+- `censusapi`:A wrapper for the U.S. Census Bureau APIs that returns data frames of Census data and metadata.
+- `nsoApi`:builds on other packages to access data from official statistics and tries to harmonize the API.
+- `CANSIM2R`: Extract CANSIM (Statistics Canada) tables and transform them into readily usable data.
+- `pxweb`: Generic interface for the PX-Web/PC-Axis API used by many National Statistical Agencies.
+- `PxWebApiData`: Easy API access to e.g. Statistics Norway, Statistics Sweden and Statistics Finland.
+- `rdbnomics`: Access to the DB.nomics database which provide macroeconomic data from 38 official providers such as INSEE, Eurostat, Wolrd bank, etc.
+- `readabs`:Download data from the Australian Bureau of Statistics.
+- `destatiscleanr`: Clean csv files from Genesis, the database of the Federal Statistical Office of Germany (Destatis) and its regional outlets.
+- `statcanR`: An R connection to Statistics Canada's Web Data Service. Open economic data (formerly CANSIM tables) are accessible as a data frame in the R environment.
+- `cdlTools`: Downloads USDA National Agricultural Statistics Service (NASS) cropscape data for a specified state.
+- `csodata`:Download data from Central Statistics Office (CSO) of Ireland.
+- `iriR`: Client for the European Commission’s Industrial R&D Investment Scoreboard (IRI)
+- `czso`: Access open data from the Czech Statistical Office.
+
+
+## Active community
+
+use of R in official Statistics:
+
+- Yearly conference: uROS: use of R in Official Statistics
+- Last year Vienna: https://r-project.ro/conference2020.html
+- Check the website: many examples of R projects.
+- twitter: uRosconf
+
+
+
+List of awesome official statistics software: many R entries!
+
+- https://github.com/SNStatComp/awesome-official-statistics-software
+

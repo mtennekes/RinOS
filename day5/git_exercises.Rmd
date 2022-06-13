@@ -1,0 +1,63 @@
+---
+title: "Exercise Git"
+author: "ESTP Use of R in Official Statistics"
+output:
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+  html_document:
+    df_print: paged
+---
+
+### Exercise
+
+We will make a simple git repo.
+
+a) Configure your git for your name
+
+```sh
+git config --global user.email "name@email.com"
+```
+```sh
+git config --global user.name "FirstName LastName"
+```
+
+
+b) 
+- create a new directory: "my_project"
+- initialize this directory with `git init`
+- check the status with `git status`
+- Create a file ``test.txt`` with the text "Hello Git!"
+- Check the status with `git status`
+- Add the file to git with `git add test.txt`
+- Check the status with `git status`
+- Commit the file with `git commit -m 'first commit'`.
+- Adjust text into ``Hello again Git!''.
+- Check the status with `git status`
+- Check the differences with `git status`
+- Commit the file with `git commit -m 'my first changes'`.
+
+### Exercise two, RStudio
+
+a)
+
+- create a new R projects from RStudio: "my_rproject"
+- check the `git` check, when creating the project.
+- Create a file 'test.R' with code `hist(runif(1000))`
+- Execute it
+- Check add the `git` tab (top right) the file `test.R`. 
+- Push on 'commit'
+- Adjust the file 'test.R' into `hist(rnorm(1000))`
+- Look at the differences (`diff`)
+- Commit the change
+ 
+### Exercise 3 (optional)
+
+a) Create a  github account (https://github.com)
+
+b) 
+
+- Create a new repo on github. Upload the code from previous exercise (my_rproject)
+- Remove the project from your local computer
+- Clone the repo on github to your local computer
+- Open the RStudio project, addjust and commit.

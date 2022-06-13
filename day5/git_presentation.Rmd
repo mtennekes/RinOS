@@ -1,0 +1,289 @@
+---
+title: "Version control"
+author: "ESTP Use of R in Official Statistics"
+output:
+  beamer_presentation:
+    fig_width: 3
+    fig_height: 3
+    includes:
+      in_header: ../header.tex
+    keep_tex: no
+---
+
+## Technical
+
+> Data Scientist (n.): Person who is better at statistics than any software engineer and better at software engineering than any statistician.
+
+@josh_wills
+
+## Contents
+
+- Version control
+- Reporting
+
+## Reproducability
+
+\begin{center}
+  \makebox[0pt]{
+    \includegraphics[width=\paperwidth]{fig/reproduce_duck}
+  }
+\end{center}
+
+## Reproducability
+
+### 
+
+- As an official statistician your actions/data manipulations 
+should be reproducible:
+
+- Actions **repeatable**: same data in, identical analysis out.
+- Actions **comparable**: new data in, comparable analysis out.
+- Actions **improvable**: same data in, better analysis out. 
+- Actions **readable**: do you (and I!) understand what the action is about?
+
+
+## Typical development cycle:
+
+- Design data processing script for production (good!):
+- In production you encounter unforeseen errors or changes in data (_reality is messy_)
+- So you should allow for incremental improvements and debugging
+
+## Version control
+
+- What is version control?
+
+### Software enginering trick
+
+- keep track of changes in source code (files)
+- work in teams on large sets on source code
+- make it easy to rollback changes (also partially)
+- focussed on source code (scripts!)
+
+## Version control
+
+- Why is it important?
+
+    - For yourself!
+    - To share scripts with others.
+    - To work in a team on the same project.
+
+## For yourself!
+
+### Be reproducible!
+
+- Keep explicit track of versions (history).
+- Can always return to a any version of your scripts
+- As a result: scripts cleaner.
+- ~Erorz kan be undon~
+- Errors can be undone.
+
+## Sharing scripts
+
+- The internet contains lots of example scripts / source code 
+- All these scripts are under source control
+
+    - http://github.com
+    - http://gitlab.com
+    - http://bitbucket.org
+    
+- If you share those scripts with someone, it is handy to have version control, when
+something changes. 
+
+## Team work / Professional
+
+- As a official statisticina / data scientist you often work in teams.
+- In a professional setting, the script is not yours, it should be accessable to
+current and future colleagues.
+
+### Version control allows for developing scripts together
+- changes are made individually (in parallel)
+- version control software helps to integrate these versions.
+
+## `git`
+
+- Most used tool is `git`
+- Installation: <https://git-scm.com/downloads>
+
+### History
+
+- Written by  Linus Torvalds (inventor of Linux)
+- To support Linux development.
+- Decentral management of source code.
+
+## Tools
+
+### How to use it? 
+
+- CLI (command-line), good (but complex...)
+
+### In IDE 
+- Well integrated
+- RStudio (for *R*)
+- VS Code (visual studio code) (can be used with R!)
+- Python (Spyder IDE etc.)
+
+## Do and Don'ts
+
+- `git` is a good tool, but use it for : 
+
+### Do's
+
+- Scripts!
+- Configuration files.
+- Text files.
+- (small) data files
+
+### Don't
+
+- Continuously changing data files
+- Continuously changing binary files
+  
+  - e.g. Excel, word etc
+
+**git is optimized for changes in lines of text**
+
+## Advantages
+
+###
+
+`git`:
+
+- is fast!
+- can work offline. (does not need a server)
+- keeps track of all versions you explicitly _commit_.
+- allows for returning to previous version. 
+
+## Difference with dropbox / snap shots
+
+- May look like dropbox / google drive
+
+### Use case is different:
+
+- `git` supports teams
+- decentral development and integration of applications
+
+
+
+## Why?
+
+###
+
+- `git` optimized for keeping track of changes in text. 
+- `git` stores difference between lines texts (efficiently)
+
+## `git` workflow
+
+\begin{center}
+\includegraphics[width=0.7\paperwidth]{fig/workflow.png}
+\end{center}
+
+## `git` terms
+
+- `repo`: repository, copy of all version history, kept in a (hidden) `.git` 
+sub directory
+
+- `commit`: command to store a version.
+
+- `push`: push your projects history to another git repo
+
+- `pull`: retrieve the history of another repo.
+
+## Sharing / team work
+
+###
+
+- Every repo is a full copy (with complete history)
+- `git` support all kinds of scenario for sharing/managing the code.
+- Both central as well as decentral.
+- Also  _federated model_ (army like structure)
+
+## Remote repo's model
+
+\begin{center}
+\includegraphics[width=0.7\paperwidth]{fig/02.png}
+\end{center}
+
+## Central repo model
+
+\begin{center}
+\includegraphics[width=0.6\paperwidth]{fig/03.png}
+\end{center}
+
+## Configuration (once)
+
+Git keeps track which user has work on the code, so we should declare ourselves
+to `git` using an email name (which is unique) 
+
+```sh
+git config --global user.email "name@email.com"
+```
+```sh
+git config --global user.name "FirstName LastName"
+```
+
+Checking if configuration was succesful:
+
+```sh
+git config --global --list 
+```
+
+## Commands
+
+### Initialise
+
+Once (for a project directory)
+
+```
+git init
+```
+
+### Add files to tracking:
+
+```
+git add <file1> <file2> <dir1> .... 
+```
+
+### Commit changes:
+
+```
+git commit -am 'text'
+
+```
+
+## Remote
+
+It is possible to use `git` with a centrale/remote repo: you should consider this 
+in your organisation.
+
+A central repo:
+
+- can be just a network drive
+- can be on a website:
+  
+    - external: github.com, gitlab.com 
+    - internal: gitea, gitlab (requires installation of server in your organisation)
+
+- Note every copy of the repo is a full copy!
+
+
+## Remote commando's 
+
+- Adding a centrale repo (once)
+```
+git remote add origin <url>
+```
+
+- Or clone a already existing central repo:
+```
+git clone <url> <dir>
+```
+
+- Retrieve the latest changes from the central repo
+```
+git pull origin
+```
+
+- Push your changes to the central repo.
+```
+git push origin
+```

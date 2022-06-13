@@ -1,0 +1,87 @@
+---
+title: "R Projects"
+author: "ESTP Use of R in Official Statistics"
+output: 
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+    fig_caption: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Project management
+
+### The Statistical Value Chain
+
+Define a number of 'half-products' (data sets) with set quality demands.
+
+\begin{picture}(0,0)
+\put(0,-75){
+\includegraphics[height=0.30\textheight]{fig/fig04_value-chain.png}
+}
+\end{picture}
+
+
+## Project management
+
+### Value chain
+- **Raw data**: as it enters our offices
+- **Input (tidy) data**: records and variables identifiable
+- **Valid data**: content is checked
+- **Statistics**: aggregate
+- **Output**: reports, plots, ...
+  
+### Directory structure
+
+- Create a directory for each half-product
+- The R code in each directory creates the data in that directory
+  - The R code can be in a rmarkdown document
+
+# R packages and the R help system
+
+## R packages
+
+### A R package consists of:
+
+- New functions and/or data with 
+    - documentation (**obligatory**)
+    - examples (optional) 
+    - automatic tests (optional)
+    - vignettes ($=$tutorials, optional)
+
+### Publication
+
+Via a sort app store:
+
+- Centrally via **`https://cran.r-projects.org`**
+- Or see via  **`https://r-pkg.org/`** 
+
+### Installation
+
+```{r,eval=FALSE}
+install.packages("packagename")
+```
+
+## What package should I use?
+
+### The internet helps them who help them selves
+
+1. Google your application (Use `R` as keyword);
+2. read blogs (`r-bloggers`), SO questions;
+2. read vignettes, but mainly:
+4. **Installeren en aan de slag ermee.**
+
+## R documentation
+
+### Built-in help
+- Standard technical reference, (often) with links, author, examples. 
+- Meant to document a function independent of other functions.
+
+### Vignettes
+- Tutorials, walkthroughs
+- Task orient, meant to introduce a user to the package.
+
+

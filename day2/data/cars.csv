@@ -1,0 +1,33 @@
+"model";"weight";"engine";"gearbox";"gears";"disp";"cyl";"carb";"power";"mpg";"axleratio";"qtrmile"
+"Mazda RX4";2,62;"V";"manual";4;160;6;4;110;21;3,9;16,46
+"Mazda RX4 Wag";2,875;"V";"manual";4;160;6;4;110;21;3,9;17,02
+"Datsun 710";2,32;"straight";"manual";4;108;4;1;93;22,8;3,85;18,61
+"Hornet 4 Drive";3,215;"straight";"auto";3;258;6;1;110;21,4;3,08;19,44
+"Hornet Sportabout";3,44;"V";"auto";3;360;8;2;175;18,7;3,15;17,02
+"Valiant";3,46;"straight";"auto";3;225;6;1;105;18,1;2,76;20,22
+"Duster 360";3,57;"V";"auto";3;360;8;4;245;14,3;3,21;15,84
+"Merc 240D";3,19;"straight";"auto";4;146,7;4;2;62;24,4;3,69;20
+"Merc 230";3,15;"straight";"auto";4;140,8;4;2;95;22,8;3,92;22,9
+"Merc 280";3,44;"straight";"auto";4;167,6;6;4;123;19,2;3,92;18,3
+"Merc 280C";3,44;"straight";"auto";4;167,6;6;4;123;17,8;3,92;18,9
+"Merc 450SE";4,07;"V";"auto";3;275,8;8;3;180;16,4;3,07;17,4
+"Merc 450SL";3,73;"V";"auto";3;275,8;8;3;180;17,3;3,07;17,6
+"Merc 450SLC";3,78;"V";"auto";3;275,8;8;3;180;15,2;3,07;18
+"Cadillac Fleetwood";5,25;"V";"auto";3;472;8;4;205;10,4;2,93;17,98
+"Lincoln Continental";5,424;"V";"auto";3;460;8;4;215;10,4;3;17,82
+"Chrysler Imperial";5,345;"V";"auto";3;440;8;4;230;14,7;3,23;17,42
+"Fiat 128";2,2;"straight";"manual";4;78,7;4;1;66;32,4;4,08;19,47
+"Honda Civic";1,615;"straight";"manual";4;75,7;4;2;52;30,4;4,93;18,52
+"Toyota Corolla";1,835;"straight";"manual";4;71,1;4;1;65;33,9;4,22;19,9
+"Toyota Corona";2,465;"straight";"auto";3;120,1;4;1;97;21,5;3,7;20,01
+"Dodge Challenger";3,52;"V";"auto";3;318;8;2;150;15,5;2,76;16,87
+"AMC Javelin";3,435;"V";"auto";3;304;8;2;150;15,2;3,15;17,3
+"Camaro Z28";3,84;"V";"auto";3;350;8;4;245;13,3;3,73;15,41
+"Pontiac Firebird";3,845;"V";"auto";3;400;8;2;175;19,2;3,08;17,05
+"Fiat X1-9";1,935;"straight";"manual";4;79;4;1;66;27,3;4,08;18,9
+"Porsche 914-2";2,14;"V";"manual";5;120,3;4;2;91;26;4,43;16,7
+"Lotus Europa";1,513;"straight";"manual";5;95,1;4;2;113;30,4;3,77;16,9
+"Ford Pantera L";3,17;"V";"manual";5;351;8;4;264;15,8;4,22;14,5
+"Ferrari Dino";2,77;"V";"manual";5;145;6;6;175;19,7;3,62;15,5
+"Maserati Bora";3,57;"V";"manual";5;301;8;8;335;15;3,54;14,6
+"Volvo 142E";2,78;"straight";"manual";4;121;4;2;109;21,4;4,11;18,6

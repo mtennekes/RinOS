@@ -1,0 +1,210 @@
+---
+title: "Exercises"
+output: 
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+    keep_tex: no
+---
+
+```{r setup, include=FALSE, eval=TRUE}
+library(dplyr)
+library(tmap)
+library(tmaptools)
+data("World")
+knitr::opts_chunk$set(echo=FALSE, eval=FALSE)
+```
+
+### Exercise 1: `tmap` 
+
+In this exercise we'll explore thematic maps. Load the packages `tmap` and `tmaptools`. We will use the data set `World` provided by `tmap`.
+
+a) Show a map of the world using the functions `tm_shape`, `tm_fill` and `tm_borders`. Create white borders and set the line width to 0.5.
+```{r}
+data("World")
+tm_shape(World) + tm_fill() + tm_borders(lwd=0.5, col="white")
+```
+b) Create a choropleth (a colored thematic map) displaying the life expectancy of each country. Use the `virdis` color palette.
+```{r}
+m <- tm_shape(World) + tm_fill("life_exp", palette = viridis::viridis(5))
+m
+```
+c) Add white country borders with 50% opacity.
+
+```{r}
+m + tm_borders("white", alpha=0.5)
+```
+
+d) Create a plot that shows the distribution of population densities. Adjust the plot to make it easier on the eye and easier and interpret.
+
+```{r}
+hist(log(World$pop_est))
+```
+
+e) Recreate the following bubble chart of estimated population sizes. Don't forget to add country borders.
+
+```{r, eval=TRUE}
+tm_shape(World) + tm_fill() + tm_borders(col="white", alpha=0.5) + tm_bubbles(size="pop_est", col="orange")
+```
+
+f) Recreate the following plot using `tm_facets`:
+
+```{r,eval=TRUE}
+tm_shape(World) +  tm_fill("pop_est_dens") + tm_facets(by="continent")
+``` 
+
+g) Create the same choropleth as in part c) of `pop_est_dens` for the Europian part of the data set. What's happening here? Explain.
+```{r,eval=TRUE}
+eu = World %>% filter(continent == "Europe")
+tm_shape(eu) +  tm_fill("pop_est_dens") 
+``` 
+
+### Exercise 2: `sf`
+In this exercise we will work with spatial data about the Netherlands which can be loaded with the command `data("NLD_muni")`.
+a) 
+Convert the `NLD_muni` data set to a sf data.frame and name the result `nld_sf`.
+```{r}
+library(sf)
+data("NLD_muni")
+nld_sf <- st_as_sf(NLD_muni)
+```
+b) Calculate the population density (inhabitants/km^2) and add this to the data set as a column named `pop_density`.
+
+```{r}
+nld_sf <- 
+  nld_sf %>% 
+  mutate(area = st_area(nld_sf)/1e6
+        , pop_density = population / area
+        )
+```
+
+d) Create a choropleth of `pop_density`
+
+```{r}
+tm_shape(nld_sf) +  tm_fill("pop_density")
+```
+
+e) Look at the distriution of population densities and assign colors to more suitable boundary values.
+
+```{r}
+tm_shape(nld_sf) +  tm_fill("pop_density", breaks = c(0, 250, 500, 750, 1000, 5000, 10000))
+```
+
+f) Create a histogram of `log(pop_density)`
+
+```{r}
+hist(log(unclass(nld_sf$pop_density)))
+```
+
+### Exercise 3: `raster`
+
+a)
+In this exercise we will use `raster`. Install and load the package and load the variables `meuse`and `meuse.grid`.
+
+```{r}
+library(raster)
+data("meuse")
+data("meuse.grid")
+```
+
+b)
+Convert `meuse.grid` to a `SpatialPointsDataFrame` using `coordinates` from the `sp` package. Hint: look at the official R documentation of `coordinates`. Set `gridded(meuse.grid)` to `TRUE` and use the function `raster` to create an empty raster from `meuse.grid`. Examine its `summary`.
+
+```{r}
+coordinates(meuse.grid)  <- ~x+y
+gridded(meuse.grid) <- TRUE
+r <- raster(meuse.grid)
+summary(r)
+```
+
+c)
+Convert `meuse` to a `SpatialPointsDataFrame` as well using `coordinates` once more. 
+
+```{r}
+coordinates(meuse) <- ~x+y
+```
+d) Create a 40x40 raster using the `extent` of `meuse`.
+
+```{r}
+r40 = raster(extent(meuse), nrows = 40, ncols = 40)
+```
+
+e) Create a new raster called `rcopper` using `rasterize` and `meuse` with the amounts of `log(copper)` in the soil.
+
+```{r}
+rcopper = rasterize(meuse, r40, "copper")
+```
+
+f) Repeat the previous exercise for lead concentration and name the new raster `rlead`.
+
+```{r}
+rlead = rasterize(meuse, r40, "lead")
+```
+
+g) Combine the two rasters with `stack` and plot this variable to obtain two plots side-by-side.
+
+```{r}
+plot(stack(rcopper, rlead))
+```
+
+We will finish this subject with some exercises about a different built-in data set: `volcano`. This data set gives topographic information for the Maunga Whau volcano in New Zealand on a 10m by 10m grid.
+h) Create a raster `v` out of `volcano` and plot `v`. Use the `viridis` color palette.
+
+```{r}
+v <- raster(volcano)
+plot(v, col = viridis::viridis(255))
+```
+i)  Create a contour plot for this raster.
+
+```{r}
+contour(v)
+```
+
+j) Create a `filledContour` plot of `v` and limit the number of colours to 10.
+
+```{r}
+filledContour(v, nlevels = 10)
+```
+
+k) Recreate the following 3D surface plot of `v` using `persp`:
+
+```{r, eval=TRUE}
+library(raster)
+v <- raster(volcano)
+persp(v, border="#00000044")
+```
+
+### Exercise 4: `leaflet`
+
+The `leaflet` package uses so-called lat/lon coordinates (wgs84 or "longlat").
+We will use the data set of the Netherlands we created in exercise 2 (`nld_sf`) which uses a different (Dutch) projection called "Rijksdriehoeksstelsel". 
+a) Convert the projection to wgs84 using `st_transform`.
+
+```{r}
+nl <- st_transform(nld_sf, get_proj4("longlat")) 
+```
+
+b) Create an interactive choropleth in leaflet of population sizes. First create a `colorNumeric` function and then use this as an argument in `addPolygons` to fill the colors of the polygons.
+
+```{r}
+library(leaflet)
+
+nl$pop_density = unclass(nl$pop_density)
+pal <- colorNumeric("viridis", range(nl$pop_density))
+
+leaflet(nl) %>% addTiles() %>%  addPolygons(fillColor=~pal(pop_density))
+```
+c) The library `tmap` also provides an easy-to-use function to create interactive leaflet maps called `tmap_leaflet`. Redo exercise 2e but this time make the choropleth interactive.
+
+```{r}
+m = tm_shape(nld_sf) +  tm_fill("pop_density", breaks = c(0, 250, 500, 750, 1000, 5000, 10000))
+tmap_leaflet(m)
+
+```
+
+d) Create a bubble chart of `World` showing the number of inhabitants for each country. Explain what happened to France.
+
+```{r}
+b <- tm_shape(World) + tm_fill() + tm_bubbles("pop_est")
+tmap_leaflet(b)
+```

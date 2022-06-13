@@ -1,0 +1,241 @@
+---
+title: "Reporting with R"
+author: "ESTP Use of R in Official Statistics"
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+    fig_caption: false
+---
+
+```{r,echo=FALSE,message=FALSE}
+knitr::opts_chunk$set(comment=NA)
+library(ggplot2)
+```
+
+# Rmarkdown
+
+## Markup or markdown?
+
+### Markup languages
+
+Syntax to indicate textual markup e.g.:
+
+- `HTML` (describe structure webpages)
+- `CSS` (colors/style of web pages)
+- \LaTeX (textual scientific markup, formula's)
+
+
+### Markdown
+Simple syntax
+
+- allows to describe simple markup and
+- is  _human readable_ is (think: old fashioned e-mail)
+
+
+## How does it work?
+
+1. You write a text file in  markdown `syntax`
+2. A markdown convert transforms it into a different format:
+    - e.g.: `pandoc` transforms markdown into HTML, Word (docx), pdf, ...
+
+## Example of a markdown document
+
+Syntax:
+```
+### A header title
+
+- John
+- Sue
+```
+
+Transforms into:
+
+### A header title
+
+- John
+- Sue
+
+
+## `rmarkdown`
+
+### What if I could...
+
+Add the results of an analysis automatically in a report?
+
+## `rmarkdown` with the `knitr` package
+
+`rmarkdown` is a text format in which you write an analysis report. 
+The remarkable thing is that the R code to write the report can be included in 
+the report. Using  `rmarkdown` source code `knitr` makes sure that:
+
+- The R-code is executed
+- The results of the R statements are included in the document
+- The output is shown as `html`, Word or `pdf`, powerpoint.
+
+### Tip
+
+Download the `rmarkdown` cheatsheet: 
+\url{rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf}
+
+
+## New `rmarkdown` document
+
+\begin{picture}(0,0)
+\put(15,-75){
+\includegraphics[height=0.5\textheight]{fig/fig01_rstudio-new-markdown.png}
+}
+\put(140,-75){
+\includegraphics[height=0.5\textheight]{fig/fig02_rstudio-markdown-type.png}
+}
+\end{picture}
+
+
+## rmarkdown document: yaml header
+
+
+\begin{picture}(0,0)
+\put(15,-75){
+\includegraphics[height=0.4\textheight]{fig/fig03_rmarkdown-yaml-header.png}
+}
+\end{picture}
+
+
+## rmarkdown document: contents
+
+\begin{center}
+\huge DEMO
+\end{center}
+
+## (r)markdown: some syntax
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Syntax}           & \textbf{Meaning}\\
+\hline
+\code{\# Title}           & Head 1 (biggest)\\
+\code{\#\# Title}         & Head 2 \\
+$\vdots$                  & $\vdots$\\
+\code{\#\#\#\#\# Title}   & Head 5 (smallest)\\
+\code{**bold**}            & bold\\
+\code{\_italic\_}         & italic\\
+\end{tabular}
+\end{center}
+
+## rmarkdown: R _code chunks_
+
+### Show code + results
+
+```{r, echo=FALSE}
+cat("```{r}\n"
+    ,"head(iris)"
+    ,"\n```")
+```
+
+### Show results, no code
+
+```{r, echo=FALSE}
+cat("```{r, echo=FALSE}\n"
+    ,"head(iris)"
+    ,"\n```")
+```
+
+### Show code, no results
+
+```{r, echo=FALSE}
+cat("```{r, eval=FALSE}\n"
+    ,"head(iris)"
+    ,"\n```")
+```
+
+## rmarkdown: Inline R code chunks
+
+### Syntax
+
+```{r, echo=FALSE}
+cat("The value of pi is approximately `r round(pi,3)`")
+```
+
+### Result
+
+The value of pi is approximately `r round(pi,3)`
+
+## rmarkdown: Nice tables
+
+### With the `knitr` package
+
+```{r, echo=FALSE}
+cat("```{r, echo=FALSE}\n"
+    ,"knitr::kable(head(iris))"
+    ,"\n```")
+```
+
+### Or with the `pander` package
+
+```{r, echo=FALSE}
+cat("```{r, echo=FALSE, style='asis'}\n"
+    ,"pander::pandoc.table(head(iris))"
+    ,"\n```")
+```
+
+## rmarkdown: Figures
+
+### Figures are included by default
+
+```{r, echo=FALSE}
+cat("```{r, echo=FALSE}\n"
+    ,"boxplot(Sepal.Length ~ Species, data=iris)"
+    ,"\n```")
+```
+
+### Height and width can be specified
+
+```{r, echo=FALSE}
+cat("```{r, echo=FALSE, fig.height=3, fig.width=4}\n"
+    ,"boxplot(Sepal.Length ~ Species, data=iris)"
+    ,"\n```")
+```
+
+## rmarkdown: 
+
+### Images
+````
+![Label of image](C:/path/to/image.png)
+````
+
+### Hyperlinks
+
+````
+[Eurostat](https://ec.europa.eu/eurostat)
+````
+
+Turns into: 
+
+[Eurostat](https://ec.europa.eu/eurostat)
+
+## rmarkdown: Setting defaults
+
+### Example: set `echo=FALSE` for all chunks
+
+```{r, echo=FALSE}
+cat("```{r, echo=FALSE}\n"
+    ,"knitr::opts_chunk$set(echo=FALSE)"
+    ,"\n```")
+```
+
+## rmarkdown: some tips
+
+### Repeat after me...
+
+> Always work with an Rstudio project with your data.
+
+### Further
+
+Start with some (for the reader) invisible chunks in which you:
+
+- set the default options for knitr
+- load packages
+- read data
+- Use templates to set your style and markup.
+- Use cheatsheet, google, and SO.
+- **Work iteratively:** `knit` often!`

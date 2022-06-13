@@ -1,0 +1,128 @@
+---
+title: "Exercises StatModel"
+output: 
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+params:
+  answers: yes
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set( echo = params$answers
+                     , eval = params$answers
+                     , comments = NA
+                     , message=FALSE
+                     , warning = FALSE
+                     )
+library(tidyverse)
+```
+We will fit two different models to the "data/Wage.csv" dataset. A linear model and a Decision Tree model. 
+
+(The proper way of comparing models is to use cross validation, e.g. splitting your data in a test and train set, but to simplify things, we will neglect this.)
+
+a) Load the "data/Wage.csv" file into variable `Wage`. Make a summary. 
+We will build a model that tries to predict `wage` from the other variables.
+
+```{r}
+Wage <- read.csv("data/Wage.csv")
+```
+
+b) Fit the following linear model (lm):
+
+```{r, echo = TRUE}
+model_lm1 <- lm(wage ~ age, data = Wage)
+```
+Print the `model_lm`, `summary` and coefficients `coef`.
+
+c) Get the predictions by using R function `predict`
+
+```{r, echo = TRUE}
+wage_lm1 <- predict(model_lm1)
+```
+
+We will look at the root mean squared error (rmse) as a measure to compare models.
+
+```{r, echo = TRUE}
+rmse_lm1 <- sqrt(mean((Wage$wage - wage_lm1)^2))
+rmse_lm1
+```
+
+d) Use predict to find out what wage is predicted for `age = 35`. Use argument `newdata` with a `data.frame(age = 35)`
+
+```{r}
+predict(model_lm1, newdata = data.frame(age = 35))
+```
+
+
+e) repeat b and c for `wage ~ age + education`. Is this a better model fit?
+
+```{r}
+model_lm2 <- lm(wage ~ age + education, data = Wage)
+wage_lm2 <- predict(model_lm2)
+rmse_lm2 <- sqrt(mean((Wage$wage - wage_lm2)^2))
+rmse_lm2
+```
+
+
+e) With the function `rpart` a decision tree (CART) can be used to predict
+
+```{r, echo = TRUE}
+library(rpart)
+model_cart1 <- rpart(wage ~ age, data = Wage)
+```
+
+Calculate the mse for this model and store it in `mse_cart1`
+
+```{r}
+wage_cart1 <- predict(model_cart1)
+```
+
+e) Repeat this for `wage ~ age + education` and predict this with you own age and education for both models.
+
+f) What is the `mse` for both models?
+
+### Exercise 2, Classification
+
+a) Load the dataset "data/Caravan.csv". We will try to predict whether a person 
+has purchased a caravan.
+
+
+```{r}
+Caravan <- read.csv("data/Caravan.csv")
+```
+
+b) Fit a cart model with `rpart` to predict a purchase. Use all variables.
+
+```{r}
+model <- rpart(Purchase ~ ., data= Caravan)
+```
+
+c) Predict the labels using the following statement:
+
+```{r, echo =TRUE}
+purchase_cart <- predict(model, type = "class")
+```
+
+d) create cross table where you compare how well the prediction is.
+
+```{r}
+tab <- table(predicted = purchase_cart, observed = Caravan$Purchase)
+tab
+```
+
+e) what is the precision and recall?
+
+```{r}
+prop.table(tab, 1)
+prop.table(tab, 2)
+```
+
+
+
+
+
+
+
+
+

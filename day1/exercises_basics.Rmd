@@ -1,0 +1,416 @@
+---
+title: "Exercises day 1, intro"
+author: "ESTP Use of R in Official Statistics"
+output: 
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+params: 
+  answer: no
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE
+                      , eval=params$answer
+                      , echo=params$answer
+                      )
+```
+# Intro
+
+### Exercise 1
+
+a) Create a new R project: day1
+
+Execute in the `R` console the following calculations (one by one)
+
+
+- $2^3$
+
+```{r}
+3*4
+2^3
+```
+
+
+- $\frac{1}{2}+\frac{1}{2}\sqrt{5}$
+
+```{r}
+1/2 + 1/2*sqrt(5)
+```
+
+
+- $\frac{1+2+3+4}{4}$
+
+```{r}
+(1+2+3+4)/4
+sum(1:4)/4
+```
+
+### Exercise 2
+
+With the command `data(women)` we can load the `women` data set, which is 
+available within R. 
+
+a) Type `women` on the command-line to see the data set.
+```{r}
+data(women)
+```
+
+b) Copy the `women` dataset into a new variable names `ladies`.
+
+```{r}
+ladies <- women
+```
+
+c) The ladies height and weights are in inches and pounds. Add a column to the 
+data with name `height_m` with height in meters (one inch is approx 2.54cm)
+
+```{r}
+ladies$height_m <- ladies$height * 2.54/100
+#check
+ladies$height_m
+```
+
+
+d) Add a column to the 
+data with name `weight_kg` with weight in kilo's (one kilogram is approx $2.2046$ pounds)
+
+```{r}
+ladies$weight_kg <- ladies$weight / 2.2046
+#check
+ladies$weight_kg
+```
+
+e) The Body Mass Index (bmi) is calculated
+
+$$
+\frac {(\textrm{weight (kg))}}
+{(\textrm{height (m)})^2}
+$$ 
+
+
+Calculate for the `ladies` data set the `bmi` and add this to the column.
+
+```{r}
+ladies$bmi <- ladies$weight_kg / ladies$height_m^2
+ladies$bmi
+```
+
+f) Calculate
+
+- the average (`mean`) bmi for this data set
+```{r}
+mean(ladies$bmi)
+```
+
+- the standard deviation for the bmi
+```{r}
+sd(ladies$bmi)
+```
+
+- the median for the bmi index.
+```{r}
+median(ladies$bmi)
+```
+
+g) Plot weight in meters against weight in kg
+
+```{r}
+plot(x = ladies$height_m, y = ladies$weight_kg, las=1)
+```
+
+
+
+```{r}
+# alternative solution
+plot(weight_kg ~ height_m, data = ladies, las=1)
+```
+
+### Exercise 3
+
+`1:10` create a vector / column of numbers 1 to 10
+
+```{r, eval=TRUE}
+1:10 
+```
+
+a) Calculate
+
+$\sum_{x=1}^{50}x^2 = 1^2 + 2^2 +\cdots +50^2$.
+
+```{r}
+sum((1:50)^2)
+```
+
+
+b) Generate with $:$ the vector /column $(8,4,2,1)$ and store it in `bin`.
+```{r}
+bin <- 2^(3:0)
+```
+
+
+c) Use bin to calculate the binary number $1011$.
+
+```{r}
+sum(bin * c(1,0,1,1))
+```
+
+### Exercise 4
+
+The central limit theorem states that the sum over an infinite series of independent
+random variables drawn from the same distribution, is normally distributed.
+Let's test this experimentally:
+
+a) Use the function `runif` to draw 500 random numbers from the uniform 
+distribution (between 0 and 1) and
+store this in the variable `x`. 
+
+```{r}
+set.seed(1)
+x <- runif(500)
+```
+
+b) 
+Make a histogram:
+
+```{r}
+hist(x)
+```
+
+c) Draw again 500 numbers and add these to `x`. Make a histogram and repeat until 
+normally distributed.
+
+```{r}
+x <- x + runif(500)
+hist(x)
+```
+
+d) **Extra** Try to make a `for` loop, repeating the process 100 times.
+
+
+```{r}
+for (i in 1:100){
+ x <- x + runif(500)
+}
+hist(x, breaks=100)
+```
+
+
+# Reading and importing data
+
+### Exercise 1 Csv
+
+One of the most commonly used data format is `csv`. Let's read data in csv format.
+
+a) Create a subdirectory "data" in your R project "day1". Copy the "adult.csv" file 
+into the "data" directory. 
+Try to read the csv with `read.csv`:
+
+```{r}
+adult <- read.csv("data/adult.csv")
+```
+
+b) Look at the result in the "Environment" panel. What went wrong?
+
+_we did not use the correct import specification_
+
+c) Try  'Import Dataset' (button upper right in Environment, or  click on "adult.csv").
+
+d) Try 
+
+```{r}
+adult <- read.csv2("data/adult.csv")
+```
+
+e) Use `write.csv2` to save the `women` data set into csv-file "women.csv".
+Tips: use `row.names=FALSE` and `na=""`.
+
+```{r, eval = FALSE}
+write.csv2("women", "./data/women.csv", row.names = FALSE, na="")
+```
+
+
+### Exercise 2 json
+
+The json format is a popular format on the internet. Many websites use the format
+as an intermediate transportation format between data base and web page.
+
+JSON is considered to be human readable.
+
+a) open de "adult.json" file and check its structure. To read json files you can use 
+the `jsonlite` library.
+
+
+b) Check if `jsonlite` is installed, either by searching in RStudio in "Packages" 
+or by executing 
+
+```{r}
+library(jsonlite)
+```
+
+
+```{r, eval = FALSE}
+# if not installed
+install.packages("jsonlite") # install on hard disk
+library(jsonlite) # load the library to make its functions available
+```
+
+c) Read "adult.json" with the function `read_json` and assign it to variable
+`adult_json`. Check the data. It is a list of properties
+
+```{r}
+adult_json <- read_json("data/adult.json")
+adult_json
+```
+
+
+d) Read "adult.json" again and add argument `simplifyVector=TRUE` to the function. This will turn
+the data into a `data.frame`. Check the result.
+
+```{r}
+adult_json <- read_json("data/adult.json", simplifyVector = TRUE)
+adult_json
+```
+
+
+e) Write the `adults` dataset into json format and store it
+as "adults_all.json". Find out what argument of the function indents the resulting json file.
+
+```{r, eval=FALSE}
+write_json(adult, "./data/adult_all.json", pretty = TRUE)
+```
+
+
+### Exercise 3, Sdmx
+
+a) Install the `rsdmx` package and load it with `library(rsdmx)`
+
+```{r}
+library(rsdmx)
+```
+
+
+b)  The following link points to a sdmx file published by eurostat:
+
+```{r}
+sdmx_url <- "https://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nama_10_gdp/.CLV10_MEUR.B1GQ.BE/?startperiod=2005&endPeriod=2011"
+```
+
+```{r, eval = FALSE}
+download.file(sdmx_url, "eurostat.xml")
+```
+
+c) Inspect the file to see what the structure is.
+
+_it is an xml file_ (sdmx)
+
+d) Use the `readSDMX` function to read the file. Use the Environment / Object 
+inspector to find out when this dataset was prepared and who the sender is.
+
+```{r}
+library(rsdmx)
+sdmx <- readSDMX(sdmx_url)
+sdmx
+```
+
+
+e) Use the `as.data.frame` function to transform the data into R `data.frame`
+
+```{r}
+as.data.frame(sdmx)
+```
+
+f) Which country is this data set about?
+
+_Belgium_
+
+# Summary Stats
+
+### Exercise 1
+
+a) Read the "adult.csv" file into variable `adults`
+
+```{r, echo = FALSE}
+adult <- read.csv2("data/adult.csv")
+```
+
+b) Calculate the `mean` age
+
+```{r}
+mean(adult$age)
+```
+
+c) Calculate the `median` hours.per-week
+
+```{r}
+median(adult$hours.per.week)
+```
+
+
+d) Use `summary(adult)` to get summary stats for all columns. Any peculiar findings?
+
+```{r}
+summary(adult)
+```
+
+_capital.gain is strange, looks like missing value coded as 99999_
+
+c) With `table` you can tabulate / count values:
+
+```{r}
+workclass_count <- table(adult$workclass)
+workclass_count
+```
+
+d) Count the relationships in this data set
+
+```{r}
+table(adult$relationship)
+```
+
+
+e) Count the crossing of relations and workclass
+
+```{r, echo = params$answer}
+table(adult$relationship, adult$workclass)
+```
+
+e) With `tapply` you can calculate a statistic per group
+
+```{r}
+mean_age <- 
+  tapply( adult$age  # variable 
+        , adult$relationship # per group
+        , mean # statistic
+        )
+```
+
+f) Calculate the `median` hours worked per education group
+```{r}
+median_hours <- 
+  tapply( adult$age  # variable 
+        , adult$education # per group
+        , median # statistic
+        )
+```
+
+g) Calculate the maximum `age` per `relationship` and `workclass` combination.
+
+```{r}
+max_age <- 
+  tapply( adult$age  # variable 
+        , list(adult$relationship, adult$workclass) # per group
+        , max # statistic
+        , na.rm=TRUE
+        )
+```
+
+
+
+
+
+
+
+

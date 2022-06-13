@@ -1,0 +1,212 @@
+---
+title: "Day 3, statistical modeling"
+author: "ESTP Use of R in Official Statistics"
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+    fig_caption: false
+---
+
+```{r,echo=FALSE,message=FALSE}
+knitr::opts_chunk$set(comment=NA)
+library(tidyverse)
+```
+
+## Contents
+
+- Why statistical modeling?
+- Inference
+- Predict
+
+## Official Statistics
+
+Statistics can be:
+
+- _descriptive_: describing/summarizing the "state")
+- _predictive_: estimate an unknown/incomplete parameter/indicator
+- _forcasting_: predicting the future value of indicators.
+- _inferential_: find out the mechanism, contributing parts.
+
+_Prediction aka Machine Learning_
+
+## Official Statistics
+
+- By origin Official Statistics is **descriptive**: it describe the "state" 
+(of the state :-) )
+
+- But **observations are never complete**. A survey is a method
+to do a small (incomplete) measurement to calculate statistics on (groups in) the
+population: _estimation is a prediction method_. 
+
+- But **observations can have errors and missing values**. Fixing values is a form of
+_prediction_. 
+
+- But analysing time series, finding trend and seasonal patterns is very similar
+to _forcasting_: often it is _now-casting_.
+
+## Prediction
+
+- survey estimation predicts for groups: totals (and or) means.
+- most prediction works on observations.
+- can be used together: _small area estimation_ combines survey and prediction methods
+
+## Statistical models
+
+### Statistical models are:
+
+"smart", sensible guessing machines, calibrated with known data:
+  
+  > If we measure the happyness of 0.1% of the population (smartly selected), this
+  will (probably)  hold for the whole population.
+  
+  > If we do not know the NACE code for this enterprise, but it has similar properties
+  as whole-trade enterprises, it (probably) is a whole-trade enterprise.
+  
+  
+## Descriptive stats
+
+- Can be done easily with `dplyr` and R: 
+- Counting / tabulating: `table`, `dplyr::count`, `dplyr::summarize`, `dplyr::n()`
+- variables: `mean`, `median`, `sum`
+- per group: `dplyr::group_by` (or `tapply`)
+
+
+## Prediction
+
+- For surveys the `survey` package is of interest.
+- For now we focus on predicting values for individual records:
+
+### Useful in official stats for
+
+- classification (e.g. enterprises, economic activity)
+- imputation for missing or erroneous values. 
+- estimating statistics for small groups (small area estimation)
+- clustering (technically not prediction, but can reveal structure in data that
+can be used to predict which cluster an observation belongs to)
+
+## Statistical prediction
+
+### Model
+  $$
+  Y = f(X) + \varepsilon
+  $$
+
+- $Y$: Predicted variable
+- $f$: Relation between $Y$ and $X$
+- $X=(X_1,X_2,\ldots,X_p)$: predictive variables (predictors), aka independent variables
+- $\varepsilon$: Noise, independent of $X$ en $Y$. 
+
+
+## Prediction
+
+### Estimated model
+$$
+\hat{Y} = \hat{f}(X)
+$$
+\begin{itemize}
+  \item $\hat{Y}$ the estimated value for  $Y$.
+  \item $\hat{f}$ the estimated model.
+\end{itemize}
+
+### Remark
+For individual observations
+$$
+y_i = \hat{f}(x_i),
+$$
+the relation $f$ works as a \emph{black box} / data generating machine:
+input $x$ generates value $y$.
+
+## Example
+
+```{r,message=FALSE,echo=FALSE}
+library(ISLR)
+plot(jitter(wage) ~ jitter(age), data=Wage
+     , xlab="Age"
+     , ylab="Income"
+     , main="Income (thousands dollars)"
+     , las=1
+     , cex.axis=1.2
+     , cex.lab=1.2
+     , cex.main=1.5
+     , pch=16
+     , col=adjustcolor("black",alpha.f=0.6
+  ))
+pred <- loess.smooth(Wage$age,Wage$wage)
+lines(pred,lwd=8,col='blue')
+pred1 <- lm(wage ~ age, data=Wage)
+lines(Wage$age, predict(pred1),col='red',lwd=8)
+```
+
+$X$: age, $Y$: income, \textcolor{red}{$f$}: lin. reg., \textcolor{blue}{$f$}: Loess.
+
+## Prediction error (classical)
+
+### Estimated prediction error
+$$
+\begin{array}{rcl}
+\textsf{E}[(Y-\hat{Y})^2] &=& \textsf{E}[(f(X) + \varepsilon - \hat{f}(X))^2]\\
+&=& 
+\underbrace{\textsf{E}[(f(X)-\hat{f}(X))^2]}_{\text{Reducable}} 
++ \underbrace{\textsf{Var}(\varepsilon)}_{\text{Fundamental}}
+\end{array}
+$$
+
+### Estimated prediction error
+$$
+\textsf{MSE}(\hat{f}) = \frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2
+$$
+\begin{itemize}
+\item $y_i$: Observed values
+\item $\hat{y}_i$: Predicted values $\hat{y}_i=\hat{f}(x_i)$
+\item $\textsf{MSE}$ Mean Square Error for estimated model $\hat{f}$.
+\end{itemize}
+
+## Prediction
+
+### Numerical $Y$
+
+- e.g. `turnover`
+- prediction is called **regression**
+
+### Categorical $Y$
+
+- e.g. `nace`
+- prediction is called **classification**
+
+## Prediction methods
+
+- linear models: `lm`
+- generalized linear models: `glm`
+- decision trees: `rpart` (from R package `rpart`)
+- randomForests: `randomForest` (from R package `randomForest`)
+- etc.
+
+## Model in R
+
+### Formula : 
+
+```{r, eval =FALSE}
+wage ~  age + education # wage depends on age and education
+```
+
+```{r, eval = FALSE}
+model <- lm(wage ~ age, data = Wage) # create a linear model with this 
+```
+
+## Linear model in R
+
+```{r, eval = TRUE}
+model <- lm(wage ~ age, data = Wage) # create a linear model with this 
+model
+```
+
+## Linear model in R
+
+\tiny
+```{r, eval = TRUE}
+summary(model)
+```
+
+
+

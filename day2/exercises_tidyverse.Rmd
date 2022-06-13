@@ -1,0 +1,320 @@
+---
+title: "Exercises day 2, tidyverse"
+author: "ESTP Use of R in Official Statistics"
+output: 
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+params:
+  answers: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set( eval=params$answers
+                     , echo=params$answers
+                     )
+```
+
+
+Load the R package `tidyverse` with the command `library(tidyverse)`
+
+### Exercise 1
+We will look at the `titanic` dataset. Load the file `./data/titanic.csv` and
+save it in the variable `titanic`. This file contains the passengers of the Titanic.
+
+a) How many passengers are listed in this file? Calculate this with `summarize`.
+
+```{r}
+library(tidyverse)
+titanic <- read_csv2("./data/titanic.csv")
+
+count(titanic)
+summarize(titanic, n  = n())
+nrow(titanic)
+```
+
+b) How many passengers have survived? Also use a construction with `group_by`
+
+```{r}
+titanic %>%  
+  filter(., survived == "yes") %>%
+  count(.)
+
+count(titanic, survived)
+
+titanic %>% group_by(survived) %>% summarise(n = n())
+```
+
+c) Calculate the mean age of the passengers. What was the mean age of the women
+on board? Calculate this with `summarize`
+
+```{r}
+mean(titanic$age, na.rm=TRUE)
+
+titanic %>% 
+  summarize(mean_age = mean(age, na.rm=TRUE))
+
+titanic %>% 
+  filter(sex == "female") %>% 
+  summarize(mean_age = mean(age, na.rm=TRUE))
+
+titanic %>% 
+  group_by(sex) %>% 
+  summarize(mean_age = mean(age, na.rm=TRUE))
+```
+
+d) Calculate the mean age of the passengers, by `sex` and `survived`.
+
+```{r}
+titanic %>% 
+  group_by(sex, survived) %>% 
+  summarize( mean_age = mean(age, na.rm=TRUE))
+```
+
+e) As in d), but now also the min and max age for each group. 
+
+```{r}
+titanic %>% 
+  group_by(sex, survived) %>% 
+  summarize( mean_age = mean(age, na.rm=TRUE)
+           , max_age = max(age, na.rm=TRUE)
+           , min_age = min(age, na.rm=TRUE)
+           )
+```
+
+
+### Excercise 2
+
+Create a data pipeline that does the following with the titanic data set
+
+a) Select the men.
+b) Group on passenger class
+c) Calculate the number of survivers (tip: you can sum over the number of `TRUE`)
+
+```{r}
+titanic %>% 
+  filter(sex == "male") %>% 
+  group_by(passengerClass) %>% 
+  summarize(n_survived = sum(survived == "yes"))
+
+titanic %>% 
+  filter(., sex == "male", survived == "yes") %>% 
+  count(., passengerClass)
+```
+
+d) As in a-c, but now the percentage survivors per passengerclass
+
+```{r}
+
+```
+
+d. Als a-c, maar bereken het percentage overlevenden per
+passagiersklasse.
+
+
+```{r}
+titanic %>%
+  filter(sex=="male") %>%
+  group_by(passengerClass) %>%
+  summarise( survival_rate = mean(survived == "yes")
+           , survived_percentage = 100 * survival_rate
+           )
+```
+
+### Exercise 3:
+
+We continue with the `Titanic` dataset
+
+a) Use the function `table` to count the number of passengers who survived and did
+not survive.
+
+```{r, eval=FALSE, echo=params$answers}
+table(titanic$survived)
+```
+
+b) Use the function `table` to cross tabulate the number of passengers to `survived`
+and `sex`. Store the result in the variable `survivors`. Plot the variable `survivors`.
+
+`survivors`. Plot de variable `survivors`.
+```{r, eval=FALSE, echo=params$answers}
+survivors <- table(
+  titanic$survived
+  , titanic$sex)
+plot(survivors)
+
+```
+
+c) Execute the following commands and interpret the result(s).
+
+- `prop.table(survivors)`
+- `prop.table(survivors,1)`
+- `prop.table(survivors,2)`
+
+```{r, eval=FALSE, echo=params$answers}
+prop.table(survivors)    # fractions, sum() to 1
+prop.table(survivors, 1) # row totals are equal to 1
+prop.table(survivors, 2) # column totals are equal to 1
+```
+
+d. Same as before but with  `addmargins`.
+```{r, eval=FALSE, echo=params$answers}
+dplyr::
+addmargins(survivors)    # all totals
+addmargins(survivors, 1) # column totals
+addmargins(survivors, 2) # row totals
+```
+
+e) We derive an `ageClass` variable, use the command:
+```{r,echo=TRUE}
+titanic$ageClass <- cut(titanic$age
+   , breaks=c(0,17,64,Inf)
+   , labels=c("young","middle","old")
+) 
+```
+
+Create a table with `ageClass` vs `passengerClass` and answers the following questions:
+
+- How many passengers were on board of the titanic
+- How many passengers were counted in the last table: explain
+
+```{r, eval=FALSE, echo=params$answers}
+tab <- table(titanic$ageClass, titanic$passengerClass)
+#compare
+sum(tab)
+# with 
+nrow(titanic)
+# use
+table(titanic$ageClass, titanic$passengerClass, useNA = "ifany")
+# to see that many age are not available
+```
+
+
+### Exercise 4
+
+a. Read the files `addressdata.csv` and `addressinfo.csv` with R
+
+Name the variables in R  `address`and  `addressinfo`. (check the results!)
+
+```{r, eval=FALSE, echo=params$answers}
+address <- read.csv2("data/addressdata.csv", stringsAsFactors = FALSE)
+addressinfo <- read.csv2("data/addressinfo.csv", stringsAsFactors = FALSE)
+```
+b. Use `inner_join` to enrich `address` with information from `addressinfo`.
+Match on street and place name.
+
+```{r, eval=FALSE, echo=params$answers}
+dat <- inner_join(address, addressinfo, by = c("street" = "streetname", "place"))
+```
+c. Do the same with now with `left_join`. What is the difference?
+
+```{r, eval=FALSE, echo=params$answers}
+dat <- left_join(address, addressinfo, by = c("street" = "streetname", "place"))
+```
+
+d. Select all records in `address` that cannot be matched met addressinfo with  `anti_join`.
+```{r,eval=FALSE, echo=params$answers}
+anti_join(address, addressinfo, by = c("street" = "streetname", "place"))
+```
+
+
+### Exercise 5, Missing en special values
+
+Predict the outcome of the following R statements
+
+a. `mean(c(1, 1, NA, 1))`
+```{r,eval=FALSE, echo=params$answers}
+# NA, because the mean depends also on the unknown values
+```
+b. `length(c(1,2,NA,4))`
+```{r,eval=FALSE, echo=params$answers}
+# 4, NA fills a spot 
+```
+c. `mean(c(1,4,4,NA,NULL), na.rm=TRUE)`
+```{r,eval=FALSE, echo=params$answers}
+# (1 + 4 + 4)/3  = 3. NULL does not add an element and NA is removed with
+# na.rm=TRUE.
+```
+d. `c(1,2,NA) == NA`
+```{r,eval=FALSE, echo=params$answers}
+# NA NA NA. Each comparison with NA is NA: unknown does not equal unknown
+```
+e. `is.na(c(1,2,NA))`
+```{r,eval=FALSE, echo=params$answers}
+# FALSE FALSE TRUE
+```
+f. `sum(is.na(c(1,2,NA)))`
+```{r,eval=FALSE, echo=params$answers}
+# 1
+```
+
+
+
+### Exercise 6. Reading files with `read_csv`
+
+The file `cars.csv` contains 12 columns:
+
+a. Read the file with \code{read\_csv2}.
+```{r,eval=FALSE, echo=params$answers}
+cars <- read_csv2("data/cars.csv")
+```
+b. Read the file with \code{read\_csv2} and specify the correct column types. 
+You may read \code{model}, \code{engine} and \code{gearbox} as text variables.
+
+```{r,eval=FALSE, echo=params$answers}
+cars1 <- read_csv2("data/cars.csv", col_types="cdccdddddddd")
+```
+c. Read the file with \code{read\_csv2} and make sure that  \code{engine} en
+\code{gearbox} are factor variables
+```{r,eval=FALSE, echo=params$answers}
+cars2 <- read_csv2("data/cars.csv"
+    , col_types = list(
+        engine  = col_factor(c("V", "straight"))
+      , gearbox = col_factor(c("manual", "auto"))
+    )
+)
+```
+d. Read the file with \code{read\_csv2} and skip column 3 and 5
+```{r,eval=FALSE, echo=params$answers}
+cars3 <- read_csv2("data/cars.csv", col_types="cd-c-ddddddd")
+```
+  
+### Exercise 7
+
+a. Read the dataset `adult.csv`. In this file missing values are stored with as " ?".
+(<space> <question mark>). Make sure that these are read in as `NA` (see help of
+read_csv2).
+
+```{r,echo=params$answers}
+library(readr)
+adult <- read_csv2("data/adult.csv", na="?", trim_ws = TRUE)
+```
+
+b. Create a frequency table of age, what is the modal age?
+
+```{r,eval=FALSE, echo=params$answers}
+ages <- table(adult$age)
+ages[ages==max(ages)]
+# or
+which.max(ages)
+sort(ages, decreasing=TRUE)[1]
+```
+
+c. Cross tabulate `workclass` and `income.class` (with `count` or with `table`) 
+(`workclass`, `income.class`)
+```{r,eval=FALSE, echo=params$answers}
+tab <- table(adult$workclass, adult$income.class)
+```
+
+
+d. Which `native.country` has the largest female/male ratio?
+
+```{r,eval=FALSE, echo=params$answers}
+tab <- table(adult$native.country,adult$sex)
+ratio <- tab[,"Female"]/tab[, "Male"]
+which.max(ratio)
+tab["Holand-Netherlands",]
+```
+
+
+
+

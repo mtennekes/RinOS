@@ -1,0 +1,249 @@
+---
+title: "Plotting with ggplot2"
+author: "ESTP Use of R in Official Statistics"
+output: 
+  beamer_presentation:
+    df_print: kable
+    includes:
+      in_header: ../header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,  out.width = "70%",
+  fig.showtext = TRUE,
+  fig.align = "center"
+)
+library(ggplot2)
+library(dplyr)
+```
+
+## Graphs
+
+> When communicating results to non-technical types there is nothing better than a clear visualization to make your point.
+
+> Numerical quantities focus on expected values, graphical summaries on unexpected values.
+
+__John Tukey__
+
+
+## Role visualization in  data-analysis
+
+```{r, echo=FALSE}
+knitr::include_graphics("fig/model-slide.pdf")
+```
+
+
+## Plotting in R
+
+R has great plotting facilities:
+
+- very fine-grained control over plot
+- Most functionality is/was focused on static images.
+
+##
+
+
+- `base`/`graphics` offers extended possibilities for making and tweaking graphics
+- `ggplot2` creates by default good graphs
+- Lots of extra packages for making specialized graphs.
+- E.g.: `highchartR`,   `plotly`, `ggvis`, `dyGraph`.
+
+## Exporting figures/graph
+
+### By hand (not recommended):
+
+- In Rstudio by default the plotting panel is used.
+- You can export plot from RStudio using the menu: "Export".
+
+### Setting programmatically a device:
+
+1) Set as plotting device:
+
+    - `pdf` Creates a  pdf device (document)
+    - `png` Creates a png device (document)
+    - ...
+2) Use your plotting commands: plots will be writting to disk.
+3) Close the device: `dev.off()`
+
+`ggplot` also has `ggsave`.
+
+
+## Grammar of graphics
+
+## ggplot2
+
+- Grammar of Graphics plotting library
+- Hadley Wickham
+
+```R
+install.packages("ggplot2")
+```
+
+## Layers
+
+```{r, echo=TRUE}
+head(mtcars)
+```
+
+##  dataset mtcars
+```{r}
+str(mtcars)
+```
+
+## Definition of statistical graphic
+
+> A statistical graph is a __mapping__ of __variables__ on __aesthetics__ of
+__geometric__ objects in which
+variable values are __scaled__ to __aesthetic values__.
+
+- geom_<g>
+- scale_<a>
+
+## geometric objects?
+
+- line, bar, area, polygon, etc.
+
+In `ggplot` these are combined into a *geom_*etric object
+
+
+## Graphs with ggplot2
+
+ - Gebaseerd op *Grammar of Graphics*;
+ - Graph = Data + Mapping + Geometry + Coördinate system;
+ - Graph as one or more **geom**etries.
+ - Geometry has **aes**thetic features (size, position, color etc.);
+ - Columns are mapped to aesthetics.
+ 
+## Example scatterplot
+
+::::::{.columns}
+
+:::{.column}
+\scriptsize
+```{r scatter, echo=TRUE, eval=FALSE}
+library(ggplot2)
+ggplot( data = mpg
+      , aes(x = displ, y = hwy)) +
+    geom_point()
+```
+:::
+
+:::{.column}
+```{r scatter, eval=TRUE, echo=FALSE, out.width="95%"}
+```
+
+:::
+
+::::::
+
+## scatter plot (color)
+
+::::::{.columns}
+
+:::{.column}
+\scriptsize
+```{r scattercol, echo=TRUE, eval=FALSE}
+mtcars$cyl <- factor(mtcars$cyl)
+library(ggplot2)
+ggplot( data = mpg
+      , aes( x = displ
+           , y = hwy
+           , color = cyl
+           )) +
+    geom_point()
+```
+:::
+
+:::{.column}
+```{r scattercol, eval=TRUE, echo=FALSE, out.width="95%"}
+```
+
+:::
+
+::::::
+
+## scatter plot (shape)
+
+\tiny
+```{r}
+mtcars$cyl <- factor(mtcars$cyl) 
+ggplot(data = mtcars, aes(x=disp, y=hp, shape=cyl)) + geom_point()
+```
+
+## scatter plot (shape)
+
+\tiny
+```{r}
+mtcars$cyl <- factor(mtcars$cyl) 
+ggplot(data = mtcars, aes(x=disp, y=hp, shape=cyl, color = cyl)) + geom_point()
+```
+
+## assignment
+
+- Create a histogram from `carat` column in the `diamonds` dataset (with `geom_histogram`)
+
+- Play around with the `binwidth`: what is the story of the data?
+
+## facets
+
+Split any ggplot plot on a categorical variable into small multiples
+
+- very useful during analyses!
+
+- by default same scales, to make comparison easy
+
+## facets 
+
+\tiny
+```{r}
+ggplot(mtcars) + geom_histogram(aes(x = disp), binwidth = 25) + facet_wrap(~cyl)
+```
+
+## facets
+
+\tiny
+```{r}
+mtcars$cyl <- factor(mtcars$cyl) 
+ggplot(data = mtcars, aes(x=disp, y=hp)) + geom_point() + facet_wrap(~cyl)
+```
+
+##
+
+ - Specify data with  `ggplot`;
+ - add extra layers or properties using a `+`
+ - Specify a geometry with `geom_`.
+ - Map a column to an aesthetic with `aes`;
+ - Specify a geometry with `geom_`.
+ - Each aesthetic has a `scale_`
+ - See cheat sheet.
+ 
+
+## ggplot2 tricks
+
+- each plot can be stored in a variable and be adjust
+
+```{r, eval = FALSE}
+p <- ggplot(mtcars) + geom_point(aes(x = disp, y = hp))
+p + facet_wrap(~cyl)
+p + facet_wrap(~am)
+```
+
+- a plot can be save easily with `ggsave`
+
+```{r, eval = FALSE}
+ggsave("test.pdf") # remembers last plot
+# or when assigned to variable
+ggsave("test.png", plot = p)
+```
+
+
+## ggplot2 useful packages
+
+- `ggforce`, annotation
+
+- `gganimate` create an animation from a ggplot 
+
+- `ggrepel`, nice label positioning of annotated labels.
+
+
+

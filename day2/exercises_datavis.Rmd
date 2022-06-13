@@ -1,0 +1,300 @@
+---
+title: "Exercises day 2, data visualization"
+author: "ESTP Use of R in Official Statistics"
+output: 
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+params:
+  answers: yes
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set( echo = params$answers
+                     , eval = params$answers
+                     , comments = NA
+                     , message=FALSE
+                     , warning = FALSE
+                     )
+library(tidyverse)
+```
+
+### Exercise 1
+
+a)  Load the data set mtcars and the library `ggplot2`
+
+```{r}
+data(mtcars)
+library(ggplot2)
+```
+
+b)  Create a scatterplot with `wt` on the x-axis and `disp` on the y-axis. With `geom_point()`
+
+```{r}
+ggplot(mtcars, aes(x = wt, y = disp)) + geom_point()
+```
+
+c)  Maak the points the color "blue".
+
+```{r}
+ggplot(mtcars, aes(x = wt, y = disp)) + geom_point(color="blue")
+```
+
+d)  Change the x axis titles to "weight" and the title to "engine displacement".
+
+```{r}
+ggplot(mtcars, aes(x = wt, y = disp)) + 
+  geom_point(color="blue") + 
+  labs(x = "weight", title = "engine displacement", y = "")
+```
+
+e)  Change the `cyl` variable into a factor and add this as a color `aes` to the plot.
+
+```{r}
+mtcars %>% 
+  mutate(cyl = factor(cyl)) %>% 
+  ggplot(., aes(x = wt, y = disp, color=cyl)) + 
+  geom_point() + 
+  labs(x = "weight", title = "engine displacement", y = "")
+```
+
+f)  Make a histogram of `wt` with `geom_histogram`, set binwidth on 0.5
+
+```{r}
+ggplot(mtcars, aes(x=wt)) + geom_histogram(binwidth = 0.5)
+```
+
+g)  Create multiple charts with `facet_wrap` for `cyl`
+
+```{r}
+ggplot(mtcars, aes(x=wt)) + geom_histogram(binwidth = 0.5) + facet_wrap(~cyl)
+```
+
+### Exercise 2
+
+a)  Reproduce the following boxplot with `mtcars`. Use the functions `ggplot` and `geom_boxplot` from package `ggplot2`. NB: change `gear` into a factor. What happens if you do not do that? What is the difference between `color` and `fill`?
+
+```{r, eval = TRUE}
+library(dplyr)
+library(ggplot2)
+
+mtcars <- mutate(mtcars, gear = factor(gear))
+
+# ggplot(mtcars) +
+#     geom_boxplot(aes(x = gear, y = mpg, color = gear))
+
+ggplot(mtcars) +
+    geom_boxplot(aes(x = gear, y = mpg, fill = gear))
+```
+
+b)  Create the chart with box plots and add a scatter plot of `mpg` vs `gear`. Is it better to use `geom_point` or `geom_jitter`? Explain
+
+```{r , eval=params$answers}
+ggplot(mtcars) +
+    geom_boxplot(aes(x = gear, y = mpg, fill = gear)) +
+    geom_point(aes(x = gear, y = mpg))
+
+ggplot(mtcars) +
+    geom_boxplot(aes(x = gear, y = mpg, fill = gear)) +
+    geom_jitter(aes(x = gear, y = mpg), width = 0.05, height = 0.0)
+```
+
+c)  Add information on the number of cylinders. Reproduce the following:
+
+```{r ,  eval=TRUE}
+mtcars <- mutate(mtcars, cyl = factor(cyl))
+
+ggplot(mtcars) +
+    geom_boxplot(aes(x = gear, y = mpg)) +
+    geom_jitter(aes(x = gear, y = mpg, color = cyl), width = 0.1)
+```
+
+### Exercise 3
+
+a)  Read the file *UnitedNations.txt* in. Create a scatter plot with `tfr` vs life expectancy for women `lifeFemale`. Connect the aesthetic color to `region`.
+
+```{r }
+library(ggplot2)
+library(dplyr)
+library(readr)
+
+UN <- read_delim(
+    file = "./data/UnitedNations.txt",
+    delim = " ",
+    col_names = TRUE)
+
+ggplot(data = UN) +
+    geom_point(aes(x = lifeFemale, y = tfr, color = region)) 
+```
+
+b)  Add with `geom_smooth` a linear regression to the chart. Use the option `method="lm"` First add `x` and `y` and later on `color` What happens when you add `color`?
+
+```{r, eval=params$answers}
+ggplot(data = UN) +
+    geom_point(aes(x = lifeFemale, y = tfr, color = region)) +
+    geom_smooth(aes(x = lifeFemale, y = tfr), method = "lm")
+
+ggplot(data = UN) +
+    geom_point(aes(x = lifeFemale, y = tfr, color = region)) +
+    geom_smooth(aes(x = lifeFemale, y = tfr, color = region), method = "lm")
+```
+
+c)  We will add GDP per capita in the graph. Connect aesthetic `size` to this variable, but since this variable is skewed, do a log transform. This can either be done with: `log` beforehand, or using the `scale_size` function. Experiment with option range to explore the sizes of the symbols.
+
+```{r ,  eval=params$answers}
+ggplot(data = UN) +
+    geom_point(aes(
+        x = lifeFemale,
+        y = tfr,
+        color = region,
+        size = GDPperCapita)) 
+
+ggplot(data = UN) +
+    geom_point(aes(
+        x = lifeFemale,
+        y = tfr,
+        color = region,
+        size = GDPperCapita)) +
+    
+    scale_size(trans = "log", range = c(0, 3))
+```
+
+d)  Create with `ggplot` and `geom_histogram` a histogram of the values of `lifeFemale`. Change `geom_histogram` into a `geom_freqpoly` and connect `color` with `region`. Experiment with the `binwidth`.
+
+```{r ,  eval=params$answers}
+ggplot(data = UN) +
+    geom_histogram(aes(x = lifeFemale, fill = region), bins = 25) + facet_wrap(~region)
+
+ggplot(data = UN) +
+    geom_histogram(aes(x = lifeFemale, fill = region), bins = 30) + facet_wrap(~region)
+
+ggplot(data = UN) +
+    geom_histogram(aes(x = lifeFemale, fill = region), bins = 35) + facet_wrap(~region)
+```
+
+(E) Create with `ggplot` en `geom_bar` a bar chart of the number of countries of the continents.
+
+```{r}
+ggplot(data = UN) +
+    geom_bar(aes(x = region, fill = region))
+```
+
+### Exercise 4
+
+a)  The package `ggplot2` contains the dataset `diamonds`. Create a histogram of the prices of diamonds. Add labels to the chart and axes
+
+```{r ,  eval=params$answers}
+library(ggplot2)
+
+ggplot(data = diamonds) +
+    geom_histogram(aes(x = price), bins = 50) +
+    labs(
+        tile = "Price of diamonds",
+        x = "in $",
+        y = "Count")
+```
+
+b)  
+
+Investigate the how `cut` and `price` interact.
+- Create for each category a boxplot.
+- Do the same with violin plot.
+
+What do you notice?
+
+```{r ,  eval=params$answers}
+ggplot(data = diamonds) +
+    geom_boxplot(aes(x = cut, y = price))
+
+ggplot(data = diamonds) +
+    geom_violin(aes(x = cut, y = price))
+```
+
+c)  Investigate the how `carat` and `price` interact.
+
+-   Create a `geom_bin2d` color map and with add `geom_point` a scatterplot. Make sure the dots are white and 5% transparent. Any remarks on the relationship between these two variables?
+
+```{r ,  eval=params$answers}
+ggplot(data = diamonds) +
+    geom_bin2d(aes(x = carat, y = price)) +
+    geom_point(aes(x = carat, y = price), color = "white", alpha = 0.05, size = 0.1)
+```
+
+d)  Check you assumption: how do quality and carat relate? Explore/show this with a ggplot chart
+
+```{r ,  eval=params$answers}
+ggplot(data = diamonds) +
+    geom_boxplot(aes(x = cut, y = carat))
+
+ggplot(data = diamonds) +
+        geom_violin(aes(x = cut, y = carat))
+```
+
+### Exercise 5
+
+a)  Read the file *UnitedNations.txt* . Create a histogram of total fertility rate `tfr`.
+
+```{r , eval=TRUE}
+library(ggplot2)
+library(dplyr)
+library(readr)
+
+UN <- read_delim(
+    file = "./data/UnitedNations.txt",
+    delim = " ",
+    col_names = TRUE)
+```
+
+```{r , eval=params$answers}
+ggplot(data = UN) +
+    geom_histogram(aes(x = tfr), binwidth = .2)
+```
+
+b)  Which countries do not have a known `tfr`?
+
+```{r , eval=params$answers}
+summary(UN$tfr)
+filter(UN, is.na(UN$tfr))
+
+UN <- filter(UN, ! is.na(UN$tfr))
+```
+
+c)  Use `geom_freqpoly`, `geom_boxplot` and `facet_wrap` to show the difference between the continents. Which graph is most clear?
+
+```{r , eval=params$answers}
+
+ggplot(data = UN) +
+    geom_freqpoly(aes(x = tfr, col = region), bins = 20, size = 1)
+
+ggplot(data = UN) +
+    geom_histogram(aes(x = tfr), bins = 20) +
+    facet_grid(region ~ .)
+
+ggplot(data = UN) +
+    geom_boxplot(aes(x = region, y = tfr))
+```
+
+e)  Use `facet_grid` and `geom_points` to create a plot with child mortality and `tfr` Add a regression line.
+
+```{r , eval=params$answers}
+ggplot(data = UN, aes(x = infantMortality, y = tfr)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    facet_grid(region ~ .)
+```
+
+f)  Reproduce the following chart:
+
+```{r, eval=TRUE}
+UN <- mutate(
+    UN,
+    GDPperCapitaGroup = cut_number(GDPperCapita, 5))
+
+selectie <- filter(UN, ! is.na(GDPperCapita))
+ggplot(data = selectie, aes(x = GDPperCapitaGroup, y = tfr)) +
+    geom_boxplot() +
+    facet_grid(region ~ .)
+```

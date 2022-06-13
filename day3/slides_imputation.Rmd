@@ -1,0 +1,232 @@
+---
+title: "Imputation"
+output: 
+  beamer_presentation:
+    include:
+      in_header: ../header.tex
+classoption: "aspectratio=169"
+---
+
+
+## Imputing data
+
+### Need to specify
+
+- Imputation method
+- Variable(s) to impute
+- Variables used as predictor
+
+### Simputation's goal
+
+Easy to experiment, robust enough for production.
+
+### Simputation interface
+
+```{r, eval=FALSE}
+impute_<model>(data, imputed_variables ~ predictors, ...)
+```
+
+
+## Imputing data with simputation
+
+
+
+|  `<model>  `      |  description                                    |
+|-------------------|-------------------------------------------------|
+| `proxy`           | copy (transformation of) other variable(s)      |
+| `median`          | (group-wise) median                             |
+| `rlm`, `lm`, `en` | (robust) linear model, elasticnet regression    |
+| `cart`, `rf`      | Classification And Regression Tree, RandomForest|
+| `em`, `mf`        | EM-alogithm (multivariate normal) `missForest`  |
+| `knn`             | $k$ nearest neighbours                          |
+| `shd`, `rhd`      | sequential, random, hot-deck                    |
+| `pmm`             | predictive mean matching                        |
+| `impute_model`    | use pre-trained model                           |
+
+
+
+## Imputation of the mean
+
+```{r,echo=FALSE, fig.height=5.5}
+library(magrittr)
+library(simputation)
+par(mfrow=c(1,2))
+X <- rnorm(1000)
+Y <- X + rnorm(1000,sd = 0.2)
+i <- sample(1:1000,100,replace=FALSE)
+Y[i] <- NA
+plot(X,Y,pch=".",main="10% missing in Y", las=1)
+d <- data.frame(X=X,Y=Y)
+library(simputation)
+d1 <- impute_lm(d,Y ~ X)
+cols <- rep("black",1000)
+cols[i] <- "red"
+cex <- rep(1,1000)
+cex[i] <- 4
+plot(Y ~ X, data=d1, col=cols,pch=".",cex=cex,las=1,main="Imputation with model Y = a + bX")
+```
+
+
+## Adding a random residual
+
+```{r, echo=FALSE, fig.height=5.5}
+data("retailers", package="validate")
+library(magrittr)
+library(simputation)
+ret <- retailers[3:10]
+par(mfrow=c(1,2))
+cols <- rep("black",1000)
+cols[i] <- "red"
+cex <- rep(1,1000)
+cex[i] <- 3
+plot(Y ~ X, data=d1, col=cols,pch=".",cex=cex,las=1,main="Imputation with model Y = a + bX")
+
+d2 <- impute_lm(d,Y ~ X,add_residual = "normal")
+plot(Y ~ X, data=d2, col=cols,pch=".",cex=cex,las=1,main="Imputation with Y = a + bX + e")
+```
+
+## Adding a random residual with `simputation`
+
+### Example
+
+```{r, echo=FALSE, results='hide'}
+companies <- read.csv("./data/companies.csv"
+                      , stringsAsFactors=FALSE)
+```
+
+```{r, results='hide'}
+impute_rlm(companies, other.rev ~ turnover
+         , add_residual = "normal") 
+```
+
+### Options
+
+-  "none"`: (default)
+-  "normal"`: from $N(0,\hat{\sigma})$ 
+-  "observed"`: from observed residuals
+
+## Chaining methods
+
+### Example
+
+```{r, results='hide'}
+companies %>%
+  impute_lm(turnover ~ staff + profit) %>%
+  impute_lm(turnover ~ staff)
+```
+
+# More on missing data and (s)imputation
+
+## Missing data
+
+### Reasons
+
+- nonresponse, data loss
+- Value is observed but deemed wrong and erased
+
+### Solutions
+
+- Measure/observe again 
+- Ignore
+- Take into account when estimating
+- **Impute**
+
+## Missing data mechanisms
+
+### Missing comletely at Random (MCAR)
+
+Missingness is totally random.
+
+### Missing at Random (MAR)
+
+Missingness probability can be modeled by other variables
+
+### Not Missing at Random (NMAR)
+
+Missingness probability depends on missing value.
+
+
+## You can't tell the mechanism from the data
+
+### NMAR can look like MCAR
+
+Given $Y,X$ independent. Remove all $y\geq y^*$. Observer
+'sees' no correlation between missingness and values of $X$: MAR.
+
+
+### NMAR can look like MAR
+
+Given $Y,X$ with $\textsf{Cov}(Y,X)>0$. Remove all 
+$y\geq y^*$. Observer 'sees' that higher $X$ correlates with
+more missings in $Y$: MCAR.
+
+
+
+## Dealing with missing data mechanisms
+
+### Missing comletely at Random (MCAR)
+
+Model-based imputation
+
+### Missing at Random (MAR)
+
+Model-based imputation
+
+### Not Missing at Random (NMAR)
+
+No real solution.
+
+
+## Imputation methodology
+
+### Model based
+
+Estimate a value based on observed variables.
+
+### Donor-imputation
+
+Copy a value from a record that you did observe.
+
+
+## The simputation package
+
+### Provide
+
+- a _uniform interface_,
+- with _consistent behaviour_,
+- across _commonly used methodologies_
+
+
+### To facilitate
+
+- experimentation 
+- configuration for production
+
+## The `simputation` package
+
+### An imputation prodedure is specified by
+
+1. The variable to impute
+2. An imputation model
+3. Predictor variables
+
+## The simputation interface
+
+```
+impute_<model>(data
+  , <imputed vars> ~ <predictor vars>
+  , [options])
+```
+
+\begin{picture}(0,0)
+\put(170,-20){\includegraphics[]{fig/simpute.pdf}}
+\end{picture}
+
+
+## Chaining methods
+
+```{r}
+ret %>% 
+  impute_rlm(other.rev ~ turnover) %>%
+  impute_rlm(other.rev ~ staff) %>% head(3)
+```

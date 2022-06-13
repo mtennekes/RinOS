@@ -1,0 +1,38 @@
+\graphicspath{{./}{../}}
+
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\lhead{\includegraphics[height=1.5cm]{logo}}
+\rfoot{
+  \scriptsize{ESTP Use of R in Official Statistics 2021}
+%  \includegraphics[height=1cm]{logo_tridata.png}
+}
+\lfoot{\thepage}
+\cfoot{}
+
+
+% voor het weergeven van inline code.
+\newcommand{\code}[1]{\texttt{#1}}
+
+%% increase linespacing
+\linespread{1.2}
+
+%% use extra white line to indicate paragraphs
+%% (using \setlength{\parskip}{} also affects spacing in lists)
+\usepackage{parskip}
+%% no indentation for new paragraphs
+\setlength{\parindent}{0pt}
+
+%% let pages begin a bit higher
+%\setlength{\voffset}{-0.2in}
+%% and end a bit lower
+\addtolength{\textheight}{0.2in}
+
+
+% \makeatletter
+% \addtobeamertemplate{headline}{}{
+% \begin{picture}(300,0)
+%   \hspace{5cm} \vspace{2cm} \includegraphics[width=1.7cm]{logo.png}
+% \end{picture}
+% }
+\definecolor{yourcolourname}{RGB}{37,74,164}
