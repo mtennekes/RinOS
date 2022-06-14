@@ -16,11 +16,11 @@ classoption: "aspectratio=169"
 - Variable(s) to impute
 - Variables used as predictor
 
-### Simputation's goal
+### R package **simputation**
 
 Easy to experiment, robust enough for production.
 
-### Simputation interface
+### Interface
 
 ```{r, eval=FALSE}
 impute_<model>(data, imputed_variables ~ predictors, ...)

@@ -6,6 +6,8 @@ output:
     includes:
       in_header: ../header.tex
     fig_caption: false
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r,echo=FALSE,message=FALSE}
@@ -23,7 +25,7 @@ library(tidyverse)
 
 Statistics can be:
 
-- _descriptive_: describing/summarizing the "state")
+- _descriptive_: describing/summarizing the "state"
 - _predictive_: estimate an unknown/incomplete parameter/indicator
 - _forcasting_: predicting the future value of indicators.
 - _inferential_: find out the mechanism, contributing parts.
@@ -187,17 +189,20 @@ $$
 ### Formula : 
 
 ```{r, eval =FALSE}
-wage ~  age + education # wage depends on age and education
+wage ~  age + education 
+# wage depends on age and education
 ```
 
 ```{r, eval = FALSE}
-model <- lm(wage ~ age, data = Wage) # create a linear model with this 
+model <- lm(wage ~ age, data = Wage) 
+# create a linear model with this 
 ```
 
 ## Linear model in R
 
 ```{r, eval = TRUE}
-model <- lm(wage ~ age, data = Wage) # create a linear model with this 
+model <- lm(wage ~ age, data = Wage) 
+# create a linear model with this 
 model
 ```
 

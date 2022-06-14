@@ -39,6 +39,8 @@ Reasons:
 
 ## Official Stats R Packages: Process (GSBPM 5)
 
+\scriptsize
+
 - `blaise` Reading and writing Files in the Blaise Format from R. By Statistics Netherlands.
 - `dcmodify` Derive new variables or modify data using externally defined data modification rules.
 - `reclin` Functions to assist in performing probabilistic record linkage and deduplication: generating pairs, comparing records, em-algorithm for estimating m- and u-probabilities, forcing one-to-one matching. Can also be used for pre- and post-processing for machine learning methods for record linkage.
@@ -48,11 +50,16 @@ Reasons:
 
 ##
 
+\scriptsize
+
 - `stringdist`. Implements approximate string matching. Supports various string distances (Damerau-Levenshtein, Hamming, Levenshtein, optimal sting alignment), qgrams (q- gram, cosine, jaccard distance) and heuristic metrics (Jaro, Jaro-Winkler). An implementation of soundex is provided as well.
 - `fuzzyjoin`. Join tables based on exact or similar matches. Allows for matching records based on inaccurate keys.
 - `XBRL`. Extraction of Business Financial Information from XBRL Documents
 
 ## Data editing and imputation
+
+\scriptsize
+
 - `validate`. Rule management and data validation.
 - `validatetools` Checking and simplifying sets of validation rules.
 - `errorlocate` Error localisation based on the principle of Fellegi and Holt.
@@ -67,6 +74,8 @@ Imputation using several donor-based methods (kNN, hot-deck)
 
 ##
 
+\scriptsize
+
 - `simputation`. Simple imputation: many methods using a uniform interface following the tidy tools manifesto
 Allows to easily combiny many imputation methods/strategies.
 Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck methods (powered by VIM), randomForest, EM-based, and iterative randomForest imputation. Reuse of fitted models and definition of simple user-defined methods are supported as well.
@@ -78,8 +87,12 @@ Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck m
 
 
 ## Estimation and weighting (GSBPM 5.6 | 5.7)
+
+\scriptsize
+
 - `survey`: Weighting and estimation for complex survey designs, possibly under nonresponse. Also computes estimator variance. See also - `srvyr`:for integration with tidy tools.
 - `hbsae`: Small area estimation based on hierarchical Bayesian models.
+- `mcmcsae`: Markov Chain Monte Carlo Small Area Estimation
 - `rsae`: Small area estimation based on (robust) maximum likelihood estimation.
 - `CalibrateSSB`: Calculate weighs and estimates for panel data with non-response.
 - `ReGenesees`: Has a similar interface as the - `survey`: along with specific features (e.g. partitioned calibration) that make it fit for processing large-scale surveys in the official statistics field. ReGenesees implements many different estimators with sampling errors, and ships with a dedicated GUI (package ReGenesees.GUI).
@@ -93,6 +106,8 @@ Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck m
 
 ## Time series and seasonal adjustment (GSBPM 5.6 | 5.7)
 
+\scriptsize
+
 - `seasonal`: Interface to the X13-ARIMA-SEATS program from R with a very nice shiny GUI.
 - `x12`: Alternative interface to the X13-ARIMA-SEATS program from R with a focus on batch processing time series.
 - `RJDemetra`:R interface to JDemetra+.
@@ -100,10 +115,16 @@ Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck m
 
 
 ## Output validation (GSBPM 6.2)
+
+\scriptsize
+
 - `validate`: Rule management and data validation.
 
 
 ## Statistical disclosure control (GSBPM 6.4)
+
+\scriptsize
+
 - `sdcMicro`: Disclosure control for statistical microdata.
 - `sdcTable`: Disclosure control for tabulated data.
 - `easySdcTable`:provides an interface to the package sdcTable.
@@ -114,6 +135,9 @@ Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck m
 - `synthpop`: Produce synthetic versions of microdata containing confidential information so that they are safe to be released to users for exploratory analysis.
 
 ## Visualisation (GSBPM 7.2)
+
+\scriptsize
+
 - `tabplot`: Compare up to about 10-20 variables simultaneously using a tableplot. See also tabplotd3 for a web-based GUI.
 - `tmap`: Thematic geographic maps, including bubble charts, choropleths, and more.
 - `oceanis`: To create maps for statistical analysis such as proportional circles, chroropleth, typology and flows. By INSEE.
@@ -121,6 +145,9 @@ Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck m
 - `btb`: Conservative kernel smoothing method for spatial analysis.
 
 ## Access to official statistics (GSBPM 7.4)
+
+\scriptsize
+
 - `rsdmx`: Easy access to data from statistical organisations that support SDMX webservices. The package contains a list of SDMX access points of various national and international statistical institutes.
 - `and`:C++ readsdmx. Read SDMX into dataframes from local SDMX-ML file or web-service. By OECD.
 - `rjstat`: Read and write data sets in the JSON-stat format.
@@ -132,6 +159,8 @@ Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck m
 
 ##
 
+\scriptsize
+
 - `cbsodataR`: Access to Statistics Netherlands' (CBS) open data API from R.
 - `censusapi`:A wrapper for the U.S. Census Bureau APIs that returns data frames of Census data and metadata.
 - `nsoApi`:builds on other packages to access data from official statistics and tries to harmonize the API.
@@ -139,6 +168,11 @@ Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck m
 - `pxweb`: Generic interface for the PX-Web/PC-Axis API used by many National Statistical Agencies.
 - `PxWebApiData`: Easy API access to e.g. Statistics Norway, Statistics Sweden and Statistics Finland.
 - `rdbnomics`: Access to the DB.nomics database which provide macroeconomic data from 38 official providers such as INSEE, Eurostat, Wolrd bank, etc.
+
+##
+
+\scriptsize
+
 - `readabs`:Download data from the Australian Bureau of Statistics.
 - `destatiscleanr`: Clean csv files from Genesis, the database of the Federal Statistical Office of Germany (Destatis) and its regional outlets.
 - `statcanR`: An R connection to Statistics Canada's Web Data Service. Open economic data (formerly CANSIM tables) are accessible as a data frame in the R environment.
@@ -153,7 +187,7 @@ Supports regression (standard, M-estimation, ridge/lasso/elasticnet), hot-deck m
 use of R in official Statistics:
 
 - Yearly conference: uROS: use of R in Official Statistics
-- Last year Vienna: https://r-project.ro/conference2020.html
+- This year 6-8 December online: http://r-project.ro/conference2022.html
 - Check the website: many examples of R projects.
 - twitter: uRosconf
 

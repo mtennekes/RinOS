@@ -533,3 +533,104 @@ Functions for reading \code{arff}, \code{dbf},
 and \code{xport} files.
 
 
+## Databases and high performance computing
+
+### Databases
+
+`dbplyr` provides a `dplyr` back-end for databases: see demo in the next slides
+
+### High performance computing
+
+`sparklyr` provides a `dplyr` back-end for Spark, an engine for high performance computing (discussed at ESTP course Big Data Tools for Advanced Users)
+
+
+## `dbplyr`, database back-end (demo 1/8)
+
+\scriptsize
+
+```{r}
+library(dplyr)
+library(dbplyr)
+
+# create a database
+con <- DBI::dbConnect(RSQLite::SQLite())
+
+# copy some data to the database
+DBI::dbWriteTable(con, "iris", iris)
+
+# retrieve a reference to the table in the database
+tbl_iris <- tbl(con, "iris")
+```
+
+## `dbplyr`, database back-end (demo 2/8)
+
+
+\scriptsize
+
+```{r}
+# this now a link to the table in the database
+tbl_iris
+```
+
+## `dbplyr`, database back-end (demo 3/8)
+
+\scriptsize
+
+```{r}
+query <- 
+  tbl_iris %>% 
+  mutate(silly = 1)
+
+print(query)
+```
+
+## `dbplyr`, database back-end (demo 4/8)
+
+\scriptsize
+
+```{r}
+show_query(query)
+```
+
+## `dbplyr`, database back-end (demo 5/8)
+
+\scriptsize
+
+```{r}
+# this now a link to the table in the database
+query <- 
+  tbl_iris %>% 
+  group_by(Species) %>% 
+  summarize( mean_sepal_length = mean(Sepal.Length, na.rm=TRUE)
+           , mean_sepal_width = mean(Sepal.Width, na.rm = TRUE)
+           ) %>% 
+  mutate(ratio = mean_sepal_length / mean_sepal_width)
+
+print(query)
+```
+
+## `dbplyr`, database back-end (demo 6/8)
+
+\scriptsize
+
+```{r}
+show_query(query)
+```
+
+## `dbplyr`, database back-end (demo 7/8)
+
+\scriptsize
+
+```{r}
+# you can also directly use SQL on the database
+DBI::dbGetQuery(con, "SELECT * FROM iris")
+```
+
+## `dbplyr`, database back-end (demo 8/8)
+
+### Close connection
+
+```{r}
+DBI::dbDisconnect(con)
+```
+

@@ -1,5 +1,5 @@
 ---
-title: "R Projects"
+title: "Project management"
 author: "ESTP Use of R in Official Statistics"
 output: 
   beamer_presentation:
@@ -72,7 +72,7 @@ install.packages("packagename")
 1. Google your application (Use `R` as keyword);
 2. read blogs (`r-bloggers`), SO questions;
 2. read vignettes, but mainly:
-4. **Installeren en aan de slag ermee.**
+4. **Install and get started**
 
 ## R documentation
 
