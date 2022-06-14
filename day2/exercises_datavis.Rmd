@@ -6,7 +6,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: yes
+  answers: no
 editor_options: 
   markdown: 
     wrap: sentence
@@ -26,18 +26,18 @@ library(tidyverse)
 
 a)  Load the data set mtcars and the library `ggplot2`
 
-```{r}
+```{r, eval = TRUE, echo = TRUE}
 data(mtcars)
 library(ggplot2)
 ```
 
-b)  Create a scatterplot with `wt` on the x-axis and `disp` on the y-axis. With `geom_point()`
+b)  Create a scatte rplot with `wt` on the x-axis and `disp` on the y-axis.
 
 ```{r}
 ggplot(mtcars, aes(x = wt, y = disp)) + geom_point()
 ```
 
-c)  Maak the points the color "blue".
+c)  Make the points blue.
 
 ```{r}
 ggplot(mtcars, aes(x = wt, y = disp)) + geom_point(color="blue")
@@ -114,7 +114,7 @@ ggplot(mtcars) +
 
 ### Exercise 3
 
-a)  Read the file *UnitedNations.txt* in. Create a scatter plot with `tfr` vs life expectancy for women `lifeFemale`. Connect the aesthetic color to `region`.
+a)  Read the file *UnitedNations.txt*. Create a scatter plot with `tfr` vs life expectancy for women `lifeFemale`. Connect the aesthetic color to `region`.
 
 ```{r }
 library(ggplot2)
@@ -175,7 +175,7 @@ ggplot(data = UN) +
     geom_histogram(aes(x = lifeFemale, fill = region), bins = 35) + facet_wrap(~region)
 ```
 
-(E) Create with `ggplot` en `geom_bar` a bar chart of the number of countries of the continents.
+(e) Create with `ggplot` en `geom_bar` a bar chart of the number of countries of the continents.
 
 ```{r}
 ggplot(data = UN) +
@@ -197,9 +197,8 @@ ggplot(data = diamonds) +
         y = "Count")
 ```
 
-b)  
+b)  Investigate the how `cut` and `price` interact.
 
-Investigate the how `cut` and `price` interact.
 - Create for each category a boxplot.
 - Do the same with violin plot.
 

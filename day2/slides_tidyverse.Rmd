@@ -6,6 +6,8 @@ output:
     includes:
       in_header: ../header.tex
     fig_caption: false
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r,echo=FALSE,message=FALSE}
@@ -31,8 +33,8 @@ library(tidyverse)
 
 ### R packages
 
-- number of standard and documented functions.
-- can be published (after strict technical checks) on [CRAN](https://cran.r-project.org)
+- Collection of standard and documented functions
+- Can be published (after strict technical checks) on [CRAN](https://cran.r-project.org)
 
 ### Tidyverse
 
@@ -63,9 +65,9 @@ _factoid_: approx 80\% of time is datamanipulation...
 
 ### Concept
 
-- set of basic manipulations (_verbs_) that all have a data.frame (tibble) as input and
-output.
-- therefor these _verbs_ can be chained in any particular combination.
+- Set of basic manipulations (_verbs_) that all have a data.frame (tibble) as input and
+output
+- Therefor these _verbs_ can be chained in any particular combination
 - Manipulations for: 
     - data selection
     - deriving new variables 
@@ -73,7 +75,7 @@ output.
     - combining datasets (join)
 
 ### remarks
-- This idea (algebraic closure) is same as  SQL. 
+- This idea (algebraic closure) is same as  SQL
 - Not all manipulation fit in the grammar
 
 ## The tidyverse datatype: `tibble`
@@ -131,9 +133,9 @@ summarize(.data, ...)
 With \code{...} you can give \code{<name>=<expression>} to calculate a statistic.
 
 ```{r, eval=TRUE}
-summarize(iris
-          , min_sl = min(Sepal.Length) # calculate min 
-          , max_sl = max(Sepal.Length)
+summarize(iris,
+          min_sl = min(Sepal.Length), # calculate min 
+          max_sl = max(Sepal.Length)
           )
 ```
 
@@ -146,9 +148,9 @@ group_by(.data, ...)
 With \code{...} you indicate which  (categorical) variable(s) are used for the groups
 
 ```{r}
-summarize(group_by(iris, Species)
-          , min_sl = min(Sepal.Length)
-          , max_sl = max(Sepal.Length)) 
+summarize(group_by(iris, Species),
+          min_sl = min(Sepal.Length),
+          max_sl = max(Sepal.Length)) 
 ```
 
 ## Tabulating with `dplyr`
@@ -156,8 +158,8 @@ summarize(group_by(iris, Species)
 With the function `n()` you can count the number of rows. 
 
 ```{r}
-summarize(group_by(iris, Species)
-         , number=n()
+summarize(group_by(iris, Species),
+         number=n()
          )
 ```
 
@@ -170,48 +172,45 @@ count(iris, Species, name="number")
 ```
 
 
-## Syntactic sugar: data pipelines
+## Pipelines
 
-The operator `%>%` passes the output of the left side through as the first argument
+The pipe operator `|>` passes the output of the left side through as the first argument
 of the following function. So:
 
 ```{r, eval=FALSE}
-iris %>%
-  group_by(Species) %>%
-  summarize(min_sl = min(Sepal.Length)
-           , max_ls=max(Sepal.Length)
-           )
+iris |>
+  group_by(Species) |>
+  summarize(min_sl = min(Sepal.Length),
+            max_ls = max(Sepal.Length))
 ```
 
+- The `|>` operator has been introduced in 2021 (as of R 4.1).
+- Alternatively, the `%>%` operator (from the `magrittr` package, also in `tidyverse`) can be used.
+- In RStudio, press CTRL + SHIFT + M to type this symbol.
 
-```{r,eval=FALSE}
-summarize(group_by(iris, Species)
-          , min_sl = min(Sepal.Length)
-          , max_sl = max(Sepal.Length)) 
+
+
+## Pipelines (2)
+
+A placeholder for the left side is the `_` symbol (and `.` for the `%>%` operator). 
+
+```{r, eval=FALSE}
+iris |>
+  group_by(.data = _, 
+           Species) |>
+  summarize(.data = _,
+            min_sl = min(Sepal.Length),
+            max_ls=max(Sepal.Length))
 ```
 
-## Syntactic sugar: data pipelines (2)
-
-The operator `%>%` passes the output of the left side through as the first argument
-of the following function. So:
 
 ```{r, eval=FALSE}
 iris %>%
-  group_by(Species) %>%
-  summarize(min_sl = min(Sepal.Length)
-           , max_ls=max(Sepal.Length)
-           )
-```
-
-Can also be written (which may be more clear for you...)
-
-```{r, eval=FALSE}
-iris %>%
-  group_by(., Species) %>%
-  summarize( .
-           , min_sl = min(Sepal.Length)
-           , max_ls=max(Sepal.Length)
-           )
+  group_by(.data  = ., 
+           Species) %>%
+  summarize(.data = .,
+            min_sl = min(Sepal.Length),
+            max_ls=max(Sepal.Length))
 ```
 
 ## Tabulating (1)
@@ -450,7 +449,7 @@ e.g.
 ## File names  in R
 
 - File names are always between quotes.
-- The directory separator is _always the forward slash
+- The directory separator is _always_ the forward slash
 
 ```{r,eval=FALSE}
 dat <- read.csv("C:/users/joe/documents/foo.csv")
@@ -503,7 +502,6 @@ dat <- read_csv("myiris.csv", col_types = "ddddc")
 \end{tabular}
 \end{center}
 
-### Opmerking
 
 ## When reading does not succeeed 
 
@@ -528,7 +526,7 @@ STATA & \code{read\_stata}\\
 SAS   & \code{read\_sas}
 \end{tabular}
 
-### Het `foreign` package (standaard bij R)
+### The `foreign` package (a standard R package)
 
 Functions for reading \code{arff}, \code{dbf},
 \code{dba}, \code{epiinfo}, \code{mtp}, \code{octave}, \code{systat},

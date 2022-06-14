@@ -208,7 +208,7 @@ a) Create a subdirectory "data" in your R project "day1". Copy the "adult.csv" f
 into the "data" directory. 
 Try to read the csv with `read.csv`:
 
-```{r}
+```{r, eval=TRUE}
 adult <- read.csv("data/adult.csv")
 ```
 
@@ -258,7 +258,7 @@ library(jsonlite) # load the library to make its functions available
 ```
 
 c) Read "adult.json" with the function `read_json` and assign it to variable
-`adult_json`. Check the data. It is a list of properties
+`adult_json`. Check the data.
 
 ```{r}
 adult_json <- read_json("data/adult.json")
@@ -304,7 +304,9 @@ download.file(sdmx_url, "eurostat.xml")
 
 c) Inspect the file to see what the structure is.
 
-_it is an xml file_ (sdmx)
+```{r, eval=FALSE}
+# It is an xml file (sdmx)
+```
 
 d) Use the `readSDMX` function to read the file. Use the Environment / Object 
 inspector to find out when this dataset was prepared and who the sender is.
@@ -324,7 +326,9 @@ as.data.frame(sdmx)
 
 f) Which country is this data set about?
 
-_Belgium_
+```{r, eval=FALSE}
+# Belgium
+```
 
 # Summary Stats
 
@@ -353,33 +357,35 @@ d) Use `summary(adult)` to get summary stats for all columns. Any peculiar findi
 
 ```{r}
 summary(adult)
+
+# capital.gain is strange, looks like missing value coded as 99999
 ```
 
-_capital.gain is strange, looks like missing value coded as 99999_
 
-c) With `table` you can tabulate / count values:
+
+e) With `table` you can tabulate / count values:
 
 ```{r}
 workclass_count <- table(adult$workclass)
 workclass_count
 ```
 
-d) Count the relationships in this data set
+f) Count the relationships in this data set
 
 ```{r}
 table(adult$relationship)
 ```
 
 
-e) Count the crossing of relations and workclass
+g) Count the crossing of relations and workclass
 
 ```{r, echo = params$answer}
 table(adult$relationship, adult$workclass)
 ```
 
-e) With `tapply` you can calculate a statistic per group
+With `tapply` you can calculate a statistic per group:
 
-```{r}
+```{r, eval=FALSE, echo=TRUE}
 mean_age <- 
   tapply( adult$age  # variable 
         , adult$relationship # per group
@@ -387,7 +393,7 @@ mean_age <-
         )
 ```
 
-f) Calculate the `median` hours worked per education group
+h) Calculate the `median` hours worked per education group
 ```{r}
 median_hours <- 
   tapply( adult$age  # variable 
@@ -396,7 +402,7 @@ median_hours <-
         )
 ```
 
-g) Calculate the maximum `age` per `relationship` and `workclass` combination.
+i) Calculate the maximum `age` per `relationship` and `workclass` combination.
 
 ```{r}
 max_age <- 

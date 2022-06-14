@@ -37,7 +37,7 @@ knitr::include_graphics("fig/model-slide.pdf")
 
 R has great plotting facilities:
 
-- very fine-grained control over plot
+- Very fine-grained control over plot
 - Most functionality is/was focused on static images.
 
 ##
@@ -57,18 +57,29 @@ R has great plotting facilities:
 
 ### Setting programmatically a device:
 
-1) Set as plotting device:
+1. Set as plotting device:
 
     - `pdf` Creates a  pdf device (document)
     - `png` Creates a png device (document)
     - ...
-2) Use your plotting commands: plots will be writting to disk.
-3) Close the device: `dev.off()`
+2. Use your plotting commands: plots will be writting to disk.
+3. Close the device: `dev.off()`
 
-`ggplot` also has `ggsave`.
 
+`ggplot` also has `ggsave`
 
 ## Grammar of graphics
+
+
+A systematic formulation ("grammar") of how charts are build:
+
+- Data
+- Data mapping (which variables are used)
+- Geometry: points, lines, ...?
+- Statistics: identity, binned, density, ...?
+- Scale: linear/logarithmic, color scales
+- Coordinates: Cartesian or polar
+- Facets (small multiples)
 
 ## ggplot2
 
@@ -79,13 +90,18 @@ R has great plotting facilities:
 install.packages("ggplot2")
 ```
 
-## Layers
+## Example data
+
+\scriptsize
 
 ```{r, echo=TRUE}
 head(mtcars)
 ```
 
-##  dataset mtcars
+## Example data
+
+\scriptsize
+
 ```{r}
 str(mtcars)
 ```
@@ -178,28 +194,28 @@ mtcars$cyl <- factor(mtcars$cyl)
 ggplot(data = mtcars, aes(x=disp, y=hp, shape=cyl, color = cyl)) + geom_point()
 ```
 
-## assignment
+## Assignment
 
 - Create a histogram from `carat` column in the `diamonds` dataset (with `geom_histogram`)
 
 - Play around with the `binwidth`: what is the story of the data?
 
-## facets
+## Facets
 
 Split any ggplot plot on a categorical variable into small multiples
 
-- very useful during analyses!
+- Very useful during analyses!
 
-- by default same scales, to make comparison easy
+- By default same scales, to make comparison easy
 
-## facets 
+## Facets 
 
 \tiny
 ```{r}
 ggplot(mtcars) + geom_histogram(aes(x = disp), binwidth = 25) + facet_wrap(~cyl)
 ```
 
-## facets
+## Facets (2)
 
 \tiny
 ```{r}
@@ -220,7 +236,7 @@ ggplot(data = mtcars, aes(x=disp, y=hp)) + geom_point() + facet_wrap(~cyl)
 
 ## ggplot2 tricks
 
-- each plot can be stored in a variable and be adjust
+- Each plot can be stored in a variable and be adjust
 
 ```{r, eval = FALSE}
 p <- ggplot(mtcars) + geom_point(aes(x = disp, y = hp))
@@ -228,7 +244,7 @@ p + facet_wrap(~cyl)
 p + facet_wrap(~am)
 ```
 
-- a plot can be save easily with `ggsave`
+- A plot can be save easily with `ggsave`
 
 ```{r, eval = FALSE}
 ggsave("test.pdf") # remembers last plot
@@ -245,5 +261,5 @@ ggsave("test.png", plot = p)
 
 - `ggrepel`, nice label positioning of annotated labels.
 
-
+- `plotly`, create interactive charts (function `ggplotly`)
 
