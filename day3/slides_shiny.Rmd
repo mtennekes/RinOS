@@ -1,0 +1,183 @@
+---
+title: "Graphical User Interfaces and dashboards with shiny"
+author: "ESTP Use of R in Official Statistics"
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+fig_caption: false
+editor_options: 
+  chunk_output_type: console
+---
+
+## What is `shiny`?
+
+- `shiny` is an R package to create web-based applications
+- It is also popular outside the R community, where it is refered to as "R Shiny"
+- An application created with Shiny is often called a "Shiny App" or simply an "app".
+- Applications can run in the browser, so no additional software required
+- R is required, either local or via a server
+
+## Web development
+
+- `shiny` uses HTML/CSS/Javascript under the hood, the main languages for professional web development
+- No knowledge of HTML/CSS/Javascript required to create shiny apps, but...
+- additional HTML/CSS/Javascript make shiny fully customizable and extendable
+
+## `ui` and `server`
+
+A `shiny` app consists of two main functions:
+
+1. A `ui` which stands for user interface: this contains all visual components, such as buttons, sliders, and (placeholders for) interactive charts and tables
+2. A `server` which contains the R back-end for creating interaction between the visual components. E.g., when a slider is changed, the histogram should be updated.
+
+## Example: ui
+
+\scriptsize
+
+```{r, eval=FALSE}
+library(shiny)
+ui <- fluidPage(
+  titlePanel("Histrogram of random data"),
+  sidebarPanel(
+    sliderInput("k",
+               "Number of observations",
+               min = 100,
+               max = 10000,
+               value = 1000,
+               step = 100),
+    radioButtons("type",
+                 "Distribution type",
+                 choices = c("Uniform", "Normal", "Log-normal"),
+                 selected = "Uniform")),
+  mainPanel(
+    plotOutput("hist")
+  )
+)
+```
+
+## Example: server
+
+
+```{r, eval=FALSE}
+server <- function(input, output) {
+  output$hist <- renderPlot({
+    if (input$type == "Uniform") {
+      hist(runif(input$k))
+    } else if (input$type == "Normal") {
+      hist(rnorm(input$k))
+    } else if (input$type == "Log-normal") {
+      hist(rlnorm(input$k))
+    }
+  })
+}
+```
+
+## Example: run app
+
+```{r, eval=FALSE}
+shinyApp(ui, server)
+``` 
+
+
+## Example: server (alternative)
+
+```{r, eval=FALSE}
+server <- function(input, output) {
+  
+  get_data <- reactive({
+    type <- input$type
+    k <- input$k
+    
+    fun = switch(type, Uniform = runif, Normal = rnorm, 'Log-normal' = rlnorm)
+    
+    fun(k)
+  })
+  
+  output$hist <- renderPlot({
+    data <- get_data()
+    hist(data)
+  })
+}
+```
+
+
+## Page layout functions
+
+### Page functions 
+- All UI items should ultimately be contained in a `page`
+- Standard page functions are `fluidPage`, `fixedPage`, `fillPage` and `navbarPage`
+
+
+### Layout functions
+- Layout functions organize the UI items
+- Many layouts available, e.g. `sidebarLayout`, `verticalLayout`, `splitLayout`
+- See (and run) examples of these functions to see the layouts
+
+
+## Control widgets
+
+Standard shiny widgets:
+
+\scriptsize
+
+- actionButton	Action Button
+- checkboxGroupInput	A group of check boxes
+- checkboxInput	A single check box
+- dateInput	A calendar to aid date selection
+- dateRangeInput	A pair of calendars for selecting a date range
+- fileInput	A file upload control wizard
+- helpText	Help text that can be added to an input form
+- numericInput	A field to enter numbers
+- radioButtons	A set of radio buttons
+- selectInput	A box with choices to select from
+- sliderInput	A slider bar
+- submitButton	A submit button
+- textInput	A field to enter text
+
+
+## HTML elements
+
+HTML elements can be added via the `tags` list:
+
+```{r,eval=FALSE}
+ui <- fluidPage(
+  tags$h1("Heading 1"),
+  tags$h2("Heading 2"),
+  tags$p("Paragraph"),
+  tags$br(),
+  tags$a(href = "https://shiny.rstudio.com", "Shiny!"))
+server <- function(input, output){}
+shinyApp(ui, server)
+```
+
+
+
+## Output widgets
+
+Always consist of two functions: a placeholder in the UI and a rendering function in the server
+
+Standard output widgets are:
+
+- `plotOutput` and `renderPlot`
+- `tableOutput` and `renderTable`
+- `textOutput` and `renderText`
+- `uiOutput`/`htmlOutput` and `renderUI`
+
+The latter is used to update the control widgets
+
+
+## Reactive and observe
+
+Shiny contains two families of interactive functions:
+
+1. **reactive** These functions (`reactive`, `reactiveValues`, ...) are lazy: they are only executed when they are called elsewhere
+2. **observe** These functions (`observe` and `observeEvent`) are eager: they are continually monitoring for changes in the dependencies
+
+
+
+## Hosting shiny apps
+
+Shiny apps can be runned locally, or hosted online, e.g. at https://www.shinyapps.io
+
+
