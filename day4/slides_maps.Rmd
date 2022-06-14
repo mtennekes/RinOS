@@ -1,5 +1,5 @@
 ---
-title: "Maps in R"
+title: "Thematic Maps in R"
 author: "ESTP Use of R in Official Statistics"
 output:
   beamer_presentation:
@@ -19,93 +19,7 @@ knitr::opts_chunk$set(
 ```
 
 
-## Spatial data
 
-Data often has a spatial component:
-
-- differences in income between municipalities/neighborhoods
-- population density
-- companies, high tech, agricultural
-- road density
-- mobility, migration
-- land use etc.
-
-You are often interested in (the relevance of) areas or locations.
-
-## GIS
-
-- Software for geographical data is called GIS.
-- _Geographical Information Systems_
-- Broad umbrella term for spatial analysis, processing and *cartography*.
-- Cartography is only part of this.
-
-## Spatial data
-
-Spatial or spatial data has different forms:
-
-## Vector data (`sf`)
-
-- _point_ data: location with (measured) values for that location. E.g. locations of theft, fire.
-
-- _areal_/_polygon_ data: boundaries of areas/regions, municipalities
-, police regions etc. with associated data
-
-- _line_ data: roads/rivers with associated data.
-
-## Raster data (`raster`)
-
-- Grid data: the data is a collection of rectangles/pixels with data
-- Eg: satellite photos, infrared, drone data.
-
-## CRS: coordinate reference system
-
-- All cards use a CRS (coordinate system)
-- In the Netherlands this is often the National Triangle System (rd, EPSG: 28992)
-
-The earth is (approximately) a sphere, but a map is flat:
-
-- Every card is distorted (is not a perfect image).
-- that is why there are many ways to smash (a piece of) the earth.
-- in Geo data you occasionally have to transform from one CRS to another CRS.
-- sounds simple, but the details are not (for example, earth pollen moving)
-
-## Google/Bing maps (WGS84, Webmercator)
-
-- Due to the rise of GPS, lat/lon coordination is often used (sphere coordinates). (WGS84)
-- Many systems also use this convention, so sometimes you have to transform data from this form to your desired CRS.
-
-## sf (_simple features_)
-
-- point, polygon, line data.
-- Supports union, intersections etc.
-- crs transformations
-- join with data (`dplyr`)
-- writing and reading of many GIS vector formats
-- (used geos, gdal, proj)
-
-## grid
-
-- multi-layer raster data
-- writing and reading many GIS raster formats
-- can handle very large frames (by leaving data on disk)
-- help functions for converting vector -> raster (and back).
-
-## sf
-
-Data is a "data.frame" with an additional "geometry" column.
-
-### read/write
-
-- `st_read` read (many) different formats: geojson, geopackage and shp (ESRI)
-- `st_write` write to different formats
-
-### Manipulate
-
-- `create, modify, association, intersection etc. of" geometry "
-
-### Calculate
-
-- buffer query, interpolation, etc
 
 ## Maps
 

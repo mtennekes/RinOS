@@ -1,0 +1,38 @@
+---
+title: "Spatial data in R"
+author: "ESTP Use of R in Official Statistics"
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+editor_options: 
+  chunk_output_type: console
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE,
+  out.width="70%",
+  fig.showtext=TRUE,
+  fig.align="center"
+)
+```
+
+
+
+## sf
+
+Data is a "data.frame" with an additional "geometry" column.
+
+### read/write
+
+- `st_read` read (many) different formats: geojson, geopackage and shp (ESRI)
+- `st_write` write to different formats
+
+### Manipulate
+
+- `create, modify, association, intersection etc. of" geometry "
+
+### Calculate
+
+- buffer query, interpolation, etc
