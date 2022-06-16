@@ -50,43 +50,23 @@ You are often interested in (the relevance of) areas or locations.
 ## R Spatial
 
 - Group of developers of spatial data analysis R packages
-- Main persons:Roger Bivand, Edzer Pebesma, and Robert Hijmans
-- Large community (active on github and stackoverflow)
+- Main persons: Roger Bivand, Edzer Pebesma, and Robert Hijmans
+- Large community (active on GitHub and StackOverflow)
 
 
 
-## Spatial data
+## Spatial vector data
 
-Spatial data has two different forms:
-  
-### Vector data
-  
-- _point_ data: location with (measured) values for that location. E.g. locations of theft, fire.
-
-- _polygon_ data: boundaries of areas/regions, municipalities
-, police regions etc. with associated data
-
-- _line_ data: roads/rivers with associated data.
-
-### Raster data
-
-- Grid data: the data is a collection of rectangles/pixels with data
-- Eg: satellite photos, infrared, drone data.
-
-
-
-## Vector data
-
-Spatial vector data represent spatial objects using points, lines, and polygons
+Spatial vector data represent spatial objects:
 
 ### Example vector data
 
-\includegraphics[width=0.7\textwidth]{fig/vector-data-model-1.png}
+\includegraphics[width=0.5\textwidth]{fig/vector-data-model-1.png}
 
 One feature (row in the data) may contain several points/lines/polygons.
 
 
-## Raster data
+## Spatial raster data
 
 Spatial raster data represent spatial phenomena using a continuous grid of cells
 
@@ -94,13 +74,13 @@ Spatial raster data represent spatial phenomena using a continuous grid of cells
 
 \includegraphics[width=0.7\textwidth]{fig/raster-intro-1.png}
 
-##
+## Types of raster grids
 
 Raster data does not have to be regular
 
-### Types of data grids
-
-\includegraphics[width=0.7\textwidth]{fig/grid-types-1.png}
+\begin{block}{Types of data grids}
+\includegraphics[width=0.9\textwidth]{fig/grid-types-1.png}
+\end{block}
 
 Non-regular grids are typically obtained after reprojection (more on this later)
 
@@ -137,51 +117,58 @@ Example: land use percentages grouped by administrative region
 
 ## Map projections (CRS)
 
-
-- How to flatten a three dimensional object?
-- Or, in other words, how to peel an orange?
+How to flatten a three dimensional object?
 
 \includegraphics[width=0.7\textwidth]{fig/orange_world.png}
+
+## One approach to flatten the Earth
+
 \includegraphics[width=0.7\textwidth]{fig/crs-goode-1.png}
+
+Formally known as the _Goode homolosien projection_
+
 
 ## CRS: coordinate reference system
 
 - The CRS (coordinate reference system) contains information where each point on earth is located on a two-dimensional map (x-y coordinates)
 - All maps use a CRS
-- E.g. in the Netherlands, this is often the National Triangle System (rd, EPSG: 28992)
-
-## Google/Bing maps (WGS84, Webmercator)
-
-- Due to the rise of GPS, lat/lon coordination is often used (sphere coordinates). (WGS84)
-- Many systems also use this convention, so sometimes you have to transform data from this form to your desired CRS.
+- E.g. in the Netherlands, this is often the National Triangle System (EPSG: 28992)
 
 
-The earth is (approximately) a sphere, but a map is flat:
-  
-- Every map is distorted (is not a perfect image).
-- That is why there are many ways to smash (a piece of) the earth.
-- In Geo data you occasionally have to transform from one CRS to another CRS.
-- Sounds simple, but the details are not
+## CRS: does it matter?
 
-## Google/Bing maps (WGS84, Webmercator)
+### Yes
 
-- Due to the rise of GPS, lat/lon coordination is often used (sphere coordinates). (WGS84)
-- Many systems also use this convention, so sometimes you have to transform data from this form to your desired CRS.
+\includegraphics[width=0.7\textwidth]{fig/crs-bias-1.png}
 
-## sf (_simple features_)
+Left: Web Mercator (used in many interactive maps)
+Right: Eckert IV projection
 
-- point, polygon, line data.
-- Supports union, intersections etc.
-- crs transformations
-- join with data (`dplyr`)
-- writing and reading of many GIS vector formats
-- (used geos, gdal, proj)
+For statistical purposes, the second is better
 
-## grid
+## CRS: main four types
 
-- multi-layer raster data
-- writing and reading many GIS raster formats
-- can handle very large frames (by leaving data on disk)
-- help functions for converting vector -> raster (and back).
+\includegraphics[width=0.7\textwidth]{fig/crs-types-1.png}
 
+## CRS: properties
 
+\scriptsize
+
+| Property | Conformal | Equal area | Equidistant | Azimuthal |
+| --------- | --------- | --------- | --------- | --------- |
+| Preserves	| Local angle (shape) | Area | Distance | Direction |
+| Application |	Navigation, climate	| Statistics | Geology	Geology |
+| Examples (cyclindrical)	| Mercator | Gall-Peters, Eckert IV | Equirectangular	| none |
+| Examples (conic)	| Lambert conformal conic | Albers conic | Equidistant conic | none |
+| Examples (planar)	| Stereographic	| Lambert azimuthal equal-area | Azimuthal equidistant | Stereographic, Lambert azimuthal equal-area |
+| Examples (interrupted)	| Myriahedral	| Goode homolosine, Myriahedral | none | none |
+
+## CRS: World maps
+
+For thematic World maps, pseudo-cylindrical projections are used:
+
+\includegraphics[width=0.7\textwidth]{fig/crs-robin-1.png}
+
+- This is the Robinson projection
+- These projecions are pseudo-cylindrical
+- They are equal-area, important for statistics
