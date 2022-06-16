@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 Data often has a spatial component:
   
-  - differences in income between municipalities/neighborhoods
+- differences in income between municipalities/neighborhoods
 - population density
 - companies, high tech, agricultural
 - road density
@@ -37,31 +37,124 @@ You are often interested in (the relevance of) areas or locations.
 
 - Software for geographical data is called GIS.
 - _Geographical Information Systems_
-- Broad umbrella term for spatial analysis, processing and *cartography*.
-- Cartography is only part of this.
+- Broad umbrella term for spatial analysis, processing and *cartography*
+- Cartography is only part of this
+
+
+## Software
+
+- Desktop GIS software: ArcGIS (ESRI), QGIS, GRASS
+- Python (libraries: geopandas, shapely, pyproj, geojson, etc.)
+- R (libraries: sf, terra, stars, tmap, mapview, etc.)
+
+## R Spatial
+
+- Group of developers of spatial data analysis R packages
+- Main persons:Roger Bivand, Edzer Pebesma, and Robert Hijmans
+- Large community (active on github and stackoverflow)
+
+
 
 ## Spatial data
 
-Spatial or spatial data has different forms:
+Spatial data has two different forms:
   
-## Vector data (`sf`)
+### Vector data
   
 - _point_ data: location with (measured) values for that location. E.g. locations of theft, fire.
 
-- _areal_/_polygon_ data: boundaries of areas/regions, municipalities
+- _polygon_ data: boundaries of areas/regions, municipalities
 , police regions etc. with associated data
 
 - _line_ data: roads/rivers with associated data.
 
-## Raster data (`terra` or `stars`)
+### Raster data
 
 - Grid data: the data is a collection of rectangles/pixels with data
 - Eg: satellite photos, infrared, drone data.
 
+
+
+## Vector data
+
+Spatial vector data represent spatial objects using points, lines, and polygons
+
+### Example vector data
+
+\includegraphics[width=0.7\textwidth]{fig/vector-data-model-1.png}
+
+One feature (row in the data) may contain several points/lines/polygons.
+
+
+## Raster data
+
+Spatial raster data represent spatial phenomena using a continuous grid of cells
+
+### Basic representation
+
+\includegraphics[width=0.7\textwidth]{fig/raster-intro-1.png}
+
+##
+
+Raster data does not have to be regular
+
+### Types of data grids
+
+\includegraphics[width=0.7\textwidth]{fig/grid-types-1.png}
+
+Non-regular grids are typically obtained after reprojection (more on this later)
+
+##
+
+A satellite image is an example of raster data
+
+\includegraphics[width=0.7\textwidth]{fig/rgb-raster-1.png}
+
+It shows the three color bands and a composite image using the three bands
+
+
+## Spatio-temporal data
+
+- Spatio-temporal data are spatial data with a time dimension
+- These data are used for spatial data analysis over time
+- Such data can be stored in a data cube
+
+
+## Raster data cube
+
+\includegraphics[width=0.7\textwidth]{fig/raster-data-cubes-1.png}
+
+Example: weather data with attributes: temperature, preceptation, and air pressure
+
+
+## Vector data cube
+
+\includegraphics[width=0.7\textwidth]{fig/vector-data-cubes-1.png}
+
+Example: land use percentages grouped by administrative region
+
+
+
+## Map projections (CRS)
+
+
+- How to flatten a three dimensional object?
+- Or, in other words, how to peel an orange?
+
+\includegraphics[width=0.7\textwidth]{fig/orange_world.png}
+\includegraphics[width=0.7\textwidth]{fig/crs-goode-1.png}
+
 ## CRS: coordinate reference system
 
-- All maps use a CRS (coordinate system)
+- The CRS (coordinate reference system) contains information where each point on earth is located on a two-dimensional map (x-y coordinates)
+- All maps use a CRS
 - E.g. in the Netherlands, this is often the National Triangle System (rd, EPSG: 28992)
+
+## Google/Bing maps (WGS84, Webmercator)
+
+- Due to the rise of GPS, lat/lon coordination is often used (sphere coordinates). (WGS84)
+- Many systems also use this convention, so sometimes you have to transform data from this form to your desired CRS.
+
 
 The earth is (approximately) a sphere, but a map is flat:
   

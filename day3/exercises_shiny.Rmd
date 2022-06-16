@@ -1,0 +1,89 @@
+---
+title: "Exercises Shiny"
+output: 
+  pdf_document:
+    includes:
+      in_header: ../exercise.tex
+params:
+  answers: no
+editor_options: 
+  chunk_output_type: console
+---
+  
+```{r, include=FALSE}
+knitr::opts_chunk$set( echo = params$answers
+                       , eval = params$answers
+                       , comments = NA
+                       , message=FALSE
+                       , warning = FALSE
+)
+library(shiny)
+```
+
+In this session, we will create a dashboard to analyse the `Wage` dataset:
+
+```{r,eval=TRUE,echo=TRUE}
+Wage <- read.csv("data/Wage.csv")
+str(Wage)
+```
+
+a) Create a shiny app that shows a histogram of the column `wage`, with a slider for the number of bins
+
+```{r,eval=FALSE}
+ui <- fluidPage(
+  titlePanel("Wage data"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("n", "Number of bins", min = 10, max = 100, step  = 5, value = 30)
+    ),
+    mainPanel(
+      plotOutput("hist")
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  output$hist <- renderPlot({
+    hist(Wage$wage, breaks = input$n, main = "Histogram of wage", xlab = "Wage")
+  })
+}
+
+shinyApp(ui, server)
+```
+
+##
+
+b) We would like to create histograms for different subgroups in the data. We can group the data according to any categorical data variable in the data. For instance, for `education`, we can create the subgroups: `r sort(unique(Wage$education))`. Create a shiny app where the user can select the grouping variable (use `selectInput`). Use `ggplot2` to render histograms, one for each category (ideally stacked vertically). The variable `age` is an integer, but we can create age-groups with the function `cut`:
+  
+```{r,eval=TRUE,echo=TRUE}
+Wage$age_class = cut(Wage$age, breaks = c(18, 35, 55, 80), right = FALSE, include.lowest = TRUE)
+```
+
+
+```{r,eval=FALSE}
+library(ggplot2)
+
+ui <- fluidPage(
+  titlePanel("Wage data: subgroups"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("n", "Number of bins", min = 10, max = 100, step  = 5, value = 30),
+      selectInput("grp", "Grouping variable", choices = c("age_class", "maritl", "race", "education", "region", "jobclass", "health", "health_ins"), selected = "maritl")
+    ),
+    mainPanel(
+      plotOutput("hist")
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  output$hist <- renderPlot({
+    ggplot(Wage, aes(x=wage)) + geom_histogram(bins = input$n) + facet_grid(rows = input$grp)
+  })
+}
+
+shinyApp(ui, server)
+```
+
