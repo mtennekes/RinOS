@@ -172,3 +172,28 @@ For thematic World maps, pseudo-cylindrical projections are used:
 - This is the Robinson projection
 - These projecions are pseudo-cylindrical
 - They are equal-area, important for statistics
+
+
+## Vector data in R: `sf` package
+
+Data is a "data.frame" with an additional "geometry" column.
+
+### read/write
+
+- `st_read` read (many) different formats: geojson, geopackage and shp (ESRI)
+- `st_write` write to different formats
+
+### Manipulate
+
+- `create, modify, association, intersection etc. of" geometry "
+
+### Calculate
+
+- buffer query, interpolation, etc
+
+
+## Raster data in R: `terra` package
+
+
+
+

@@ -1,5 +1,5 @@
 ---
-title: "Plotting with ggplot2"
+title: "Data visualization Plotting with ggplot2"
 author: "ESTP Use of R in Official Statistics"
 output: 
   beamer_presentation:

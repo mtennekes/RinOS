@@ -1,5 +1,5 @@
 ---
-title: "Data management met R"
+title: "tidyverse"
 author: "ESTP Use of R in Official Statistics"
 output:
   beamer_presentation:

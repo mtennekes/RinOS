@@ -2,3 +2,17 @@
 .Rhistory
 .RData
 .Ruserdata
+day1/*.log
+day1/*.pdf
+day2/*.log
+day2/*.pdf
+day3/*.log
+day3/*.pdf
+day4/*.log
+day4/*.pdf
+day5/*.log
+day5/*.pdf
+*.zip
+.DS_Store
+**/.DS_Store
+*.pages

@@ -128,6 +128,7 @@ c) Implement the following imputation sequence:
     - Impute everything else using `missForest` (formula: `. ~ .`)
 ```{r}
 library(tidyverse)
+library(missForest)
 companies %>% 
   select(., staff:vat) %>% 
   impute_proxy(., turnover ~ vat) %>% 

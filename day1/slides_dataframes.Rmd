@@ -23,6 +23,8 @@ str(iris)
 
 ## Data frames summary
 
+\scriptsize
+
 ```{r}
 summary(iris)
 ```
@@ -47,6 +49,8 @@ summary(iris)
 
 ### Retrieve colum with `$`
 
+\scriptsize
+
 ```{r}
 mean(iris$Sepal.Length)
 # or 
@@ -59,12 +63,47 @@ colnames(iris)
 
 ### Retrieve rows with index
 
+\scriptsize
+
+
 ```{r}
 # first row (before comma)
 iris[1,]
 
 # row 2, 6 and 3 and column 1 and 2
 iris[c(2,6,3),1:2]
+```
+
+##
+
+### Row filtering
+
+\scriptsize
+
+```{r}
+iris[iris$Species == "versicolor" & iris$Sepal.Length > 6.5, ]
+```
+
+
+
+## Plotting (1)
+
+- The `plot` function is a generic function
+- It depends on the input what kind of data is plotted
+- For numeric data, a scatter plot is created
+
+
+```{r, fig.height=4}
+# scatter plot
+plot(1:10)
+```
+
+##
+
+```{r, fig.height=4}
+
+# line plot
+plot(1:10, type = "l")
 ```
 
 
@@ -123,5 +162,53 @@ table(iris$Species)
 iris$Sepal.Length.Class = cut(iris$Sepal.Length, breaks = 4:8)
 table(iris$Species, iris$Sepal.Length.Class)
 ```
+
+## Missing data
+
+* Missing values are represented with `NA`
+* `is.na()` checks for missing values
+* `which()` returns indices
+
+
+### Example
+
+\scriptsize
+
+```{r}
+x <- c(3, 4, 6, NA, 3, NA)
+
+is.na(x)
+
+which(is.na(x))
+```
+
+## Missing data (2)
+
+* `na.omit()` returns the vector without `NA` values
+
+### Example
+
+```{r}
+na.omit(x)
+
+# is the same as
+x[!is.na(x)]
+
+```
+
+## Missing data (3)
+
+* Most functions have a `na.rm` argument
+
+### Example
+
+```{r}
+sum(x)
+
+sum(x, na.rm = TRUE)
+```
+
+
+
 
 
