@@ -5,7 +5,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: yes
+  answers: no
 ---
 
 ```{r, include=FALSE}
@@ -130,7 +130,7 @@ c) Implement the following imputation sequence:
 library(tidyverse)
 library(missForest)
 companies %>% 
-  select(., staff:vat) %>% 
+  dplyr::select(., staff:vat) %>% 
   impute_proxy(., turnover ~ vat) %>% 
   impute_rlm(staff ~ staff.costs) %>% 
   impute_rlm(staff ~ total.costs) %>% 
