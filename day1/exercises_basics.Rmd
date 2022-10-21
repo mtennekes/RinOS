@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE
 
 ### Exercise 1
 
-a) Create a new R project: day1
+a) Create a new R project: day 1
 
 Execute in the `R` console the following calculations (one by one)
 
