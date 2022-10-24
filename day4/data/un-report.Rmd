@@ -1,0 +1,86 @@
+---
+title: "The UN dataset"
+author: "Me, myself and I"
+date: "March 5, 2021"
+output:
+  pdf_document: default
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+```
+
+```{r, message=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+un <- read.table("data/UnitedNations.txt", header=TRUE)
+```
+
+( _italic_ texts should be generated with an r statement
+)
+
+### Introduction
+
+In this report we revisit the dataset of the United Nations. 
+This dataset has _`r nrow(un)`_ rows. Each row describes variables of a country. 
+The countries are subdivided into _`r length(unique(un$region))`_ regions.
+The following table shows the number of countries per region.
+
+```{r, results='asis'}
+out <- un %>%
+  group_by(region) %>%
+  summarize(countries=n())
+pander::pandoc.table(out)
+```
+
+### Life expectance and GDP
+
+The life expectency and the Gross Domestic Product are important indicators
+for well being. In the following table are the average life expectancy per country of men
+women.
+
+```{r, results='asis'}
+un %>%
+  group_by(region) %>%
+  summarize(men = mean(lifeMale,na.rm=TRUE)
+            ,  women=mean(lifeFemale,na.rm=TRUE)) %>%
+  pander::pandoc.table("Mean life expectancy (years)")
+```
+
+```{r}
+lowest_women <- un %>% 
+  filter(lifeFemale == min(lifeFemale, na.rm=TRUE))
+```
+
+The country with the lowest life expectancy for women is _`r lowest_women$country`_
+with a life expectancy of _`r lowest_women$lifeFemale`_ year.
+
+
+The following barchart shows the GDP per capita per region:
+
+```{r}
+un %>% group_by(region) %>% 
+  summarize(gdp = mean(GDPperCapita,na.rm=TRUE))  %>%
+  ggplot(aes(x=region, y=gdp, fill=region)) +
+  geom_col(show.legend = FALSE) +
+  labs(title="GDP per capita in $", x="regio", y="GDP")
+```
+
+
+### Relation between life expectancy and GDP
+
+It is interesting to see if the GDP per capita relates to life expectancy. Let's
+look at this relationship for women.
+
+```{r,message=FALSE, warning=FALSE}
+un %>% ggplot(aes(x=GDPperCapita, y=lifeFemale, color=region)) +
+  geom_point() + scale_x_log10() + geom_smooth(method='lm') + 
+  labs(title="Life expentancy of women") + theme_bw()
+```
+
+
+
+

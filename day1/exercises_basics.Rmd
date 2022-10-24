@@ -115,7 +115,7 @@ sd(ladies$bmi)
 median(ladies$bmi)
 ```
 
-g) Plot weight in meters against weight in kg
+g) Plot height in meters against weight in kg
 
 ```{r}
 plot(x = ladies$height_m, y = ladies$weight_kg, las=1)
