@@ -67,7 +67,7 @@ _factoid_: approx 80\% of time is datamanipulation...
 
 - Set of basic manipulations (_verbs_) that all have a data.frame (tibble) as input and
 output
-- Therefor these _verbs_ can be chained in any particular combination
+- Therefore these _verbs_ can be chained in any particular combination
 - Manipulations for: 
     - data selection
     - deriving new variables 
@@ -102,7 +102,7 @@ E.g:
 \code{rename}    & rename columns\\
 \code{distinct}  & select unique rows\\
 \code{arrange}   & sort rows\\
-\code{transmute} & caculate new columns\\
+\code{transmute} & calculate new columns\\
 \code{mutate}    & add new columns
 \end{tabular}
 
@@ -301,7 +301,7 @@ anti_join(d1,d2)  # select records in d1 that do not match in d2
 ```
 
 ```{r}
-semi_join(d1, d2) # selecteer records in d1 that do match in d2
+semi_join(d1, d2) # select records in d1 that do match in d2
 ```
 \normalfont
 
@@ -433,7 +433,7 @@ Zie `?strptime` for a list of conversion codes
 
 ### `POSIXct`
 
-This format store time as the number of seconds since `1970-01-01 00:00:00`.
+This format stores time as the number of seconds since `1970-01-01 00:00:00`.
 During printing (to text) it is turned into a date time depending on the `locale` settings:
 e.g.
 
@@ -503,12 +503,12 @@ dat <- read_csv("myiris.csv", col_types = "ddddc")
 \end{center}
 
 
-## When reading does not succeeed 
+## When reading does not succeed 
 
 e.g. "money", "kg" etc.
 
 - Read in as \code{character}
-- Use \code{parse\_number} to extra the numbers.
+- Use \code{parse\_number} to extract the numbers.
 
 ```{r}
 x <- c("10%", "EUR 7,-", "$12")

@@ -6,7 +6,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: yes
+  answers: no
 ---
 
 ```{r setup, include=FALSE}
@@ -105,14 +105,6 @@ titanic %>%
 d) As in a-c, but now the percentage survivors per passengerclass
 
 ```{r}
-
-```
-
-d. Als a-c, maar bereken het percentage overlevenden per
-passagiersklasse.
-
-
-```{r}
 titanic %>%
   filter(sex=="male") %>%
   group_by(passengerClass) %>%
@@ -193,7 +185,7 @@ table(titanic$ageClass, titanic$passengerClass, useNA = "ifany")
 
 a. Read the files `addressdata.csv` and `addressinfo.csv` with R
 
-Name the variables in R  `address`and  `addressinfo`. (check the results!)
+Name the variables in R  `address` and  `addressinfo`. (check the results!)
 
 ```{r, eval=FALSE, echo=params$answers}
 address <- read.csv2("data/addressdata.csv", stringsAsFactors = FALSE)

@@ -12,8 +12,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE
-                      , eval=params$answer
+knitr::opts_chunk$set(eval=params$answer
                       , echo=params$answer
                       )
 ```
@@ -21,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE
 
 ### Exercise 1
 
-a) Create a new R project: day1
+a) Create a new R project: day 1
 
 Execute in the `R` console the following calculations (one by one)
 
@@ -115,7 +114,7 @@ sd(ladies$bmi)
 median(ladies$bmi)
 ```
 
-g) Plot weight in meters against weight in kg
+g) Plot height in meters against weight in kg
 
 ```{r}
 plot(x = ladies$height_m, y = ladies$weight_kg, las=1)
@@ -218,11 +217,8 @@ _we did not use the correct import specification_
 
 c) Try  'Import Dataset' (button upper right in Environment, or  click on "adult.csv").
 
-d) Try 
+d) Try `adult <- read.csv2("data/adult.csv")`
 
-```{r}
-adult <- read.csv2("data/adult.csv")
-```
 
 e) Use `write.csv2` to save the `women` data set into csv-file "women.csv".
 Tips: use `row.names=FALSE` and `na=""`.
@@ -292,7 +288,7 @@ library(rsdmx)
 ```
 
 
-b)  The following link points to a sdmx file published by eurostat:
+b)  The following link points to a sdmx file published by eurostat
 
 ```{r}
 sdmx_url <- "https://ec.europa.eu/eurostat/SDMX/diss-web/rest/data/nama_10_gdp/.CLV10_MEUR.B1GQ.BE/?startperiod=2005&endPeriod=2011"
@@ -360,8 +356,6 @@ summary(adult)
 
 # capital.gain is strange, looks like missing value coded as 99999
 ```
-
-
 
 e) With `table` you can tabulate / count values:
 

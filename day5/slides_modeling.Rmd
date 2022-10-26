@@ -1,5 +1,5 @@
 ---
-title: "Day 3, statistical modeling"
+title: "Day 5, statistical modeling"
 author: "ESTP Use of R in Official Statistics"
 output:
   beamer_presentation:
@@ -27,7 +27,7 @@ Statistics can be:
 
 - _descriptive_: describing/summarizing the "state"
 - _predictive_: estimate an unknown/incomplete parameter/indicator
-- _forcasting_: predicting the future value of indicators.
+- _forecasting_: predicting the future value of indicators.
 - _inferential_: find out the mechanism, contributing parts.
 
 _Prediction aka Machine Learning_
@@ -45,7 +45,7 @@ population: _estimation is a prediction method_.
 _prediction_. 
 
 - But analysing time series, finding trend and seasonal patterns is very similar
-to _forcasting_: often it is _now-casting_.
+to _forecasting_: often it is _now-casting_.
 
 ## Prediction
 

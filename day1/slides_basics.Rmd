@@ -175,7 +175,7 @@ x %in% y
 Operator  & Means\\
 \hline
 \code{\&} & AND\\
-\code{|}  & OR (en/of)\\
+\code{|}  & OR (and/or)\\
 \code{!}  & NOT\\
 \code{all(x)} & all \code{x} equal to \code{TRUE}?\\
 \code{any(x)} & at least one \code{x} equal to \code{TRUE}?

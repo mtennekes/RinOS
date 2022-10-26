@@ -6,13 +6,13 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: TRUE
+  answers: no
 ---
 
 ### Exercise 1
 
-Look the file `un-report.pdf`. We are recreating this document
-using `rmarkdown` in html (of pdf if you want to).
+Look at the file `un-report.pdf`. We are recreating this document
+using `rmarkdown` in html (or pdf if you want to).
 
 Some clues: 
 
