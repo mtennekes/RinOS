@@ -181,19 +181,30 @@ Data is a "data.frame" with an additional "geometry" column.
 ### read/write
 
 - `st_read` read (many) different formats: geojson, geopackage and shp (ESRI)
+- `st_as_sf` cast other R objects to `sf` objects
 - `st_write` write to different formats
 
 ### Manipulate
 
-- `create, modify, association, intersection etc. of" geometry "
+- spatial manipulations, e.g. `st_intersection` and `st_buffer`
 
 ### Calculate
 
-- buffer query, interpolation, etc
+- spatial data calculations, e.g. `st_intersects`, `st_distance` and `st_area`     
 
 
-## Raster data in R: `terra` package
+## Raster data in R
 
+### `terra` package
+
+* For regular rasters
+* Easy to use
+
+### `stars` package
+
+* For regular and irregular rasters
+* Also for spatial data cubes
+* A bit more complex to use
 
 
 

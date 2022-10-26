@@ -16,6 +16,11 @@ knitr::opts_chunk$set(
   fig.showtext=TRUE,
   fig.align="center"
 )
+library(tmap)
+data("NLD_muni")
+data("NLD_prov")
+sf::st_crs(NLD_muni) = sf::st_crs(28992)
+sf::st_crs(NLD_prov) = sf::st_crs(28992)
 ```
 
 
@@ -101,14 +106,6 @@ knitr::include_graphics("fig/geom_sf.png")
 ```
 
 ## tmap
-
-```{r, include=FALSE}
-library(tmap)
-data("NLD_muni")
-data("NLD_prov")
-sf::st_crs(NLD_muni) = sf::st_crs(28992)
-sf::st_crs(NLD_prov) = sf::st_crs(28992)
-```
 
 :::::: {.columns}
 
