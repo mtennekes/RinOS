@@ -30,7 +30,7 @@ Syntax to indicate textual markup e.g.:
 Simple syntax
 
 - allows to describe simple markup and
-- is  _human readable_ is (think: old fashioned e-mail)
+- is _human readable_ (think: old fashioned e-mail)
 
 
 ## How does it work?
