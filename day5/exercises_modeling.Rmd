@@ -28,12 +28,18 @@ We will build a model that tries to predict `wage` from the other variables.
 
 ```{r}
 Wage <- read.csv("data/Wage.csv")
+
 ```
 
 b) Fit the following linear model (lm):
 
 ```{r, echo = TRUE}
 model_lm1 <- lm(wage ~ age, data = Wage)
+
+model_lm1
+summary(model_lm1)
+model_lm1$coefficients
+
 ```
 Print the `model_lm`, `summary` and coefficients `coef`.
 
@@ -48,6 +54,7 @@ We will look at the root mean squared error (rmse) as a measure to compare model
 ```{r, echo = TRUE}
 rmse_lm1 <- sqrt(mean((Wage$wage - wage_lm1)^2))
 rmse_lm1
+
 ```
 
 d) Use predict to find out what wage is predicted for `age = 35`. Use argument `newdata` with a `data.frame(age = 35)`
@@ -64,6 +71,10 @@ model_lm2 <- lm(wage ~ age + education, data = Wage)
 wage_lm2 <- predict(model_lm2)
 rmse_lm2 <- sqrt(mean((Wage$wage - wage_lm2)^2))
 rmse_lm2
+
+# Another option to compare results:
+anova(model_lm1, model_lm2)
+
 ```
 
 
@@ -92,12 +103,17 @@ has purchased a caravan.
 
 ```{r}
 Caravan <- read.csv("data/Caravan.csv")
+
+names(Caravan)
+summary(Caravan)
 ```
 
 b) Fit a cart model with `rpart` to predict a purchase. Use all variables.
 
 ```{r}
+
 model <- rpart(Purchase ~ ., data= Caravan)
+
 ```
 
 c) Predict the labels using the following statement:
@@ -111,13 +127,27 @@ d) create cross table where you compare how well the prediction is.
 ```{r}
 tab <- table(predicted = purchase_cart, observed = Caravan$Purchase)
 tab
+
 ```
 
 e) what is the precision and recall?
 
 ```{r}
+
+# TP/(TP+FP) = precision
+# TP/(TP+FN) = recall
+
+TP <- tab[2,2]
+FP <- tab[2,1]
+FN <- tab[1,2]
+
+TP/(TP+FP)
+TP/(TP+FN)
+
+
 prop.table(tab, 1)
 prop.table(tab, 2)
+ 
 ```
 
 
