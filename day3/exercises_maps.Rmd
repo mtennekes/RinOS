@@ -5,7 +5,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: yes
+  answers: TRUE
 editor_options: 
   chunk_output_type: console
 ---

@@ -5,6 +5,8 @@ output:
   beamer_presentation:
     includes:
       in_header: ../header.tex
+params: 
+  answers: TRUE
 editor_options: 
   chunk_output_type: console
 ---

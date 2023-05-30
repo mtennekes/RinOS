@@ -6,6 +6,8 @@ output:
       in_header: ../header.tex
 editor_options: 
   chunk_output_type: console
+params: 
+  answers: TRUE
 ---
 
 ```{r setup, include=FALSE}

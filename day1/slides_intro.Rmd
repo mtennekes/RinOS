@@ -4,6 +4,8 @@ output:
   beamer_presentation:
     includes:
       in_header: ../header.tex
+params: 
+  answers: TRUE
 ---
 
 ```{r setup, include=FALSE}

@@ -6,6 +6,8 @@ output:
     includes:
       in_header: ../header.tex
     fig_caption: false
+params: 
+  answers: TRUE
 editor_options: 
   chunk_output_type: console
 ---

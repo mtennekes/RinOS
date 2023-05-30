@@ -8,6 +8,8 @@ output:
 fig_caption: false
 editor_options: 
   chunk_output_type: console
+params: 
+  answers: TRUE
 ---
 
 ## What is `shiny`?

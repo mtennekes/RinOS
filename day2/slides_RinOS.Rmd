@@ -5,7 +5,8 @@ output:
     includes:
       in_header: ../header.tex
     fig_caption: false
-
+params: 
+  answers: TRUE
 ---
 
 ```{r setup, include=FALSE}

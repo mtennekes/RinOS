@@ -6,7 +6,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: yes
+  answers: TRUE
 editor_options: 
   markdown: 
     wrap: sentence

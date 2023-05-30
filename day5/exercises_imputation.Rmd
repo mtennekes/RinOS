@@ -5,7 +5,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: no
+  answers: TRUE
 ---
 
 ```{r, include=FALSE}

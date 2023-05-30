@@ -7,7 +7,9 @@ output:
     fig_height: 3
     includes:
       in_header: ../header.tex
-    keep_tex: no
+    keep_tex: TRUE
+params: 
+  answers: yes
 ---
 
 ## Technical
