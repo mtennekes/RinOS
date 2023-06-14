@@ -316,7 +316,7 @@ sdmx
 
 e) Use the `as.data.frame` function to transform the data into R `data.frame`
 
-```{r}
+```{r, eval = FALSE}
 sdmx_df <- as.data.frame(sdmx)
 ```
 

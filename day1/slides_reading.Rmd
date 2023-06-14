@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Reading
 
-- `read.csv`, Comma separated dot is decimal
+- `read.csv`, Comma separated, dot is decimal
 - `read.csv2`, Semicolon separated, comma is decimal
 - `read.table`, all types of text tabular format
 
@@ -52,7 +52,7 @@ directory.
 - use relative paths ("./")
 
 E.g `C:/projects/foo`. Read data with `C:/projects/foo/data.csv`
-inlezen met
+
 ```{r,eval=FALSE}
 x <- read.csv("data.csv")
 ```

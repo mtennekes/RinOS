@@ -198,10 +198,19 @@ rm("x")
 ls()
 ```
 
+### Clear the environment at the beginning of a script
+```{r, eval = FALSE, warning = FALSE}
+rm(list = ls())
+gc()
+```
+
 
 ## RStudio Shortcuts
 
 * **CTRL + R** or **CTRL + Enter** Run code
 * **F1** (cursor at a function name) Help
 * **F2** (cursor at a function name) Go to source
+* **CTRL + ALT + B** Run from document beginning to current line	
+* **CTRL + Shift + C** Comment/uncomment current line/selection
+* Complete overview with shortcuts: **Alt + Shift + K** or Tools > Keyboard Shortcuts Help
 
