@@ -85,7 +85,7 @@ output
 - Nicer printing than `data.frame`
 - With a `data.frame` `df` `df[,1]` returns a vector; with a `tibble`
   `tb` `tb[,1]` returns a tibble (with 1 column).
-- The contain extra metadata use full for dplyr
+- They contain extra metadata usefull for dplyr
 - A tibble does not have to be a `data.frame` but also can refer to a table in a 
 database (`dbplyr`!)
 
@@ -421,7 +421,7 @@ c(USAweek = week(d), EUweek = isoweek(d))
 Sys.setlocale("LC_TIME","nl_NL.utf8")
 ```
 
-Gebruik `format`
+Use `format`
 ```{r}
 d <- dmy("het was 2 januari 2016","8 jun 1996")
 format(d, format="%A, %d %B '%y")
@@ -445,7 +445,7 @@ e.g.
 - Daylight Savings Time (idem)
 - Leap seconds.
 
-# I/O
+# Input/Output
 
 
 ## File names  in R
@@ -498,9 +498,9 @@ dat <- read_csv("myiris.csv", col_types = "ddddc")
 \code{i} & \code{integer}\\
 \code{d} & \code{double} (=\code{numeric})\\
 \code{c} & \code{character} (text)\\
-\code{D} & \code{datum} (in locale format)\\
-\code{T} & \code{datum/tijd} (in ISO8601) format.\\
-\code{\_} of \code{-} & Skip column
+\code{D} & \code{date} (locale format)\\
+\code{T} & \code{date/time} (ISO8601) format.\\
+\code{\_} or \code{-} & Skip column
 \end{tabular}
 \end{center}
 
@@ -570,7 +570,7 @@ tbl_iris <- tbl(con, "iris")
 \scriptsize
 
 ```{r}
-# this now a link to the table in the database
+# this is now a link to the table in the database
 tbl_iris
 ```
 
@@ -599,7 +599,7 @@ show_query(query)
 \scriptsize
 
 ```{r}
-# this now a link to the table in the database
+# this is now a link to the table in the database
 query <- 
   tbl_iris %>% 
   group_by(Species) %>% 
