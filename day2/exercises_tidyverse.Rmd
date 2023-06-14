@@ -178,6 +178,9 @@ nrow(titanic)
 # use
 table(titanic$ageClass, titanic$passengerClass, useNA = "ifany")
 # to see that many age are not available
+
+#alternative
+titanic %>% group_by(ageClass, passengerClass) %>% tally() %>% spread(passengerClass,n)
 ```
 
 

@@ -137,6 +137,8 @@ Standard shiny widgets:
 - submitButton	A submit button
 - textInput	A field to enter text
 
+Demo: https://shiny.posit.co/r/gallery/widgets/widget-gallery/
+
 
 ## HTML elements
 
@@ -157,7 +159,7 @@ shinyApp(ui, server)
 
 ## Output widgets
 
-Always consist of two functions: a placeholder in the UI and a rendering function in the server
+Always consists of two functions: a placeholder in the UI and a rendering function in the server
 
 Standard output widgets are:
 
@@ -177,9 +179,15 @@ Shiny contains two families of interactive functions:
 2. **observe** These functions (`observe` and `observeEvent`) are eager: they are continually monitoring for changes in the dependencies
 
 
-
 ## Hosting shiny apps
 
 Shiny apps can be runned locally, or hosted online, e.g. at https://www.shinyapps.io
 
+
+## Shiny dashboards
+
+Create a Shiny dashboard with `library(shinydashboard)`. 
+For more information: https://rstudio.github.io/shinydashboard/index.html
+
+Statistics Netherlands website with Shiny dashboards: https://dashboards.cbs.nl/ 
 
