@@ -58,7 +58,7 @@ Define a number of 'half-products' (data sets) with set quality demands.
 
 Via a sort app store:
 
-- Centrally via **`https://cran.r-projects.org`**
+- Centrally via **`https://cran.r-project.org`**
 - Or see via  **`https://r-pkg.org/`** 
 
 ### Installation
