@@ -10,6 +10,7 @@ params:
 editor_options: 
   markdown: 
     wrap: sentence
+  chunk_output_type: console
 ---
 
 ```{r, include=FALSE}
@@ -31,7 +32,7 @@ data(mtcars)
 library(ggplot2)
 ```
 
-b)  Create a scatte rplot with `wt` on the x-axis and `disp` on the y-axis.
+b)  Create a scatter plot with `wt` on the x-axis and `disp` on the y-axis.
 
 ```{r}
 ggplot(mtcars, aes(x = wt, y = disp)) + geom_point()
@@ -41,6 +42,9 @@ c)  Make the points blue.
 
 ```{r}
 ggplot(mtcars, aes(x = wt, y = disp)) + geom_point(color="blue")
+
+# in case the color is defined in ggplot, make sure to use the I function:
+# ggplot(mtcars, aes(x = wt, y = disp, color = I("blue"))) + geom_point()
 ```
 
 d)  Change the x axis titles to "weight" and the title to "engine displacement".
@@ -49,6 +53,21 @@ d)  Change the x axis titles to "weight" and the title to "engine displacement".
 ggplot(mtcars, aes(x = wt, y = disp)) + 
   geom_point(color="blue") + 
   labs(x = "weight", title = "engine displacement", y = "")
+
+# Alternative ways:
+#
+# ggplot(mtcars, aes(x = wt, y = disp)) + 
+#   geom_point(color="blue") + 
+#   xlab("weight") +
+#   ylab("") +
+#   ggtitle("engine displacement")
+#   
+# ggplot(mtcars, aes(x = wt, y = disp)) + 
+#   geom_point(color="blue") + 
+#   scale_x_continuous("weight") +
+#   scale_y_continuous("") +
+#   ggtitle("engine displacement")
+
 ```
 
 e)  Change the `cyl` variable into a factor and add this as a color `aes` to the plot.
@@ -56,7 +75,7 @@ e)  Change the `cyl` variable into a factor and add this as a color `aes` to the
 ```{r}
 mtcars %>% 
   mutate(cyl = factor(cyl)) %>% 
-  ggplot(., aes(x = wt, y = disp, color=cyl)) + 
+  ggplot(aes(x = wt, y = disp, color=cyl)) + 
   geom_point() + 
   labs(x = "weight", title = "engine displacement", y = "")
 ```
@@ -80,22 +99,19 @@ a)  Reproduce the following boxplot with `mtcars`. Use the functions `ggplot` an
 ```{r, eval = TRUE}
 library(dplyr)
 library(ggplot2)
-
-mtcars <- mutate(mtcars, gear = factor(gear))
-
-# ggplot(mtcars) +
-#     geom_boxplot(aes(x = gear, y = mpg, color = gear))
+mtcars$gear <- as.factor(mtcars$gear)
 
 ggplot(mtcars) +
-    geom_boxplot(aes(x = gear, y = mpg, fill = gear))
+    geom_boxplot(aes(x = gear, y = mpg, fill = gear)) +
+  scale_fill_discrete("GEAR")
 ```
 
 b)  Create the chart with box plots and add a scatter plot of `mpg` vs `gear`. Is it better to use `geom_point` or `geom_jitter`? Explain
 
 ```{r , eval=params$answers}
-ggplot(mtcars) +
-    geom_boxplot(aes(x = gear, y = mpg, fill = gear)) +
-    geom_point(aes(x = gear, y = mpg))
+ggplot(mtcars, aes(x = gear, y = mpg, fill = gear)) +
+    geom_boxplot() +
+    geom_point()
 
 ggplot(mtcars) +
     geom_boxplot(aes(x = gear, y = mpg, fill = gear)) +
@@ -256,7 +272,7 @@ b)  Which countries do not have a known `tfr`?
 
 ```{r , eval=params$answers}
 summary(UN$tfr)
-filter(UN, is.na(UN$tfr))
+filter(UN, is.na(tfr))
 
 UN <- filter(UN, ! is.na(UN$tfr))
 ```
@@ -292,8 +308,8 @@ UN <- mutate(
     UN,
     GDPperCapitaGroup = cut_number(GDPperCapita, 5))
 
-selectie <- filter(UN, ! is.na(GDPperCapita))
-ggplot(data = selectie, aes(x = GDPperCapitaGroup, y = tfr)) +
+selection <- filter(UN, ! is.na(GDPperCapita))
+ggplot(data = selection, aes(x = GDPperCapitaGroup, y = tfr)) +
     geom_boxplot() +
     facet_grid(region ~ .)
 ```

@@ -157,7 +157,7 @@ current and future colleagues.
 
 ## Difference with dropbox / snap shots
 
-- May look like dropbox / google drive
+- May look like Dropbox / Google drive
 
 ### Use case is different:
 

@@ -28,10 +28,10 @@ a) Show a map of the world using the functions `tm_shape`, `tm_fill` and `tm_bor
 
 ```{r}
 data("World")
-tm_shape(World) + tm_fill() + tm_borders(lwd=0.5, col="white")
+tm_shape(World) + tm_fill() + tm_borders(lwd = 0.5, col = "white")
 ```
 
-b) Create a choropleth (a colored thematic map) displaying the life expectancy of each country. Use the `virdis` color palette.\
+b) Create a choropleth (a colored thematic map) displaying the life expectancy of each country. Use the `"viridis"` color palette.\
 
 ```{r}
 m <- tm_shape(World) + tm_fill("life_exp", palette = "viridis")
@@ -53,13 +53,13 @@ hist(log(World$pop_est))
 e) Recreate the following bubble chart of estimated population sizes. Don't forget to add country borders.
 
 ```{r, eval=TRUE}
-tm_shape(World) + tm_fill() + tm_borders(col="white", alpha=0.5) + tm_bubbles(size="pop_est", col="orange")
+tm_shape(World) + tm_fill() + tm_borders(col = "white", alpha = 0.5) + tm_bubbles(size = "pop_est", col = "orange")
 ```
 
 f) Recreate the following plot using `tm_facets`:
 
 ```{r,eval=TRUE}
-tm_shape(World) +  tm_fill("pop_est_dens") + tm_facets(by="continent")
+tm_shape(World) +  tm_fill("pop_est_dens") + tm_facets(by = "continent")
 ``` 
 
 g) Create the same choropleth as in part c) of `pop_est_dens` for the Europian part of the data set. What's happening here? Explain.
@@ -71,41 +71,33 @@ tm_shape(eu) +  tm_fill("pop_est_dens")
 
 ### Exercise 2: `sf`
 In this exercise we will work with spatial data about the Netherlands which can be loaded with the command `data("NLD_muni")`.
-a) 
-Convert the `NLD_muni` data set to a sf data.frame and name the result `nld_sf`.
+
+a) Calculate the population density (inhabitants/km^2) and add this to the data set as a column named `pop_density`.
 
 ```{r}
-library(sf)
-data("NLD_muni")
-nld_sf <- st_as_sf(NLD_muni)
-```
-
-b) Calculate the population density (inhabitants/km^2) and add this to the data set as a column named `pop_density`.
-
-```{r}
-nld_sf <- 
-  nld_sf %>% 
-  mutate(area = st_area(nld_sf)/1e6
-        , pop_density = population / area
+NLD_muni <- 
+  NLD_muni %>% 
+  mutate(area = st_area(NLD_muni)/1e6,
+        pop_density = population / area
         )
 ```
 
 d) Create a choropleth of `pop_density`
 
 ```{r}
-tm_shape(nld_sf) +  tm_fill("pop_density")
+tm_shape(NLD_muni) +  tm_fill("pop_density")
 ```
 
-e) Look at the distriution of population densities and assign colors to more suitable boundary values.
+e) Look at the distribution of population densities and assign colors to more suitable boundary values.
 
 ```{r}
-tm_shape(nld_sf) +  tm_fill("pop_density", breaks = c(0, 250, 500, 750, 1000, 5000, 10000))
+tm_shape(NLD_muni) +  tm_fill("pop_density", breaks = c(0, 250, 500, 750, 1000, 5000, 10000))
 ```
 
 f) Create a histogram of `log(pop_density)`
 
 ```{r}
-hist(log(unclass(nld_sf$pop_density)))
+hist(log(unclass(NLD_muni$pop_density)))
 ```
 
 ### Exercise 3: `stars`
