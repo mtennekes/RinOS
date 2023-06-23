@@ -5,7 +5,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: TRUE
+  answers: FALSE
 editor_options: 
   chunk_output_type: console
 ---
@@ -27,7 +27,7 @@ a) Load the "data/Wage.csv" file into variable `Wage`. Make a summary.
 We will build a model that tries to predict `wage` from the other variables.
 
 ```{r}
-Wage <- read.csv("data/Wage.csv")
+Wage <- read.csv("./day5/data/Wage.csv")
 
 ```
 
@@ -47,6 +47,7 @@ c) Get the predictions by using R function `predict`
 
 ```{r, echo = TRUE}
 wage_lm1 <- predict(model_lm1)
+wage_lm1
 ```
 
 We will look at the root mean squared error (rmse) as a measure to compare models.
@@ -61,6 +62,7 @@ d) Use predict to find out what wage is predicted for `age = 35`. Use argument `
 
 ```{r}
 predict(model_lm1, newdata = data.frame(age = 35))
+
 ```
 
 
@@ -83,15 +85,24 @@ e) With the function `rpart` a decision tree (CART) can be used to predict
 ```{r, echo = TRUE}
 library(rpart)
 model_cart1 <- rpart(wage ~ age, data = Wage)
+
+summary(model_cart1)
+plot(model_cart1)
+
+# Also possible to make a decision tree plot
+library(rpart.plot)
+rpart.plot(model_cart1)
+
 ```
 
 Calculate the mse for this model and store it in `mse_cart1`
 
 ```{r}
 wage_cart1 <- predict(model_cart1)
+wage_cart1
 ```
 
-e) Repeat this for `wage ~ age + education` and predict this with you own age and education for both models.
+e) Repeat this for `wage ~ age + education` and predict this with your own age and education for both models.
 
 f) What is the `mse` for both models?
 
@@ -102,7 +113,7 @@ has purchased a caravan.
 
 
 ```{r}
-Caravan <- read.csv("data/Caravan.csv")
+Caravan <- read.csv("./day5/data/Caravan.csv")
 
 names(Caravan)
 summary(Caravan)
@@ -113,6 +124,7 @@ b) Fit a cart model with `rpart` to predict a purchase. Use all variables.
 ```{r}
 
 model <- rpart(Purchase ~ ., data= Caravan)
+summary(model)
 
 ```
 
@@ -120,6 +132,7 @@ c) Predict the labels using the following statement:
 
 ```{r, echo =TRUE}
 purchase_cart <- predict(model, type = "class")
+purchase_cart
 ```
 
 d) create cross table where you compare how well the prediction is.
