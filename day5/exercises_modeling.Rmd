@@ -27,7 +27,7 @@ a) Load the "data/Wage.csv" file into variable `Wage`. Make a summary.
 We will build a model that tries to predict `wage` from the other variables.
 
 ```{r}
-Wage <- read.csv("./day5/data/Wage.csv")
+Wage <- read.csv("data/Wage.csv")
 
 ```
 
@@ -113,7 +113,7 @@ has purchased a caravan.
 
 
 ```{r}
-Caravan <- read.csv("./day5/data/Caravan.csv")
+Caravan <- read.csv("data/Caravan.csv")
 
 names(Caravan)
 summary(Caravan)
