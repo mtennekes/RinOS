@@ -296,7 +296,8 @@ library(rsdmx)
 b)  The following link points to a sdmx file published by Eurostat: 
 
 ```{r, eval = FALSE, echo = TRUE}
-sdmx_url <- "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/NAMA_10_GDP?format=SDMX_2.1_STRUCTURED"
+sdmx_url <- 
+"https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/NAMA_10_GDP?format=SDMX_2.1_STRUCTURED"
 ```
 
 c) Use the `readSDMX` function to read the file. Use the Environment / Object 
