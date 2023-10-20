@@ -146,16 +146,6 @@ $X$: age, $Y$: income, \textcolor{red}{$f$}: lin. reg., \textcolor{blue}{$f$}: L
 
 ### Estimated prediction error
 $$
-\begin{array}{rcl}
-\textsf{E}[(Y-\hat{Y})^2] &=& \textsf{E}[(f(X) + \varepsilon - \hat{f}(X))^2]\\
-&=& 
-\underbrace{\textsf{E}[(f(X)-\hat{f}(X))^2]}_{\text{Reducable}} 
-+ \underbrace{\textsf{Var}(\varepsilon)}_{\text{Fundamental}}
-\end{array}
-$$
-
-### Estimated prediction error
-$$
 \textsf{MSE}(\hat{f}) = \frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2
 $$
 \begin{itemize}
