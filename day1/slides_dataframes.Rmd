@@ -49,7 +49,7 @@ summary(iris)
 ## Selecting data
 
 
-### Retrieve colum with `$`
+### Retrieve column with `$`
 
 \scriptsize
 
