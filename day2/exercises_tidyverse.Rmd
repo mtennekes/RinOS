@@ -6,7 +6,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: TRUE
+  answers: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -30,6 +30,7 @@ titanic <- read_csv2("./data/titanic.csv")
 
 count(titanic)
 summarize(titanic, n  = n())
+titanic %>% summarize(n = n())
 nrow(titanic)
 ```
 
@@ -122,6 +123,9 @@ not survive.
 
 ```{r, eval=FALSE, echo=params$answers}
 table(titanic$survived)
+
+titanic %>% count(survived)
+
 ```
 
 b) Use the function `table` to cross tabulate the number of passengers to `survived`
@@ -134,6 +138,9 @@ survivors <- table(
   , titanic$sex)
 plot(survivors)
 
+titanic %>% group_by(survived, sex) %>% count()
+titanic %>% group_by(survived, sex) %>% tally() %>% spread(sex, n)
+
 ```
 
 c) Execute the following commands and interpret the result(s).
@@ -143,6 +150,10 @@ c) Execute the following commands and interpret the result(s).
 - `prop.table(survivors,2)`
 
 ```{r, eval=FALSE, echo=params$answers}
+age <- titanic %>% select(age)
+colMeans(age, na.rm = TRUE)
+
+
 prop.table(survivors)    # fractions, sum() to 1
 prop.table(survivors, 1) # row totals are equal to 1
 prop.table(survivors, 2) # column totals are equal to 1
@@ -150,10 +161,11 @@ prop.table(survivors, 2) # column totals are equal to 1
 
 d. Same as before but with  `addmargins`.
 ```{r, eval=FALSE, echo=params$answers}
-dplyr::
+#dplyr::
 addmargins(survivors)    # all totals
 addmargins(survivors, 1) # column totals
 addmargins(survivors, 2) # row totals
+
 ```
 
 e) We derive an `ageClass` variable, use the command:
@@ -176,11 +188,12 @@ sum(tab)
 # with 
 nrow(titanic)
 # use
-table(titanic$ageClass, titanic$passengerClass, useNA = "ifany")
+table(titanic$ageClass, titanic$passengerClass)
 # to see that many age are not available
 
 #alternative
 titanic %>% group_by(ageClass, passengerClass) %>% tally() %>% spread(passengerClass,n)
+
 ```
 
 
@@ -194,19 +207,21 @@ Name the variables in R  `address` and  `addressinfo`. (check the results!)
 address <- read.csv2("data/addressdata.csv", stringsAsFactors = FALSE)
 addressinfo <- read.csv2("data/addressinfo.csv", stringsAsFactors = FALSE)
 ```
+
 b. Use `inner_join` to enrich `address` with information from `addressinfo`.
 Match on street and place name.
 
 ```{r, eval=FALSE, echo=params$answers}
 dat <- inner_join(address, addressinfo, by = c("street" = "streetname", "place"))
 ```
+
 c. Do the same with now with `left_join`. What is the difference?
 
 ```{r, eval=FALSE, echo=params$answers}
 dat <- left_join(address, addressinfo, by = c("street" = "streetname", "place"))
 ```
 
-d. Select all records in `address` that cannot be matched met addressinfo with  `anti_join`.
+d. Select all records in `address` that cannot be matched with addressinfo with `anti_join`.
 ```{r,eval=FALSE, echo=params$answers}
 anti_join(address, addressinfo, by = c("street" = "streetname", "place"))
 ```
@@ -220,29 +235,33 @@ a. `mean(c(1, 1, NA, 1))`
 ```{r,eval=FALSE, echo=params$answers}
 # NA, because the mean depends also on the unknown values
 ```
+
 b. `length(c(1,2,NA,4))`
+
 ```{r,eval=FALSE, echo=params$answers}
 # 4, NA fills a spot 
 ```
+
 c. `mean(c(1,4,4,NA,NULL), na.rm=TRUE)`
 ```{r,eval=FALSE, echo=params$answers}
 # (1 + 4 + 4)/3  = 3. NULL does not add an element and NA is removed with
 # na.rm=TRUE.
 ```
+
 d. `c(1,2,NA) == NA`
 ```{r,eval=FALSE, echo=params$answers}
 # NA NA NA. Each comparison with NA is NA: unknown does not equal unknown
 ```
+
 e. `is.na(c(1,2,NA))`
 ```{r,eval=FALSE, echo=params$answers}
 # FALSE FALSE TRUE
 ```
+
 f. `sum(is.na(c(1,2,NA)))`
 ```{r,eval=FALSE, echo=params$answers}
 # 1
 ```
-
-
 
 ### Exercise 6. Reading files with `read_csv`
 
@@ -252,13 +271,15 @@ a. Read the file with \code{read\_csv2}.
 ```{r,eval=FALSE, echo=params$answers}
 cars <- read_csv2("data/cars.csv")
 ```
+
 b. Read the file with \code{read\_csv2} and specify the correct column types. 
 You may read \code{model}, \code{engine} and \code{gearbox} as text variables.
 
 ```{r,eval=FALSE, echo=params$answers}
 cars1 <- read_csv2("data/cars.csv", col_types="cdccdddddddd")
 ```
-c. Read the file with \code{read\_csv2} and make sure that  \code{engine} en
+
+c. Read the file with \code{read\_csv2} and make sure that \code{engine} en
 \code{gearbox} are factor variables
 ```{r,eval=FALSE, echo=params$answers}
 cars2 <- read_csv2("data/cars.csv"
@@ -268,6 +289,7 @@ cars2 <- read_csv2("data/cars.csv"
     )
 )
 ```
+
 d. Read the file with \code{read\_csv2} and skip column 3 and 5
 ```{r,eval=FALSE, echo=params$answers}
 cars3 <- read_csv2("data/cars.csv", col_types="cd-c-ddddddd")
@@ -275,7 +297,7 @@ cars3 <- read_csv2("data/cars.csv", col_types="cd-c-ddddddd")
   
 ### Exercise 7
 
-a. Read the dataset `adult.csv`. In this file missing values are stored with as " ?".
+a. Read the dataset `adult.csv`. In this file missing values are stored with as "?".
 (<space> <question mark>). Make sure that these are read in as `NA` (see help of
 read_csv2).
 
@@ -299,7 +321,6 @@ c. Cross tabulate `workclass` and `income.class` (with `count` or with `table`)
 ```{r,eval=FALSE, echo=params$answers}
 tab <- table(adult$workclass, adult$income.class)
 ```
-
 
 d. Which `native.country` has the largest female/male ratio?
 
