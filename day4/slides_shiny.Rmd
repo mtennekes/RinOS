@@ -40,7 +40,7 @@ A `shiny` app consists of two main functions:
 ```{r, eval=FALSE}
 library(shiny)
 ui <- fluidPage(
-  titlePanel("Histrogram of random data"),
+  titlePanel("Histogram of random data"),
   sidebarPanel(
     sliderInput("k",
                "Number of observations",
