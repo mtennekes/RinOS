@@ -242,7 +242,7 @@ table(class = k, gender = g)
 
 ## Tabulating (3)
 
-The optie \code{useNA} has three possible values:
+The option \code{useNA} has three possible values:
 
 - \code{"no"}: records with NA are not counted
 - \code{"ifany"}: for columns in which occurs `<NA>` is added to the matrix
@@ -429,7 +429,7 @@ format(d, format="%A, %d %B '%y")
 
 ### Conversioncodes
 
-Zie `?strptime` for a list of conversion codes
+Use `?strptime` for a list of conversion codes
 
 ## Background
 
