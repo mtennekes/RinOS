@@ -6,7 +6,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params: 
-  answers: TRUE
+  answers: FALSE
 editor_options: 
   chunk_output_type: console
 ---
@@ -106,7 +106,7 @@ mean(ladies$bmi)
 
 - the standard deviation for the bmi
 ```{r}
-sd(ladies$bmi)
+sd_bmi <- sd(ladies$bmi)
 ```
 
 - the median for the bmi index.
@@ -147,6 +147,10 @@ sum((1:50)^2)
 b) Generate with $:$ the vector /column $(8,4,2,1)$ and store it in `bin`.
 ```{r}
 bin <- 2^(3:0)
+2^3
+2^2
+2^1
+2^0
 ```
 
 
@@ -169,6 +173,7 @@ store this in the variable `x`.
 ```{r}
 set.seed(1)
 x <- runif(500)
+
 ```
 
 b) 
@@ -195,7 +200,6 @@ for (i in 1:100){
 }
 hist(x, breaks=100)
 ```
-
 
 # Reading and importing data
 
@@ -284,44 +288,32 @@ write_json(adult, "./data/adult_all.json", pretty = TRUE)
 a) Install the `rsdmx` package and load it with `library(rsdmx)`
 
 ```{r}
+install.packages("rsdmx")
 library(rsdmx)
 ```
 
 
-b)  The following link points to a sdmx file published by eurostat
+b)  The following link points to a sdmx file published by Eurostat: 
 
-```{r}
+```{r, eval = FALSE, echo = TRUE}
 sdmx_url <- "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/NAMA_10_GDP?format=SDMX_2.1_STRUCTURED"
 ```
 
-```{r, eval = FALSE}
-download.file(sdmx_url, "eurostat.xml")
-```
-
-c) Inspect the file to see what the structure is.
-
-```{r, eval=FALSE}
-# It is an xml file (sdmx)
-```
-
-d) Use the `readSDMX` function to read the file. Use the Environment / Object 
+c) Use the `readSDMX` function to read the file. Use the Environment / Object 
 inspector to find out when this dataset was prepared and who the sender is.
 
 ```{r, eval=FALSE}
-library(rsdmx)
 sdmx <- readSDMX(sdmx_url)
 sdmx
 ```
 
-
-e) Use the `as.data.frame` function to transform the data into R `data.frame`
+d) Use the `as.data.frame` function to transform the data into R `data.frame`
 
 ```{r, eval = FALSE}
 sdmx_df <- as.data.frame(sdmx)
 ```
 
-f) What is this data set about?
-
+e) What is this data set about?
 
 
 # Summary Stats
@@ -340,12 +332,11 @@ b) Calculate the `mean` age
 mean(adult$age)
 ```
 
-c) Calculate the `median` hours.per-week
+c) Calculate the `median` hours.per.week
 
 ```{r}
 median(adult$hours.per.week)
 ```
-
 
 d) Use `summary(adult)` to get summary stats for all columns. Any peculiar findings?
 
@@ -403,6 +394,8 @@ max_age <-
         , max # statistic
         , na.rm=TRUE
         )
+
+table(adult$relationship, adult$workclass)
 ```
 
 
