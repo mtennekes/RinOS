@@ -135,10 +135,10 @@ summarize(.data, ...)
 With \code{...} you can give \code{<name>=<expression>} to calculate a statistic.
 
 ```{r, eval=TRUE}
-summarize(iris,
-          min_sl = min(Sepal.Length), # calculate min 
-          max_sl = max(Sepal.Length)
-          )
+iris %>% summarize(
+  min_sl = min(Sepal.Length), # calculate min 
+  max_sl = max(Sepal.Length)
+)
 ```
 
 ## Grouped aggregation with `dplyr`
@@ -150,7 +150,7 @@ group_by(.data, ...)
 With \code{...} you indicate which  (categorical) variable(s) are used for the groups
 
 ```{r}
-summarize(group_by(iris, Species),
+iris %>% summarize(group_by(Species),
           min_sl = min(Sepal.Length),
           max_sl = max(Sepal.Length)) 
 ```
@@ -160,7 +160,7 @@ summarize(group_by(iris, Species),
 With the function `n()` you can count the number of rows. 
 
 ```{r}
-summarize(group_by(iris, Species),
+iris %>% summarize(group_by(Species),
          number=n()
          )
 ```
@@ -170,7 +170,7 @@ summarize(group_by(iris, Species),
 A shorter version is `count`  (same result)
 
 ```{r}
-count(iris, Species, name="number")
+iris %>% count(Species)
 ```
 
 
@@ -352,7 +352,7 @@ pivot_wider(long, names_from = variable)
 
 ```{r}
 x <- c(1,4,2,NA,6)
-c( mean1 = mean(x), mean2 = mean(x, na.rm=TRUE) )
+c(mean1 = mean(x), mean2 = mean(x, na.rm=TRUE) )
 ```
 
 - All statistical functions have the option to remove `NA` with argument
