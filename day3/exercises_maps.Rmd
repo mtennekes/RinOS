@@ -27,6 +27,7 @@ In this exercise we'll explore thematic maps. Load the packages `tmap` and `tmap
 a) Show a map of the world using the functions `tm_shape`, `tm_fill` and `tm_borders`. Create white borders and set the line width to 0.5.
 
 ```{r}
+library(tmap)
 data("World")
 tm_shape(World) + tm_fill() + tm_borders(lwd = 0.5, col = "white")
 ```
@@ -34,37 +35,50 @@ tm_shape(World) + tm_fill() + tm_borders(lwd = 0.5, col = "white")
 b) Create a choropleth (a colored thematic map) displaying the life expectancy of each country. Use the `"viridis"` color palette.\
 
 ```{r}
-m <- tm_shape(World) + tm_fill("life_exp", palette = "viridis")
-m
+tm_shape(World) +
+  tm_polygons(fill = "life_exp",
+              fill.scale = tm_scale(values = "viridis"))
+
 ```
 
 c) Add white country borders with 50% opacity.
 
 ```{r}
-m + tm_borders("white", alpha=0.5)
+tm_shape(World) +
+  tm_polygons(fill = "life_exp",
+              fill.scale = tm_scale(values = "viridis"),
+              col = "white",
+              col_alpha = 0.5)
 ```
 
-d) Create a plot that shows the distribution of population densities. Adjust the plot to make it easier on the eye and easier and interpret.
+d) Create a plot that shows the distribution of population densities. Adjust the plot to make it easier on the eye and easier to interpret.
 
 ```{r}
-hist(log(World$pop_est))
+hist(log(World$pop_est), breaks = 30)
 ```
 
 e) Recreate the following bubble chart of estimated population sizes. Don't forget to add country borders.
 
 ```{r, eval=TRUE}
-tm_shape(World) + tm_fill() + tm_borders(col = "white", alpha = 0.5) + tm_bubbles(size = "pop_est", col = "orange")
+# tmap 4 code:
+tm_shape(World) +
+  tm_polygons(fill = "gray85", col = "white") +
+  tm_bubbles(size = "pop_est", 
+             fill = "orange",
+             size.legend = tm_legend(position = tm_pos_in("left", "bottom"), orientation = "landscape", frame = FALSE))
 ```
 
 f) Recreate the following plot using `tm_facets`:
 
 ```{r,eval=TRUE}
-tm_shape(World) +  tm_fill("pop_est_dens") + tm_facets(by = "continent")
+tm_shape(World) +  tm_fill("pop_est_dens",
+                           fill.scale = tm_scale_intervals(values = "tableau.orange_gold")) + tm_facets(by = "continent")
 ``` 
 
 g) Create the same choropleth as in part c) of `pop_est_dens` for the Europian part of the data set. What's happening here? Explain.
 
 ```{r,eval=TRUE}
+library(tidyverse)
 eu = World %>% filter(continent == "Europe")
 tm_shape(eu) +  tm_fill("pop_est_dens") 
 ``` 
@@ -75,6 +89,7 @@ In this exercise we will work with spatial data about the Netherlands which can 
 a) Calculate the population density (inhabitants/km^2) and add this to the data set as a column named `pop_density`.
 
 ```{r}
+library(sf)
 NLD_muni <- 
   NLD_muni %>% 
   mutate(area = st_area(NLD_muni)/1e6,
@@ -115,8 +130,10 @@ b)
 Create a world map of land cover using the `land` dataset. Add country polygon border on top.
 
 ```{r}
+palette <- c("#33A02C", "#B2DF8A", "#FDBF6F", "#1F78B4", "#999999", "#E31A1C", "#E6E6E6", "#A6CEE3")
+
 tm_shape(land) +
-  tm_raster("cover") +
+  tm_raster("cover_cls", col.scale = tm_scale_categorical(values = palette)) +
 tm_shape(World) +
   tm_borders()
 ```
