@@ -158,7 +158,20 @@ c) Use bin to calculate the binary number $1011$.
 
 ```{r}
 sum(bin * c(1,0,1,1))
+
+# The numbers in 'bin' represent the symbols in the binary number. 
+
+# To understand this trick, we can calculate the normal (decimal) number 1011: 
+
+deci <- 10^(3:0)
+
+# So if we want to caculate the number 1011 in the decimal number system:
+
+sum(deci * c(1, 0, 1, 1))
+
+# we get 1011 (as expected).
 ```
+
 
 ### Exercise 4
 
