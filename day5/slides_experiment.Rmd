@@ -5,7 +5,7 @@ output:
   beamer_presentation:
     includes:
       in_header: ../header.tex
-    fig_caption: false
+fig_caption: false
 ---
 
 ```{r,echo=FALSE,message=FALSE}
@@ -17,12 +17,12 @@ library(tidyverse)
 
 - methods comparison (e.g design-based simulation studies)
 
-- policy modelling on individual level (e.g health planning, climate change,
+- policy modeling on individual level (e.g health planning, climate change,
 demographic change, economic change, …)
 
 - teaching (e.g.teaching of survey methods)
 
-- Creation of public-/scientific-use fileswith lowdisclosure risk
+- Creation of public-/scientific-use files with low disclosure risk
 data availability is often a problem (legal issues, costs,…)
 
 ## Close-to-reality data
@@ -31,15 +31,15 @@ data availability is often a problem (legal issues, costs,…)
 marginal distributions and interactions between variables should be represented
 correctly
 - hierarchical and cluster structures have to be preserved
-Data confidentiality must be ensured
+- Data confidentiality must be ensured
 - Pure replication of units from the underlying sample should be avoided
-Sometimes some marginal distributions must exactly match known values
+- Sometimes some marginal distributions must exactly match known values
 
 ## Approaches
 
 - choice of methods highly depends on available information survey samples
 
-- aggregated information from samples known marginal distributions from population
+- aggregated information from samples known, marginal distributions from population
 
 ## R package `simPop`
 

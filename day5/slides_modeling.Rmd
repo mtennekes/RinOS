@@ -1,11 +1,11 @@
 ---
-title: "Day 5, statistical modeling"
+title: "Statistical modeling"
 author: "ESTP Use of R in Official Statistics"
 output:
   beamer_presentation:
     includes:
       in_header: ../header.tex
-    fig_caption: false
+fig_caption: false
 editor_options: 
   chunk_output_type: console
 ---

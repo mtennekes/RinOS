@@ -42,6 +42,7 @@ titanic %>%
   count(.)
 
 count(titanic, survived)
+titanic %>% count(survived)
 
 titanic %>% group_by(survived) %>% summarise(n = n())
 ```

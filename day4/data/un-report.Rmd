@@ -10,17 +10,16 @@ output:
 knitr::opts_chunk$set(echo=FALSE)
 ```
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning = FALSE}
 library(dplyr)
 library(ggplot2)
 ```
 
 ```{r}
-un <- read.table("data/UnitedNations.txt", header=TRUE)
+un <- read.table("C:/Users/NSCN/Documents/rinos/day4/data/UnitedNations.txt", header=TRUE)
 ```
 
-( _italic_ texts should be generated with an r statement
-)
+( _italic_ texts should be generated with an r statement)
 
 ### Introduction
 
@@ -30,15 +29,17 @@ The countries are subdivided into _`r length(unique(un$region))`_ regions.
 The following table shows the number of countries per region.
 
 ```{r, results='asis'}
+
 out <- un %>%
   group_by(region) %>%
   summarize(countries=n())
+
 pander::pandoc.table(out)
 ```
 
 ### Life expectance and GDP
 
-The life expectency and the Gross Domestic Product are important indicators
+The life expectancy and the Gross Domestic Product are important indicators
 for well being. In the following table are the average life expectancy per country of men
 women.
 

@@ -5,7 +5,7 @@ output:
     includes:
       in_header: ../exercise.tex
 params:
-  answers: TRUE
+  answers: FALSE
 editor_options: 
   chunk_output_type: console
 ---
@@ -25,6 +25,9 @@ In this session, we will create a dashboard to analyse the `Wage` dataset:
 ```{r,eval=TRUE,echo=TRUE}
 Wage <- read.csv("data/Wage.csv")
 str(Wage)
+
+hist(Wage$wage, breaks = 100)
+?hist
 ```
 
 a) Create a shiny app that shows a histogram of the column `wage`, with a slider for the number of bins
@@ -35,18 +38,19 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       sliderInput("n", "Number of bins", min = 10, max = 100, step  = 5, value = 30)
-    ),
+    )),
     mainPanel(
       plotOutput("hist")
     )
-  )
+  
 )
-
 
 server <- function(input, output) {
   output$hist <- renderPlot({
+    
     hist(Wage$wage, breaks = input$n, main = "Histogram of wage", xlab = "Wage")
-  })
+  
+    })
 }
 
 shinyApp(ui, server)

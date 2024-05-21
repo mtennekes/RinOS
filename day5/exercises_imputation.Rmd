@@ -28,8 +28,8 @@ a) Install R package `simputation` (if you have not done so)
 install.packages("simputation", dependencies = TRUE)
 ```
 
-b) load the data set "data/iris_missing.csv". 
-Find out on which colums data is missing. 
+b) Load the data set "data/iris_missing.csv". 
+Find out on which columns data is missing. 
 
 ```{r}
 iris_missing <- read.csv("data/iris_missing.csv")
@@ -50,7 +50,7 @@ mean(iris_missing$Sepal.Length, na.rm=TRUE)
 ```
 
 
-d) Load the simputation library and impute `Sepal.Length` with a linear model dependent
+d) Load the `simputation` library and impute `Sepal.Length` with a linear model dependent
 on `Sepal.Width` and `Species` (use `impute_lm`). Store the new data set in 
 `iris_imputed1`
 
@@ -109,28 +109,24 @@ companies <- read.csv("data/companies.csv")
 ```
 
 
-b) Make a separete data frame, selecting columns 7--14 (`staff`--`vat`)
+b) Make a separate data frame, selecting columns 7--14 (`staff`--`vat`)
+
+```{r}
+library(tidyverse)
+companies_sel <- companies %>% select(id, staff:vat)
+```
 
 c) Implement the following imputation sequence:
     - Impute `turnover` by copying the `vat` variable (`impute_proxy`)
-    
-```{r}
-```
-    
     - Impute `staff` with a robust linear model based on `staff.costs`
-    
-```{r}
-
-```
-  
     - Impute `staff` with a robust linear model based on `total.costs`
     - Impute `profit` as `total.rev - total.costs` (`impute_proxy`)
     - Impute everything else using `missForest` (formula: `. ~ .`)
+    
 ```{r}
-library(tidyverse)
+
 library(missForest)
 companies %>% 
-  dplyr::select(., staff:vat) %>% 
   impute_proxy(., turnover ~ vat) %>% 
   impute_rlm(staff ~ staff.costs) %>% 
   impute_rlm(staff ~ total.costs) %>% 

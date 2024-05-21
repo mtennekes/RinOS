@@ -19,17 +19,15 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  get_data <- reactive({
-    type <- input$type
-    k <- input$k
-    fun = switch(type, Uniform = runif, Normal = rnorm, 'Log-normal' = rlnorm)
-    fun(k)
-  })
   output$hist <- renderPlot({
-    data <- get_data()
-    hist(data)
+    if (input$type == "Uniform") {
+      hist(runif(input$k))
+    } else if (input$type == "Normal") {
+      hist(rnorm(input$k))
+    } else if (input$type == "Log-normal") {
+      hist(rlnorm(input$k))
+    }
   })
 }
-
 
 shinyApp(ui, server)

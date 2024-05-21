@@ -1,55 +1,223 @@
 ---
 title: "Imputation"
-output: 
+output:
   beamer_presentation:
-    include:
+    includes:
       in_header: ../header.tex
 classoption: "aspectratio=169"
 ---
 
-
-## Imputing data
-
-### Need to specify
-
-- Imputation method
-- Variable(s) to impute
-- Variables used as predictor
-
-### R package **simputation**
-
-Easy to experiment, robust enough for production.
-
-### Interface
-
-```{r, eval=FALSE}
-impute_<model>(data, imputed_variables ~ predictors, ...)
-```
-
-
-## Imputing data with simputation
-
-
-
-|  `<model>  `      |  description                                    |
-|-------------------|-------------------------------------------------|
-| `proxy`           | copy (transformation of) other variable(s)      |
-| `median`          | (group-wise) median                             |
-| `rlm`, `lm`, `en` | (robust) linear model, elasticnet regression    |
-| `cart`, `rf`      | Classification And Regression Tree, RandomForest|
-| `em`, `mf`        | EM-alogithm (multivariate normal) `missForest`  |
-| `knn`             | $k$ nearest neighbours                          |
-| `shd`, `rhd`      | sequential, random, hot-deck                    |
-| `pmm`             | predictive mean matching                        |
-| `impute_model`    | use pre-trained model                           |
-
-
-
-## Imputation of the mean
-
-```{r,echo=FALSE, fig.height=5.5}
+```{r, echo=FALSE, warning = FALSE, message = FALSE}
 library(magrittr)
 library(simputation)
+data("retailers", package="validate")
+ret <- retailers[3:10]
+```
+
+## Missing data and imputation
+
+-   Missing data mechanisms
+-   Model-based imputation
+-   Donor-imputation
+-   Imputation with the `simputation` package
+
+## Missing data
+
+### Reasons
+
+- Nonresponse
+- Missing data in administrative data sources
+- Value is observed but is wrong and therefore erased 
+- Joining data sources with mismatches
+
+### Solutions
+
+- Measure/observe again 
+- Delete records with missing values
+- Take into account when estimating
+- Deriving the missing values from the data by using other variables 
+- **Impute**
+
+## Missing data mechanisms
+
+The first step with handling missing data is determining the **missing data mechanism**:
+
+- Missing completely at Random (MCAR) 
+- Missing at Random (MAR) 
+- Not Missing at Random (NMAR) 
+
+## Missing data mechanisms - example
+
+Data on **voting behaviour**:
+
+- Which political party will you vote for?
+- Background information from registers: 
+  - Sex
+  - Income
+  - Age
+
+\begin{picture}(0,0)
+\put(220,-20){
+\includegraphics[height=3cm]{fig/politieke_partijen.PNG}
+}
+\end{picture}
+
+## Missing data mechanism - example
+
+- X = the observed (complete) variables: sex and age 
+- Y = the incomplete variables: political party and income 
+- M = the response probability for the political party or income (Y)
+
+\begin{picture}(0,0)
+\put(-10,-90){
+\includegraphics[height=3cm]{fig/Tabel.PNG}
+}
+\end{picture}
+
+\begin{picture}(0,0)
+\put(280,-80){
+\includegraphics[height=4cm]{fig/MCAR.PNG}
+}
+\end{picture}
+
+## Missing Completely at Random (MCAR)
+
+The probability that data is missing, is the same for all respondents. The reason for the missing data is independent of the data.
+
+Example: All respondents have equal response probabilities to answer about the political party they will vote for.
+
+\begin{picture}(0,0)
+\put(280,-80){
+\includegraphics[height=4cm]{fig/MCAR.PNG}
+}
+\end{picture}
+
+## Missing at Random (MAR)
+
+The probability that data is missing, is not dependent on the incomplete variable, but is related to the observed variables.
+
+Example: The response probability that the political party is missing, is higher for respondents with a higher income.
+
+\begin{picture}(0,0)
+\put(280,-85){
+\includegraphics[height=4cm]{fig/MAR.PNG}
+}
+\end{picture}
+
+## Not Missing at Random (NMAR)
+
+The probability that data is missing, is related to the incomplete variable. 
+
+Example: Respondents that vote for certain political parties more often have a missing value for the political party.
+ 
+\begin{picture}(0,0)
+\put(280,-90){
+\includegraphics[height=4cm]{fig/NMAR.PNG}
+}
+\end{picture}
+
+## What data mechanism does the data have?
+
+In practice it is difficult to determine, but you can use:    
+
+- Theoretical information of the data/model   
+- Using the context of the data or historical data    
+- Descriptive statistics and relations between variables     
+- Missing data pattern     
+
+The assumption with imputation often is MAR
+
+## Imputation methodology
+
+### Model based
+
+Estimate a value based on observed variables.
+
+### Donor-imputation
+
+Copy a value from a record that you did observe.
+
+## The `simputation` package
+
+### Provide
+
+- a _uniform interface_,
+- with _consistent behaviour_,
+- across _commonly used methodologies_
+
+### To facilitate
+
+- experimentation 
+- configuration for production
+
+### An imputation prodedure is specified by
+
+1. The variable to impute
+2. An imputation model
+3. Predictor variables
+
+## The simputation interface
+
+```
+impute_<model>(data
+  , <imputed vars> ~ <predictor vars>
+  , [options])
+```
+
+\begin{picture}(0,0)
+\put(170,-20){\includegraphics[]{fig/simpute.pdf}}
+\end{picture}
+
+
+## Chaining methods
+
+```{r}
+
+ret %>% 
+  impute_rlm(other.rev ~ turnover) %>%
+  impute_rlm(other.rev ~ staff) %>% head(3)
+```
+
+## Multiple variables, same predictors
+
+```{r,eval=FALSE}
+ret %>% 
+  impute_rlm(other.rev + total.rev ~ turnover) 
+
+ret %>% 
+  impute_rlm( . - turnover ~ turnover) 
+```
+
+## Grouping
+
+```{r, eval=FALSE}
+retailers %>% impute_rlm(total.rev ~ turnover | size) 
+
+# or, using dplyr::group_by
+retailers %>% 
+  group_by(size) %>%
+  impute_rlm(total.rev ~ turnover)
+```
+
+## Imputation and univariate distribution
+
+```{r,echo=FALSE,fig.height=5.5}
+set.seed(1)
+x <- rnorm(1000)
+y <- x
+i <- sample(1:1000,100,replace=FALSE)
+x[i] <- NA
+par(mfrow=c(3,1))
+hist(y,main="true data",breaks=50,las=1)
+hist(x,main="10% missing values", breaks=50,las=1)
+x[i] <- mean(x,na.rm=TRUE)
+hist(x,main="Imputating the mean",breaks=50,las=1)
+```
+
+## Imputation and bivariate distribution
+
+```{r,echo=FALSE, fig.height=5.5}
+
 par(mfrow=c(1,2))
 X <- rnorm(1000)
 Y <- X + rnorm(1000,sd = 0.2)
@@ -70,10 +238,7 @@ plot(Y ~ X, data=d1, col=cols,pch=".",cex=cex,las=1,main="Imputation with model 
 ## Adding a random residual
 
 ```{r, echo=FALSE, fig.height=5.5}
-data("retailers", package="validate")
-library(magrittr)
-library(simputation)
-ret <- retailers[3:10]
+
 par(mfrow=c(1,2))
 cols <- rep("black",1000)
 cols[i] <- "red"
@@ -115,118 +280,18 @@ companies %>%
   impute_lm(turnover ~ staff)
 ```
 
-# More on missing data and (s)imputation
+## Imputing data with simputation
 
-## Missing data
+Other models available in simputation:
 
-### Reasons
-
-- nonresponse, data loss
-- Value is observed but deemed wrong and erased
-
-### Solutions
-
-- Measure/observe again 
-- Ignore
-- Take into account when estimating
-- **Impute**
-
-## Missing data mechanisms
-
-### Missing comletely at Random (MCAR)
-
-Missingness is totally random.
-
-### Missing at Random (MAR)
-
-Missingness probability can be modeled by other variables
-
-### Not Missing at Random (NMAR)
-
-Missingness probability depends on missing value.
-
-
-## You can't tell the mechanism from the data
-
-### NMAR can look like MCAR
-
-Given $Y,X$ independent. Remove all $y\geq y^*$. Observer
-'sees' no correlation between missingness and values of $X$: MAR.
-
-
-### NMAR can look like MAR
-
-Given $Y,X$ with $\textsf{Cov}(Y,X)>0$. Remove all 
-$y\geq y^*$. Observer 'sees' that higher $X$ correlates with
-more missings in $Y$: MCAR.
-
-
-
-## Dealing with missing data mechanisms
-
-### Missing comletely at Random (MCAR)
-
-Model-based imputation
-
-### Missing at Random (MAR)
-
-Model-based imputation
-
-### Not Missing at Random (NMAR)
-
-No real solution.
-
-
-## Imputation methodology
-
-### Model based
-
-Estimate a value based on observed variables.
-
-### Donor-imputation
-
-Copy a value from a record that you did observe.
-
-
-## The simputation package
-
-### Provide
-
-- a _uniform interface_,
-- with _consistent behaviour_,
-- across _commonly used methodologies_
-
-
-### To facilitate
-
-- experimentation 
-- configuration for production
-
-## The `simputation` package
-
-### An imputation prodedure is specified by
-
-1. The variable to impute
-2. An imputation model
-3. Predictor variables
-
-## The simputation interface
-
-```
-impute_<model>(data
-  , <imputed vars> ~ <predictor vars>
-  , [options])
-```
-
-\begin{picture}(0,0)
-\put(170,-20){\includegraphics[]{fig/simpute.pdf}}
-\end{picture}
-
-
-## Chaining methods
-
-```{r}
-ret %>% 
-  impute_rlm(other.rev ~ turnover) %>%
-  impute_rlm(other.rev ~ staff) %>% head(3)
-```
+|  `<model>  `      |  description                                    |
+|-------------------|-------------------------------------------------|
+| `proxy`           | copy (transformation of) other variable(s)      |
+| `median`          | (group-wise) median                             |
+| `rlm`, `lm`, `en` | (robust) linear model, elasticnet regression    |
+| `cart`, `rf`      | Classification And Regression Tree, RandomForest|
+| `em`, `mf`        | EM-algorithm (multivariate normal) `missForest` |
+| `knn`             | $k$ nearest neighbours                          |
+| `shd`, `rhd`      | sequential, random, hot-deck                    |
+| `pmm`             | predictive mean matching                        |
+| `impute_model`    | use pre-trained model                           |
