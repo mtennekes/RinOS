@@ -46,6 +46,6 @@ for (d in days) {
 }
 
 
-f = list.files(path = "day5_afternoon/", full.names = TRUE, recursive = TRUE)
-zip(zipfile = "ESTP_RinOS_day5_afternoon.zip", files = f)
+f = list.files(path = "day3_afternoon/", full.names = TRUE, recursive = TRUE)
+zip(zipfile = "ESTP_RinOS_day3_afternoon.zip", files = f)
 
