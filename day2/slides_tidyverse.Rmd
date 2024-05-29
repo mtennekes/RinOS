@@ -150,9 +150,10 @@ group_by(.data, ...)
 With \code{...} you indicate which  (categorical) variable(s) are used for the groups
 
 ```{r}
-iris %>% summarize(group_by(Species),
-          min_sl = min(Sepal.Length),
-          max_sl = max(Sepal.Length)) 
+iris %>% 
+  group_by(Species) %>%
+  summarize(min_sl = min(Sepal.Length),
+            max_sl = max(Sepal.Length)) 
 ```
 
 ## Tabulating with `dplyr`
@@ -160,9 +161,9 @@ iris %>% summarize(group_by(Species),
 With the function `n()` you can count the number of rows. 
 
 ```{r}
-iris %>% summarize(group_by(Species),
-         number=n()
-         )
+iris %>% 
+  group_by(Species) %>%
+  summarize(number=n())
 ```
 
 ## Tabulating with `dplyr` (2)
