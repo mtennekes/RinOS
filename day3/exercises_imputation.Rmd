@@ -34,6 +34,10 @@ Find out on which columns data is missing.
 ```{r}
 iris_missing <- read.csv("data/iris_missing.csv")
 summary(iris_missing)
+
+# In Species there are also missing values, not always recognized as NA but an empty string. Important to recode them first before continuing: 
+iris_missing <- iris_missing %>% mutate(Species_recode = ifelse(Species == "", NA, Species))
+
 ```
 
 c) Find out which on rows data is missing (tip `complete.cases()`)
@@ -67,7 +71,7 @@ mean(iris_imputed1$Sepal.Length)
 mean(iris_imputed1$Sepal.Length, na.rm=TRUE)
 
 incomplete <- !complete.cases(iris_imputed1)
-# wel Sepal.Length is missing
+# Sepal.Length is missing
 iris_imputed1[incomplete, ]
 ```
 
