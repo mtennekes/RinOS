@@ -13,6 +13,9 @@ knitr::opts_chunk$set(comment=NA)
 library(tidyverse)
 ```
 
+## What is a synthetic population? 
+Synthetic populations are artificially generated datasets that mimic the characteristics of real-world populations. These synthetic populations are created to replicate the statistical properties of actual populations without containing any real data.
+
 ## Why synthetic populations?
 
 - methods comparison (e.g design-based simulation studies)

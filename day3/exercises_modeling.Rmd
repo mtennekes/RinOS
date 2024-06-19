@@ -85,9 +85,7 @@ e) With the function `rpart` a decision tree (CART) can be used to predict
 ```{r, echo = TRUE}
 library(rpart)
 model_cart1 <- rpart(wage ~ age, data = Wage)
-
 summary(model_cart1)
-plot(model_cart1)
 
 # Also possible to make a decision tree plot
 library(rpart.plot)
