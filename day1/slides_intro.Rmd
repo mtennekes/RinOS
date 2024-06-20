@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 * Open source
 * Developed and maintained by the *R-core*, a small team of dedicated volunteers
 * Extendable via packages hosted on [**CRAN**](https://cran.r-project.org), the Comprehensive R Archive Network
-* As of June 2022, there are 18564 (!) packages on CRAN
+* As of June 2024, there are over 20000 (!) packages on CRAN
 * The most popular IDE (editor) is [**RStudio**](https://www.rstudio.com)
 
 ## Base R and packages
