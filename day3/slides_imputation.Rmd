@@ -150,7 +150,7 @@ Copy a value from a record that you did observe.
 - experimentation 
 - configuration for production
 
-### An imputation prodedure is specified by
+### An imputation procedure is specified by
 
 1. The variable to impute
 2. An imputation model

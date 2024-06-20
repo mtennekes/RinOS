@@ -28,7 +28,6 @@ Execute in the `R` console the following calculations (one by one)
 - $2^3$
 
 ```{r}
-3*4
 2^3
 ```
 
@@ -124,7 +123,7 @@ plot(x = ladies$height_m, y = ladies$weight_kg, las=1)
 
 ```{r}
 # alternative solution
-plot(weight_kg ~ height_m, data = ladies, las=1)
+plot(weight_kg ~ height_m, data = ladies, las = 1)
 ```
 
 ### Exercise 3
@@ -159,13 +158,15 @@ c) Use bin to calculate the binary number $1011$.
 ```{r}
 sum(bin * c(1,0,1,1))
 
+# 1011 binary number is equal to 11 in a normal number. So if we have 4 building blocks of 1, 2, 4 and 8. How to build the number 11 with those blocks? We need the block of 1, 2 and 8 (and not 4).
+
 # The numbers in 'bin' represent the symbols in the binary number. 
 
 # To understand this trick, we can calculate the normal (decimal) number 1011: 
 
 deci <- 10^(3:0)
 
-# So if we want to caculate the number 1011 in the decimal number system:
+# So if we want to calculate the number 1011 in the decimal number system:
 
 sum(deci * c(1, 0, 1, 1))
 
@@ -241,7 +242,7 @@ e) Use `write.csv2` to save the `women` data set into csv-file "women.csv".
 Tips: use `row.names=FALSE` and `na=""`.
 
 ```{r, eval = FALSE}
-write.csv2("women", "./data/women.csv", row.names = FALSE, na="")
+write.csv2(women, "./data/women.csv", row.names = FALSE, na="")
 ```
 
 
