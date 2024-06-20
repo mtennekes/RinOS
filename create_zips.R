@@ -1,6 +1,6 @@
-answers = T
+answers = F
 
-days = 5
+days = 4
 
 
 # delete log and pdf files
@@ -46,6 +46,18 @@ for (d in days) {
 }
 
 
+
 f = list.files(path = "day3_afternoon/", full.names = TRUE, recursive = TRUE)
-zip(zipfile = "ESTP_RinOS_day3_afternoon.zip", files = f)
+fbase = list.files(path = "day3_afternoon/", recursive = TRUE)
+
+# with answers
+fsel = f[!(fbase %in% c("exercises_weighting.pdf"))]
+zip(zipfile = "ESTP_RinOS_day3_afternoon_with_answers.zip", files = fsel)
+
+# without answers
+
+fsel = f[!(fbase %in% c("exercises_weighting_with_answers.pdf", "exercises_weighting.Rmd"))]
+zip(zipfile = "ESTP_RinOS_day3_afternoon.zip", files = fsel)
+
+
 
