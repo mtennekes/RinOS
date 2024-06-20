@@ -16,7 +16,7 @@ library(ggplot2)
 ```
 
 ```{r}
-un <- read.table("C:/Users/NSCN/Documents/rinos/day4/data/UnitedNations.txt", header=TRUE)
+un <- read.table("UnitedNations.txt", header=TRUE)
 ```
 
 ( _italic_ texts should be generated with an r statement)
@@ -59,6 +59,14 @@ lowest_women <- un %>%
 The country with the lowest life expectancy for women is _`r lowest_women$country`_
 with a life expectancy of _`r lowest_women$lifeFemale`_ year.
 
+```{r, eval=FALSE}
+# in base R:
+
+id <- which.min(un$lifeFemale)
+
+# The country with the lowest life expectancy for women is _`r un$country[id]`_ with a life expectancy of _`r un$lifeFemale[id]`_ year.
+
+```
 
 The following barchart shows the GDP per capita per region:
 
