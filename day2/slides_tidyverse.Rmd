@@ -250,6 +250,26 @@ The option \code{useNA} has three possible values:
 - \code{"always"}: always count the number of NA's.
 
 
+## Modifying data
+
+With the \code{mutate} function new columns can be created
+
+```{r}
+iris <- iris |> 
+  mutate(petal_length_mm = round(Petal.Length * 100),
+         petal_width_mm = round(Petal.Width * 100))
+```
+
+## If else statements
+
+With the Base R function \code{ifelse} 
+
+```{r}
+iris <- iris |> 
+  mutate(petal_class = ifelse(petal_length_mm >= 500, "large", "small"))
+```
+
+
 # Combining datasets
 
 ## Combine datasets with `dplyr`: stacking
